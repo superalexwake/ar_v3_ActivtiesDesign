@@ -125,7 +125,7 @@ const badgeNum = (count?: number) => ((count ?? 0) > 1 ? count : undefined)
 					background-position: center;
 					background-size: 80px, 80px;
 				}
-				// 没有专属图标映射的活动(每日签到/首充奖励/锦标赛/国庆充值活动等)被选进推荐位时的兜底通用图标
+				// 没有专属图标映射的活动(锦标赛/首充奖励/积分商城/国庆充值活动等)被选进推荐位时的兜底通用图标
 				&.ageneric {
 					background: url("@/assets/icons/svg/activity.svg") no-repeat;
 					background-position: center;

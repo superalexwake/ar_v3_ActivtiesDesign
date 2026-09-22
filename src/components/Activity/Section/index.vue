@@ -61,7 +61,6 @@ import { AwaitApiResult } from '@/utils'
 import defaultImgAvatar from '@public/images/avatar.png'
 import { useRoute, useRouter } from 'vue-router'
 import type { ActivityList, UserInfo } from '@/types/api'
-import { useI18n } from 'vue-i18n'
 import { ref, computed, watch, onMounted, defineAsyncComponent } from 'vue'
 import { useActive } from '@/components/common/use'
 import { GetActivityList } from '@/api'
@@ -111,7 +110,6 @@ watch(()=>ActiveSotre.value.isOpenChampion,
 })
 
 const activityList = ref<ActivityList[]>([])
-const { t } = useI18n()
 const loading = ref(false);
 const finished = ref(false);
 const pageNo = ref(1);
@@ -152,12 +150,14 @@ const filteredActivityList = computed(() =>
 		: activityList.value.filter((item: any) => item.category === activeCategory.value)
 )
 
-// 顶部图标行=「推荐位」,由下方活动列表里 recommend=true 的条目筛选+排序驱动(2026-09-22 拍板),不再写死 6 个固定入口。
-// 这里只给"曾经是固定图标"的活动保留现成的 80×80 图标 + 复用原有红点参数口径;没在这张表里的活动
-// (锦标赛/首充奖励/邀请奖励/积分商城/国庆充值活动等)如果也被选进推荐位,用 ActivityEntryGrid 的通用图标兜底。
-// enabled() 对应的是原来"这个入口该不该显示"的后台功能开关,与 recommend(是否被选进推荐位)是两个独立维度:
-// 开关关闭的活动即使被选进推荐位也不出现在图标行,保持与老版本一致的功能可用性判断。
+// 顶部图标行=「推荐位」,完全由下方活动列表里 recommend=true 的条目筛选+排序驱动(2026-09-23 二次拍板:
+// 连"活动奖励"也不再是前端写死排第一,它只是列表里一条 recommend=true 的普通配置,顺序跟列表走,没有
+// 任何一格是前端固定的)。这里只给"曾经是固定图标"的活动保留现成的 80×80 图标 + 复用原有红点/开关参数
+// 口径;没在这张表里的活动(锦标赛/首充奖励/积分商城/国庆充值活动等)如果也被勾成 recommend,用
+// ActivityEntryGrid 的通用图标兜底。enabled() 对应的是原来"这个入口该不该显示"的后台功能开关,与
+// recommend(是否被勾选推荐)是两个独立维度:开关关闭的活动即使被勾成推荐也不出现在图标行。
 const RECOMMEND_ICON_META: Partial<Record<string, { icon: string; enabled: () => boolean; badge: () => number }>> = {
+	taskReward: { icon: 'a1', enabled: () => ActiveSotre.value.isOpenActivityAward, badge: () => dotCount(redDot.value.activityAwardCount) },
 	invitationBonus: { icon: 'a2', enabled: () => ActiveSotre.value.isTaskState, badge: () => dotCount(redDot.value.invitationBonusCount) },
 	laundry: { icon: 'a3', enabled: () => ActiveSotre.value.isOpenWashCode, badge: () => dotCount(redDot.value.bettingRebateCount) },
 	superJackpot: { icon: 'a4', enabled: () => ActiveSotre.value.isOpenJackpotReward, badge: () => dotCount(redDot.value.superJackpotCount) },
@@ -165,13 +165,8 @@ const RECOMMEND_ICON_META: Partial<Record<string, { icon: string; enabled: () =>
 	// 第 6 个图标是普通幸运大转盘(v1 后台叫「大转盘配置」),不是邀请转盘,没有开关也没有红点
 	bigWheel: { icon: 'a6', enabled: () => true, badge: () => 0 },
 }
-
-// 活动奖励不是下方活动列表里的一张卡(2026-09-23 打回:每日签到/活动奖励都属于任务页签,设计稿的活动
-// 列表里不出现它们),是前端固定排在图标行第一位的快捷入口,用不在真实 bannerID 段位里的哨兵值标记,
-// 点击时不查活动列表、直接切到「任务」页签
-const TASK_SWITCH_BANNER_ID = -1
-const navList = computed<ActivityEntryItem[]>(() => {
-	const fromList = activityList.value
+const navList = computed<ActivityEntryItem[]>(() =>
+	activityList.value
 		.filter((item: any) => {
 			if (!item.recommend) return false
 			const meta = RECOMMEND_ICON_META[item.activityCode as string]
@@ -186,22 +181,11 @@ const navList = computed<ActivityEntryItem[]>(() => {
 				noread: meta?.badge() ?? 0,
 			}
 		})
-	if (!ActiveSotre.value.isOpenActivityAward) return fromList
-	const taskEntry: ActivityEntryItem = {
-		bannerID: TASK_SWITCH_BANNER_ID,
-		name: t('actTip1'),
-		icon: 'a1',
-		noread: dotCount(redDot.value.activityAwardCount),
-	}
-	return [taskEntry, ...fromList]
-})
+)
 
-// 图标点击统一入口:活动奖励走切 Tab,其余按 bannerID 找回原始活动,复用与下方卡片一样的 onClick 跳转/登录逻辑
+// 图标点击统一入口:按 bannerID 找回下方活动列表里的原始条目,复用与下方卡片一样的 onClick 跳转/登录逻辑
+// (活动奖励 bannerID===1007 在 onClick 内部特判为切 Tab,不需要在这里单独处理)
 const onIconNavigate = (bannerID: number) => {
-	if (bannerID === TASK_SWITCH_BANNER_ID) {
-		switchTopTab('task')
-		return
-	}
 	const item = activityList.value.find((entry: any) => entry.bannerID === bannerID)
 	if (item) onClick(item)
 }
@@ -246,8 +230,16 @@ const checkActivityItemAccess = async (item: ActivityList, targetName?: string, 
 	return requireLoginAction()
 }
 
+// 活动奖励(bannerID 1007)是活动列表里一条普通配置,但不是真的可进入活动,是"切到任务页签"的快捷方式;
+// 点击不导航、只切 Tab,也不需要登录(与其它需要登录的活动卡区分开)
+const TASK_SWITCH_BANNER_ID = 1007
+
 async function onClick(item: ActivityList) {
 	const {bannerID: id,jumpType, contents} = item;
+	if (id === TASK_SWITCH_BANNER_ID) {
+		switchTopTab('task')
+		return
+	}
 	if(jumpType == 2) {
 		if(contents?.startsWith('/')) {
 			if (!(await checkActivityItemAccess(item, undefined, contents))) return

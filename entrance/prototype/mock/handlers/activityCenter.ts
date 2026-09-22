@@ -71,56 +71,69 @@ export const bannerUrl = (ctx: MockContext, name: string): string =>
 	`mock-img/banner-${name}${ctx.lang === 'zh' ? '' : '.' + ctx.lang}.svg`
 
 /**
- * 图标行「推荐位」的活动识别码,只给需要在图标行复用现成 80×80 图标 + 走红点参数的活动用；
- * 没有 activityCode 的活动(锦标赛/首充奖励/邀请奖励/积分商城/国庆充值活动)如果也被选进推荐位，
- * 前端用一张通用活动图标兜底，见 ActivityEntryGrid.vue 的 `.ageneric`。
- *
- * @remarks 「活动奖励」不在这份列表数据里(2026-09-23 打回:每日签到属于任务页签、活动奖励就是任务页签
- * 本身，设计稿的活动列表里都不出现)，它是前端固定排在图标行第一位的入口，见 Section/index.vue。
+ * 图标行「推荐位」用的活动识别码，只给需要在图标行复用现成 80×80 图标 + 走红点/开关参数的活动用；
+ * 没有 activityCode 的活动(锦标赛/首充奖励/积分商城/国庆充值活动)如果被勾成 recommend，前端用一张
+ * 通用活动图标兜底，见 ActivityEntryGrid.vue 的 `.ageneric`。
  */
-export type RecommendActivityCode = 'invitationBonus' | 'laundry' | 'superJackpot' | 'newMemberPackage' | 'bigWheel'
+export type RecommendActivityCode = 'taskReward' | 'invitationBonus' | 'laundry' | 'superJackpot' | 'newMemberPackage' | 'bigWheel'
 
-/** 推荐位预设 → 对应 activityCode 集合；「活动奖励」不受此控制，固定显示(受 isOpenActivityAward 开关管) */
-const RECOMMEND_PRESETS: Record<ActivityCenterParams['recommendPreset'], Set<RecommendActivityCode>> = {
-	default: new Set(['invitationBonus', 'laundry', 'superJackpot', 'newMemberPackage', 'bigWheel']),
-	top3: new Set(['invitationBonus', 'laundry']),
+/**
+ * 图标行(推荐位)完全由这里的 recommend 勾选驱动(2026-09-23 二次拍板：去掉上一轮"活动奖励固定排
+ * 第一位"的前端写死逻辑——连活动奖励本身现在也只是列表里一条普通配置，靠这里勾了 recommend 才会
+ * 出现在图标行，勾选顺序跟着下面活动列表的展示顺序走)。控制台没有多选清单控件，用 3 组预设(按
+ * bannerID)代替逐条勾选。
+ */
+const RECOMMEND_PRESETS: Record<ActivityCenterParams['recommendPreset'], Set<number>> = {
+	// 默认勾选:活动奖励(1007)、首充奖励(1002，卡片本来就挂着"推荐"标签)、邀请奖励(1008)、
+	// 大转盘(1003)、新会员礼包(1005)、洗码返水(1009)、超级奖池(1010)
+	default: new Set([1007, 1002, 1008, 1003, 1005, 1009, 1010]),
+	// 只前 3 个:按下面列表的展示顺序取前 3 条(活动奖励→锦标赛→首充奖励)
+	top3: new Set([1007, 1004, 1002]),
 	none: new Set(),
 }
 
 /**
- * 活动页的活动列表；顺序、名称、标签对齐设计稿 `活动.png`：锦标赛(HOT，带倒计时/最高奖金框)→
- * 首充奖励(推荐)→邀请奖励(NEW)→积分商城(无标)，其余活动排后面、都不带标。
+ * 活动页的活动列表；顺序、名称、标签对齐设计稿 `活动.png` + 2026-09-23 两轮打回的最终口径：
+ * 活动奖励(点击切任务页签，未登录也能点)排最前面 → 锦标赛(HOT，带倒计时/最高奖金框) → 首充奖励 →
+ * 邀请奖励(NEW) → 积分商城 → 其余活动。「每日签到」仍不放回来(它属于任务页签)。
  *
- * @remarks 「每日签到」「活动奖励」不在这份列表里(2026-09-23 打回:两者都属于任务页签，设计稿的活动
- * 列表里没有它们)。1008(邀请奖励)、1009(洗码返水)、1010(超级奖池)是原先只挂在图标行、下方列表里
- * 没有卡片的入口，1011(积分商城)是新补的；因为没有现成的大图banner素材，这几条复用 1006 同款通用
- * 活动图(image: 'activity')占位。
- * category(充值/游戏/新人)、tag(HOT/推荐/NEW/无)是活动页筛选与标签用的固定枚举，不走 pick() 本地化——
- * 展示文案由 ActivityFilterTabs.vue / ActivityBannerList.vue 按枚举值统一走 $t()，与筛选 Tab 自身的
- * 文案同一套体系，避免和 mock 层的 pick() 两处维护同一份译文。
- * recommend(图标行推荐位布尔值)与 tag: 'recommend'(列表卡片上的"推荐"角标文案)是两个不相关的概念，
- * 只是恰好都叫"推荐"，读的时候不要混。
+ * @remarks 卡片上显示的"推荐"标签就是 recommend 字段本身(2026-09-23 拍板)：勾了 recommend 才会
+ * 同时"上图标行"+"显示推荐标签"，两件事不再分开配置——所以这里不再有独立的 tag:'recommend' 字面量，
+ * 改成从 specialTag(只表示 HOT/NEW 这类跟 recommend 无关的固定标签) 和 recommend 一起推出最终 tag：
+ * `specialTag ?? (recommend ? 'recommend' : null)`。specialTag 与 recommend 同时命中时(如"邀请奖励"
+ * 默认 NEW+推荐都成立)按这条规则 specialTag 优先显示，因为卡片同一时间只有一个标签位——这是我这轮加的
+ * 取舍规则，不是已有约定，已在回报里单独标注待确认。
+ * 1007(活动奖励)、1008(邀请奖励)、1009(洗码返水)、1010(超级奖池)、1011(积分商城)没有现成的大图
+ * banner 素材，复用 1006 同款通用活动图(image: 'activity')占位。
+ * category(充值/游戏/新人)是活动页筛选用的固定枚举，不走 pick() 本地化——展示文案由
+ * ActivityFilterTabs.vue 按枚举值统一走 $t()。
  */
 const banners = (ctx: MockContext) => {
 	const recommendSet = RECOMMEND_PRESETS[params<ActivityCenterParams>(ctx, 'activityCenter').recommendPreset]
 	return [
-		{ bannerID: 1004, bannerTitle: pick(ctx, '锦标赛', 'Tournament', 'चैंपियनशिप'), jumpType: 2, contents: '/activity/Championship', image: 'championship', category: 'game', tag: 'hot', activityCode: null },
-		{ bannerID: 1002, bannerTitle: pick(ctx, '首充奖励', 'First Deposit Bonus', 'पहला डिपॉज़िट बोनस'), jumpType: 2, contents: '/activity/FirstRecharge', image: 'first-recharge', category: 'recharge', tag: 'recommend', activityCode: null },
-		{ bannerID: 1008, bannerTitle: pick(ctx, '邀请奖励', 'Invitation Bonus', 'आमंत्रण बोनस'), jumpType: 2, contents: '/main/InvitationBonus', image: 'activity', category: 'game', tag: 'new', activityCode: 'invitationBonus' },
-		{ bannerID: 1011, bannerTitle: pick(ctx, '积分商城', 'Points Mall', 'पॉइंट्स मॉल'), jumpType: 2, contents: '/activity/PointMall', image: 'activity', category: 'game', tag: null, activityCode: null },
-		{ bannerID: 1003, bannerTitle: pick(ctx, '大转盘', 'Spin Wheel', 'स्पिन व्हील'), jumpType: 2, contents: '/activity/Turntable', image: 'turntable', category: 'game', tag: null, activityCode: 'bigWheel' },
-		{ bannerID: 1005, bannerTitle: pick(ctx, '新会员礼包', 'New Member Gift Pack', 'नए सदस्य उपहार पैक'), jumpType: 2, contents: '/activity/MemberPackage', image: 'member-package', category: 'newUser', tag: null, activityCode: 'newMemberPackage' },
-		{ bannerID: 1006, bannerTitle: pick(ctx, '国庆充值活动', 'National Day Deposit Event', 'राष्ट्रीय दिवस डिपॉज़िट इवेंट'), jumpType: 0, contents: '', image: 'activity', category: 'recharge', tag: null, activityCode: null },
-		{ bannerID: 1009, bannerTitle: pick(ctx, '洗码返水', 'Betting Rebate', 'बेटिंग रिबेट'), jumpType: 2, contents: '/main/Laundry', image: 'activity', category: 'game', tag: null, activityCode: 'laundry' },
-		{ bannerID: 1010, bannerTitle: pick(ctx, '超级奖池', 'Super Jackpot', 'सुपर जैकपॉट'), jumpType: 2, contents: '/main/SuperJackpot', image: 'activity', category: 'game', tag: null, activityCode: 'superJackpot' },
-	].map(({ image, activityCode, ...item }) => ({
-		...item,
-		bannerUrl: bannerUrl(ctx, image),
-		jumpLinkType: 0,
-		visibility: 0,
-		activityCode,
-		recommend: activityCode ? recommendSet.has(activityCode) : false,
-	}))
+		// 活动奖励:不是真的可进入活动，是"切到任务页签"的快捷方式；前端按 bannerID===1007 特判，点击不导航、只切 Tab，也不需要登录
+		{ bannerID: 1007, bannerTitle: pick(ctx, '活动奖励', 'Activity Rewards', 'गतिविधि पुरस्कार'), jumpType: 0, contents: '', image: 'activity', category: 'game', specialTag: null, activityCode: 'taskReward' },
+		{ bannerID: 1004, bannerTitle: pick(ctx, '锦标赛', 'Tournament', 'चैंपियनशिप'), jumpType: 2, contents: '/activity/Championship', image: 'championship', category: 'game', specialTag: 'hot', activityCode: null },
+		{ bannerID: 1002, bannerTitle: pick(ctx, '首充奖励', 'First Deposit Bonus', 'पहला डिपॉज़िट बोनस'), jumpType: 2, contents: '/activity/FirstRecharge', image: 'first-recharge', category: 'recharge', specialTag: null, activityCode: null },
+		{ bannerID: 1008, bannerTitle: pick(ctx, '邀请奖励', 'Invitation Bonus', 'आमंत्रण बोनस'), jumpType: 2, contents: '/main/InvitationBonus', image: 'activity', category: 'game', specialTag: 'new', activityCode: 'invitationBonus' },
+		{ bannerID: 1011, bannerTitle: pick(ctx, '积分商城', 'Points Mall', 'पॉइंट्स मॉल'), jumpType: 2, contents: '/activity/PointMall', image: 'activity', category: 'game', specialTag: null, activityCode: null },
+		{ bannerID: 1003, bannerTitle: pick(ctx, '大转盘', 'Spin Wheel', 'स्पिन व्हील'), jumpType: 2, contents: '/activity/Turntable', image: 'turntable', category: 'game', specialTag: null, activityCode: 'bigWheel' },
+		{ bannerID: 1005, bannerTitle: pick(ctx, '新会员礼包', 'New Member Gift Pack', 'नए सदस्य उपहार पैक'), jumpType: 2, contents: '/activity/MemberPackage', image: 'member-package', category: 'newUser', specialTag: null, activityCode: 'newMemberPackage' },
+		{ bannerID: 1006, bannerTitle: pick(ctx, '国庆充值活动', 'National Day Deposit Event', 'राष्ट्रीय दिवस डिपॉज़िट इवेंट'), jumpType: 0, contents: '', image: 'activity', category: 'recharge', specialTag: null, activityCode: null },
+		{ bannerID: 1009, bannerTitle: pick(ctx, '洗码返水', 'Betting Rebate', 'बेटिंग रिबेट'), jumpType: 2, contents: '/main/Laundry', image: 'activity', category: 'game', specialTag: null, activityCode: 'laundry' },
+		{ bannerID: 1010, bannerTitle: pick(ctx, '超级奖池', 'Super Jackpot', 'सुपर जैकपॉट'), jumpType: 2, contents: '/main/SuperJackpot', image: 'activity', category: 'game', specialTag: null, activityCode: 'superJackpot' },
+	].map(({ image, activityCode, specialTag, ...item }) => {
+		const recommend = recommendSet.has(item.bannerID)
+		return {
+			...item,
+			bannerUrl: bannerUrl(ctx, image),
+			jumpLinkType: 0,
+			visibility: 0,
+			activityCode,
+			recommend,
+			tag: specialTag ?? (recommend ? 'recommend' : null),
+		}
+	})
 }
 
 /** 1006 国庆充值活动的图文详情，3 段正文 */
