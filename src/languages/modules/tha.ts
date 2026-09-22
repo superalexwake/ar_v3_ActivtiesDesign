@@ -2886,6 +2886,7 @@ export default {
 	periodCardExpireWarn: 'ต้องรับรางวัลรายวันภายในวันนั้น มิฉะนั้นจะถูกยกเลิกโดยอัตโนมัติ!',
 	periodCardConfirmBuy: 'ยืนยันการซื้อ',
 	periodCardDayLabel: 'วันที่ {n}',
+	periodCardDayLabelMonth: 'DAY {n}',
 	periodCardClaimedDays: 'รับแล้ว {taken} / {total} วัน',
 	periodCardStatDays: 'จำนวนวันที่รับแล้ว',
 	periodCardStatTaken: 'รับสะสมทั้งหมด',

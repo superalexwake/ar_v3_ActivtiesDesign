@@ -5,6 +5,7 @@
 			:key="holding.orderNo"
 			:holding="holding"
 			:total-days="totalDays"
+			:card-type="cardType"
 			:server-time="serverTime"
 			:submitting="submitting"
 			@claim="emit('claim', $event)"
@@ -81,6 +82,8 @@ const props = defineProps({
 	tiers: { type: Array as () => any[], default: () => [] },
 	holdingOrders: { type: Array as () => any[], default: () => [] },
 	totalDays: { type: Number, default: 7 },
+	// 1 周卡 / 2 月卡;透传给 HoldingCard 决定天数格标签样式
+	cardType: { type: Number, default: 1 },
 	serverTime: { type: String, default: '' },
 	submitting: { type: Boolean, default: false },
 	disabledTierIds: { type: Array as () => number[], default: () => [] }
@@ -254,23 +257,17 @@ $buy-tint: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 
 		justify-content: center;
 		gap: 6px;
 		border-radius: 80px;
+		// 设计稿「立即购买」按钮不分进行中/已售罄/可买,统一这一种深棕色
+		// (量出来正好等于黑 60% 叠主色 + 原有顶部高光,之前这层只用在 disabled 态、可买态是纯主色红,
+		// 现在两者合一,状态只靠按钮文案区分,不再靠颜色区分)
 		background-color: var(--main-color);
-		background-image: $buy-tint;
+		background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), $buy-tint;
 		box-shadow: 0 4px 0 rgba(0, 0, 0, 0.18);
-		color: #fff;
+		color: var(--text_color_L2);
 
-		// 只锁购买动作:整卡发灰会读成活动已下架
+		// 只锁购买动作:整卡发灰会读成活动已下架;颜色已统一,disabled 态只保留不可点
 		&.disabled {
-			background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), $buy-tint;
-			color: var(--text_color_L2);
 			pointer-events: none;
-
-			.buy-main {
-				text-shadow: none;
-			}
-			.buy-origin {
-				color: inherit;
-			}
 		}
 
 		// 26/6/28 三段与设计稿按钮内容区 60 高咬合
@@ -278,13 +275,12 @@ $buy-tint: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 
 			font-size: 24px;
 			line-height: 26px;
 			font-weight: 700;
-			text-shadow: 0 4px 2px rgba(0, 0, 0, 0.25);
 		}
 		.buy-origin {
 			font-size: 20px;
 			line-height: 28px;
 			text-decoration: line-through;
-			color: #fefdc4;
+			color: inherit;
 		}
 	}
 

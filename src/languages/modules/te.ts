@@ -3179,6 +3179,7 @@ export default {
 	periodCardExpireWarn: 'రోజువారీ రివార్డులను అదే రోజున తీసుకోవాలి, లేకపోతే అవి స్వయంచాలకంగా రద్దవుతాయి!',
 	periodCardConfirmBuy: 'కొనుగోలును నిర్ధారించండి',
 	periodCardDayLabel: 'రోజు {n}',
+	periodCardDayLabelMonth: 'DAY {n}',
 	periodCardClaimedDays: '{taken} / {total} రోజులు తీసుకున్నారు',
 	periodCardStatDays: 'తీసుకున్న రోజులు',
 	periodCardStatTaken: 'మొత్తం పొందినది',

@@ -3350,6 +3350,7 @@ export default {
 	periodCardExpireWarn: 'Phần thưởng hàng ngày phải nhận trong ngày, nếu không sẽ tự động bị hủy!',
 	periodCardConfirmBuy: 'Xác nhận mua',
 	periodCardDayLabel: 'NGÀY {n}',
+	periodCardDayLabelMonth: 'DAY {n}',
 	periodCardClaimedDays: 'Đã nhận {taken} / {total} ngày',
 	periodCardStatDays: 'Số ngày đã nhận',
 	periodCardStatTaken: 'Tổng đã nhận',

@@ -2315,6 +2315,7 @@ export default {
 	periodCardExpireWarn: 'Ang mga pang-araw-araw na reward ay dapat i-claim sa parehong araw, kung hindi ay awtomatikong mawawala!',
 	periodCardConfirmBuy: 'Kumpirmahin ang pagbili',
 	periodCardDayLabel: 'ARAW {n}',
+	periodCardDayLabelMonth: 'DAY {n}',
 	periodCardClaimedDays: 'Na-claim {taken} / {total} araw',
 	periodCardStatDays: 'Mga araw na na-claim',
 	periodCardStatTaken: 'Kabuuang natanggap',

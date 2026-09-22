@@ -2935,6 +2935,7 @@ export default {
 	periodCardExpireWarn: 'দৈনিক পুরস্কার একই দিনে সংগ্রহ করতে হবে, অন্যথায় তা স্বয়ংক্রিয়ভাবে বাতিল হয়ে যাবে!',
 	periodCardConfirmBuy: 'কেনা নিশ্চিত করুন',
 	periodCardDayLabel: 'দিন {n}',
+	periodCardDayLabelMonth: 'DAY {n}',
 	periodCardClaimedDays: '{taken} / {total} দিন সংগ্রহ করা হয়েছে',
 	periodCardStatDays: 'সংগৃহীত দিন',
 	periodCardStatTaken: 'মোট প্রাপ্ত',

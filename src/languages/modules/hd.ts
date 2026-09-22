@@ -3418,6 +3418,7 @@ export default {
 	periodCardExpireWarn: 'दैनिक इनाम उसी दिन प्राप्त करना आवश्यक है, अन्यथा वे स्वतः रद्द हो जाएंगे!',
 	periodCardConfirmBuy: 'खरीद की पुष्टि करें',
 	periodCardDayLabel: 'दिन {n}',
+	periodCardDayLabelMonth: 'DAY {n}',
 	periodCardClaimedDays: '{taken} / {total} दिन प्राप्त किए',
 	periodCardStatDays: 'प्राप्त दिन',
 	periodCardStatTaken: 'कुल प्राप्त',

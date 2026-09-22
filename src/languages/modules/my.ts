@@ -3276,6 +3276,7 @@ export default {
 	periodCardExpireWarn: 'Ganjaran harian mesti dituntut pada hari yang sama, jika tidak ia akan terbatal secara automatik!',
 	periodCardConfirmBuy: 'Sahkan pembelian',
 	periodCardDayLabel: 'HARI {n}',
+	periodCardDayLabelMonth: 'DAY {n}',
 	periodCardClaimedDays: 'Dituntut {taken} / {total} hari',
 	periodCardStatDays: 'Hari dituntut',
 	periodCardStatTaken: 'Jumlah diterima',

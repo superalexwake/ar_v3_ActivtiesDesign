@@ -2271,6 +2271,7 @@ export default {
 	periodCardExpireWarn: 'Ежедневные награды нужно получить в тот же день, иначе они автоматически аннулируются!',
 	periodCardConfirmBuy: 'Подтвердить покупку',
 	periodCardDayLabel: 'ДЕНЬ {n}',
+	periodCardDayLabelMonth: 'DAY {n}',
 	periodCardClaimedDays: 'Получено {taken} / {total} дней',
 	periodCardStatDays: 'Получено дней',
 	periodCardStatTaken: 'Всего получено',

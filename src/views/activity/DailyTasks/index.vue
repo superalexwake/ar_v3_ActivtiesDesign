@@ -157,6 +157,7 @@
 				:holding-orders="card.holdingOrders"
 				:disabled-tier-ids="disabledTierIds(card)"
 				:total-days="card.totalDays"
+				:card-type="card.cardType"
 				:server-time="cardServerTime"
 				:submitting="isCardSubmitting"
 				@buy="(tier: any) => onBuyCard(tier, card.totalDays)"
@@ -542,6 +543,18 @@ watch(activeTab, (key) => {
 	if (!key || route.query.sub === key) return
 	router.replace({ query: { ...route.query, sub: key } })
 })
+// 反向联动:页面已打开时地址栏 sub 被外部改动(浏览器前进后退、手动改地址栏)也要驱动内容跟着切,不能只换高亮;
+// 与上面那条互为反向,靠"值已相等则跳过"避免来回触发
+watch(
+	() => route.query.sub,
+	(sub) => {
+		const key = typeof sub === 'string' ? sub : ''
+		if (!key || key === activeTab.value) return
+		if (!visibleTabs.value.some((tab) => tab.key === key)) return
+		isTabPicked = true
+		activeTab.value = key
+	}
+)
 
 // 桌面鼠标按住左右拖动滚动:手机端触屏本来就能滑动(overflow-x:auto 原生支持),这里只补桌面鼠标场景;
 // 拖动距离超过阈值就标记为"拖过",配合下面 onTabClick/onFilterClick 抑制这次的点击,避免拖完松手误触发切换

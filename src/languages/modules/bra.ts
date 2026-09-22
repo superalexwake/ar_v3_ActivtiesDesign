@@ -3281,6 +3281,7 @@ export default {
 	periodCardExpireWarn: 'As recompensas diárias devem ser resgatadas no mesmo dia, caso contrário serão anuladas automaticamente!',
 	periodCardConfirmBuy: 'Confirmar compra',
 	periodCardDayLabel: 'DIA {n}',
+	periodCardDayLabelMonth: 'DAY {n}',
 	periodCardClaimedDays: 'Resgatado {taken} / {total} dias',
 	periodCardStatDays: 'Dias resgatados',
 	periodCardStatTaken: 'Total recebido',

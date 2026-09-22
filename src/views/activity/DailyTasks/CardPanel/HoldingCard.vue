@@ -19,7 +19,8 @@
 			>
 				<span class="d-label">
 					<img v-if="day.status === DAY_TAKEN" src="@public/activity/DailyTask/period_card_taken.png" />
-					<template v-else>{{ t('periodCardDayLabel', { n: day.dayIndex }) }}</template>
+					<!-- 月卡天数格按设计稿写「DAY 3」这种固定英文样式,周卡沿用原「第N天」 -->
+					<template v-else>{{ t(cardType === 2 ? 'periodCardDayLabelMonth' : 'periodCardDayLabel', { n: day.dayIndex }) }}</template>
 				</span>
 				<span class="d-amount">{{ money(day.amount) }}</span>
 			</div>
@@ -64,6 +65,8 @@ const LONG_CARD_DAYS = 7
 const props = defineProps({
 	holding: { type: Object as () => any, required: true },
 	totalDays: { type: Number, default: 7 },
+	// 1 周卡 / 2 月卡;只用来决定天数格标签样式(DAY N vs 第N天),不参与其它业务逻辑
+	cardType: { type: Number, default: 1 },
 	// 公共响应体的 ServiceNowTime,站点时区墙钟串;倒计时以它为锚
 	serverTime: { type: String, default: '' },
 	submitting: { type: Boolean, default: false }

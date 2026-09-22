@@ -3309,6 +3309,7 @@ export default {
 	periodCardExpireWarn: 'روزانہ انعامات اسی دن وصول کرنا ضروری ہیں، ورنہ وہ خود بخود ضائع ہو جائیں گے!',
 	periodCardConfirmBuy: 'خریداری کی تصدیق کریں',
 	periodCardDayLabel: 'دن {n}',
+	periodCardDayLabelMonth: 'DAY {n}',
 	periodCardClaimedDays: '{taken} / {total} دن وصول کیے',
 	periodCardStatDays: 'وصول شدہ دن',
 	periodCardStatTaken: 'کل موصول',

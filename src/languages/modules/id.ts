@@ -3317,6 +3317,7 @@ export default {
 	periodCardExpireWarn: 'Hadiah harian harus diklaim pada hari yang sama, jika tidak akan otomatis hangus!',
 	periodCardConfirmBuy: 'Konfirmasi pembelian',
 	periodCardDayLabel: 'HARI {n}',
+	periodCardDayLabelMonth: 'DAY {n}',
 	periodCardClaimedDays: 'Diklaim {taken} / {total} hari',
 	periodCardStatDays: 'Hari diklaim',
 	periodCardStatTaken: 'Total diterima',

@@ -3179,6 +3179,7 @@ export default {
 	periodCardExpireWarn: 'தினசரி வெகுமதிகளை அதே நாளில் பெற வேண்டும், இல்லையெனில் தானாகவே ரத்தாகிவிடும்!',
 	periodCardConfirmBuy: 'வாங்குதலை உறுதிசெய்',
 	periodCardDayLabel: 'நாள் {n}',
+	periodCardDayLabelMonth: 'DAY {n}',
 	periodCardClaimedDays: '{taken} / {total} நாட்கள் பெறப்பட்டது',
 	periodCardStatDays: 'பெற்ற நாட்கள்',
 	periodCardStatTaken: 'மொத்தம் பெற்றது',

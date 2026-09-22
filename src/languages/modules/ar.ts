@@ -3446,6 +3446,7 @@ export default {
 	periodCardExpireWarn: 'يجب استلام المكافآت اليومية في نفس اليوم، وإلا سيتم إلغاؤها تلقائيًا!',
 	periodCardConfirmBuy: 'تأكيد الشراء',
 	periodCardDayLabel: 'اليوم {n}',
+	periodCardDayLabelMonth: 'DAY {n}',
 	periodCardClaimedDays: 'تم استلام {taken} / {total} يوم',
 	periodCardStatDays: 'الأيام المستلمة',
 	periodCardStatTaken: 'إجمالي المستلم',

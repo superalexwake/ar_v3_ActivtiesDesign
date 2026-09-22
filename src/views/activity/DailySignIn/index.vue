@@ -26,7 +26,7 @@
 					v-for="(item, index) in signInList.slice(0, 6)"
 					:key="index"
 					class="dailySignIn__container-content__wrapper-block"
-					:class="{ signed: index < signModel.signCount}"
+					:class="{ signed: index < signModel.signCount, today: index === signModel.signCount && !isSignedToday }"
 				>
 					<div class="dailySignIn__container-content__wrapper-block__header">
 						<img src="@public/activity/DailySignIn/SignInTop.png" />
@@ -38,7 +38,7 @@
 				<div
 					v-for="item in signInList.slice(6, 7)"
 					class="dailySignIn__container-content__wrapper-block"
-					:class="{ signed: signModel.signCount >= 7 }"
+					:class="{ signed: signModel.signCount >= 7, today: signModel.signCount === 6 && !isSignedToday }"
 				>
 				<span class="lastImage"><img src="@public/activity/DailySignIn/day7Bg.png" /></span>
 					<div>
@@ -363,7 +363,8 @@ onMounted(async () => {
 				}
 			}
 
-			&-block.signed {
+			// 只有「今天要签」的这一格整格填红,设计稿里其余格(含已签过的)都是白底,见下面 .signed
+			&-block.today {
 				background: url('../../../assets/icons/activity/DailySignIn/Signed.png') no-repeat;
 				background-position: center;
 				background-size: 96% 100%;
@@ -380,6 +381,21 @@ onMounted(async () => {
 					background: url('../../../assets/icons/activity/DailySignIn/day7BgActive.png') no-repeat;
 					background-position: center;
 					background-size: 100% 100%;
+				}
+			}
+
+			// 已签过的格子按设计稿保持白底,不整格填红,只在右上角叠一个既有的勾选图标作状态标记
+			&-block.signed {
+				position: relative;
+
+				&::after {
+					content: '';
+					position: absolute;
+					top: 10px;
+					right: 10px;
+					width: 32px;
+					height: 32px;
+					background: url('@icon/public/succeed.png') no-repeat center / contain;
 				}
 			}
 		}

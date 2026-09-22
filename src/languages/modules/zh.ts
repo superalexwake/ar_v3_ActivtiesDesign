@@ -2590,6 +2590,7 @@ export default {
 	periodCardExpireWarn: '每日奖励必须当日领取，否则系统自动作废！',
 	periodCardConfirmBuy: '确定购买',
 	periodCardDayLabel: '第{n}天',
+	periodCardDayLabelMonth: 'DAY {n}',
 	periodCardClaimedDays: '已领取 {taken} / {total} 天',
 	periodCardStatDays: '已领天数',
 	periodCardStatTaken: '累计已领',

@@ -34,11 +34,14 @@ const WEEK_TIERS: Tier[] = [
 	{ tierId: 3, sellPrice: 3462, originalPrice: 3981, realtimeRewardAmount: 3000, dailyRewardAmount: 112 },
 ]
 
-/** 月卡 30 天;2 档均按 stock 正常展示,mixed 的售罄演示只发生在周卡 */
+/** 月卡 30 天;3 档均按 stock 正常展示,mixed 的售罄演示只发生在周卡
+ *  tierId 13(至尊档)按前两档的涨幅比例(约 3 倍售价、原价/售价恒 1.15)外推,设计稿这一档截图数值命中了
+ *  边界值测试场景(返现 ¥9,999,999.99、原价反而低于售价),不能直接抄,故按已有两档的规律补齐 */
 const MONTH_TOTAL_DAYS = 30
 const MONTH_TIERS: Tier[] = [
 	{ tierId: 11, sellPrice: 999, originalPrice: 1149, realtimeRewardAmount: 200, dailyRewardAmount: 30 },
 	{ tierId: 12, sellPrice: 2999, originalPrice: 3449, realtimeRewardAmount: 800, dailyRewardAmount: 80 },
+	{ tierId: 13, sellPrice: 8999, originalPrice: 10349, realtimeRewardAmount: 2400, dailyRewardAmount: 220 },
 ]
 
 /** 周卡 mixed 库存下今日售罄的档位 */
@@ -56,6 +59,7 @@ const TIER_LABELS: Record<number, [string, string, string]> = {
 	3: ['至尊档', 'Deluxe', 'डीलक्स'],
 	11: ['基础档', 'Basic', 'बेसिक'],
 	12: ['尊享档', 'Premium', 'प्रीमियम'],
+	13: ['至尊档', 'Deluxe', 'डीलक्स'],
 }
 
 /** 两张卡的标题、规则说明,按 cardType 区分 */

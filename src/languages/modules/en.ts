@@ -2659,6 +2659,7 @@ export default {
 	periodCardExpireWarn: 'Daily rewards must be claimed on the same day, otherwise they are forfeited automatically!',
 	periodCardConfirmBuy: 'Confirm purchase',
 	periodCardDayLabel: 'DAY {n}',
+	periodCardDayLabelMonth: 'DAY {n}',
 	periodCardClaimedDays: 'Claimed {taken} / {total} days',
 	periodCardStatDays: 'Days claimed',
 	periodCardStatTaken: 'Total received',

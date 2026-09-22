@@ -3560,6 +3560,7 @@ export default {
 	periodCardExpireWarn: 'နေ့စဉ်ဆုကြေးကို ထိုနေ့အတွင်း ရယူရမည်၊ မဟုတ်ပါက အလိုအလျောက် ပျက်ပြယ်သွားမည်!',
 	periodCardConfirmBuy: 'ဝယ်ယူမှု အတည်ပြုပါ',
 	periodCardDayLabel: 'နေ့ {n}',
+	periodCardDayLabelMonth: 'DAY {n}',
 	periodCardClaimedDays: '{taken} / {total} ရက် ရယူပြီး',
 	periodCardStatDays: 'ရယူပြီးရက်များ',
 	periodCardStatTaken: 'စုစုပေါင်း ရရှိပြီး',
