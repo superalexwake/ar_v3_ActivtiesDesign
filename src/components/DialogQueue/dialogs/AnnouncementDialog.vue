@@ -217,9 +217,11 @@ function goToView() {
 		background: #ffffff;
 	}
 
+	// top 相对 &__footer 算（footer 是 position:absolute，是按钮的定位上下文）：
+	// footer 本身 top:780px，815-780=35px，两者相加正好是按钮上边缘距弹窗顶 815px
 	&__button {
 		position: absolute;
-		top: 815px;
+		top: 35px;
 		border: 0;
 		border-radius: 80px;
 		font-family: 'Inter', sans-serif;
