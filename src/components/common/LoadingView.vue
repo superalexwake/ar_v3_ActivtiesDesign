@@ -46,7 +46,7 @@ watch(()=>props.loading,async ()=>{
 			renderer: 'svg',
 			loop: true,
 			autoplay: true,
-			path:`/data.json`,
+			path:`${import.meta.env.BASE_URL}data.json`,
 		});
 		lock.value=false;
 	}
