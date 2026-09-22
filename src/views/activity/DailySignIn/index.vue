@@ -33,8 +33,7 @@
 						<span>{{ currency(item.bouns) }}</span>
 					</div>
 					<img src="@public/activity/DailySignIn/coin.png" />
-					<!-- {{ $t('continuous') }} -->
-					<span>{{ item.day }} {{ $t('days') }}</span>
+					<span>{{ $t('continuous') }}{{ item.day }}{{ $t('days') }}</span>
 				</div>
 				<div
 					v-for="item in signInList.slice(6, 7)"
@@ -47,8 +46,7 @@
 						<span>
 							{{ currency(item.bouns) }}
 						</span>
-						<!-- {{ $t('continuous') }} -->
-						<span> {{ item.day }} {{ $t('days') }} </span>
+						<span>{{ $t('continuous') }}{{ item.day }}{{ $t('days') }}</span>
 					</div>
 				</div>
 			</div>

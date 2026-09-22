@@ -32,12 +32,12 @@
 			</div>
 		</div>
 		</template>
-		<div class="task-tabs" ref="tabsRef">
+		<div class="task-tabs" ref="tabsRef" @mousedown="tabsDrag.onDown">
 			<button
 				v-for="tab in visibleTabs"
 				:key="tab.key"
 				:class="{ active: activeTab === tab.key }"
-				@click="onSwitchTab(tab.key)"
+				@click="onTabClick(tab.key)"
 			>
 				{{ tab.label }}
 				<span class="tab-badge" v-if="tabBadgeCount(tab.key) > 0">{{ tabBadgeCount(tab.key) }}</span>
@@ -48,13 +48,13 @@
 			<DailySignInPage v-if="activeTab === 'signin'" embedded />
 
 			<template v-if="activeTab === 'day' || activeTab === 'week'">
-				<div class="status-filter">
+				<div class="status-filter" ref="statusFilterRef" @mousedown="statusFilterDrag.onDown">
 					<div
 						v-for="f in TASK_FILTERS"
 						:key="String(f.key)"
 						class="status-filter__item"
 						:class="{ 'is-active': taskFilter === f.key }"
-						@click="taskFilter = f.key"
+						@click="onFilterClick(f.key)"
 					>{{ t(f.labelKey) }}</div>
 				</div>
 				<div class="claim-all">
@@ -93,13 +93,7 @@
 				<div class="btn btnNew" :class="`status${newbieGiftPackage[0].status}`" @click="clickBtnNew(newbieGiftPackage[0])">{{ newStatus(newbieGiftPackage[0].status) }}</div>
 			</div>
 
-			<div class="task-item" :class="{ 'is-ended': item.status === 4 }" v-for="(item, index) in filteredCurrentTasks" :key="index">
-				<div class="task-item-header">
-					<div class="hearder-status" :class="`${item.type}`" >
-						{{ item.type=='week'?$t('actTip4'):$t('dailyMission') }}
-					</div>
-					<span :class="item.status == 2 ? 'headerR': 'headerGray'">{{ changeHeadStatus(item.status) }}</span>
-				</div>
+			<div class="task-item task-item--card" :class="{ 'is-ended': item.status === 4 }" v-for="(item, index) in filteredCurrentTasks" :key="index">
 				<template v-if="item.taskId=='D20'">
 					<div class="task-item-subject">
 						<div class="sub-title" >
@@ -240,7 +234,7 @@
 import { AwaitApiResult, AwaitWrap, currency } from '@/utils'
 import { showFailToast } from 'vant'
 import { GetWeeklyAwardList, ReceiveWeeklyAward,getNewbieGiftPackage,receiveAward,GetDailyAwardList ,ReceiveDailyAward, GetPeriodCardInfo, BuyPeriodCard, TakeDailyReward, GetActivityCenterTabSort } from '@/api'
-import { computed, defineAsyncComponent, nextTick, onMounted, ref,watch } from 'vue'
+import { computed, defineAsyncComponent, nextTick, onMounted, ref,watch, type Ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router';
 import { useActive } from '@/components/common/use';
@@ -549,8 +543,50 @@ watch(activeTab, (key) => {
 	router.replace({ query: { ...route.query, sub: key } })
 })
 
+// 桌面鼠标按住左右拖动滚动:手机端触屏本来就能滑动(overflow-x:auto 原生支持),这里只补桌面鼠标场景;
+// 拖动距离超过阈值就标记为"拖过",配合下面 onTabClick/onFilterClick 抑制这次的点击,避免拖完松手误触发切换
+const makeDragScroll = (elRef: Ref<HTMLElement | null>) => {
+	let dragging = false
+	let startX = 0
+	let startScrollLeft = 0
+	let dragged = false
+	const onMove = (e: MouseEvent) => {
+		if (!dragging || !elRef.value) return
+		const delta = e.clientX - startX
+		if (Math.abs(delta) > 5) dragged = true
+		elRef.value.scrollLeft = startScrollLeft - delta
+	}
+	const stop = () => {
+		dragging = false
+		window.removeEventListener('mousemove', onMove)
+		window.removeEventListener('mouseup', stop)
+	}
+	const onDown = (e: MouseEvent) => {
+		if (!elRef.value) return
+		dragging = true
+		dragged = false
+		startX = e.clientX
+		startScrollLeft = elRef.value.scrollLeft
+		window.addEventListener('mousemove', onMove)
+		window.addEventListener('mouseup', stop)
+	}
+	return { onDown, wasDragged: () => dragged }
+}
+
 // Tab 满 5 个后一屏放不下,选中项可能落在屏幕外,切换后要把它带回视野
 const tabsRef = ref<HTMLElement | null>(null)
+const tabsDrag = makeDragScroll(tabsRef)
+const onTabClick = (key: string) => {
+	if (tabsDrag.wasDragged()) return
+	onSwitchTab(key)
+}
+// 状态筛选行同样可能超宽,同一套拖动逻辑
+const statusFilterRef = ref<HTMLElement | null>(null)
+const statusFilterDrag = makeDragScroll(statusFilterRef)
+const onFilterClick = (key: 'all' | number) => {
+	if (statusFilterDrag.wasDragged()) return
+	taskFilter.value = key
+}
 // 面板前后滑动的方向:切到靠后的 Tab 为 next。watch 默认 pre 冲刷,重渲染前方向已定好
 const slideDir = ref<'next' | 'prev'>('next')
 watch(activeTab, async (key, prevKey) => {
@@ -560,6 +596,11 @@ watch(activeTab, async (key, prevKey) => {
 	slideDir.value = keys.indexOf(key) >= keys.indexOf(prevKey) ? 'next' : 'prev'
 	await nextTick()
 	tabsRef.value?.querySelector('.active')?.scrollIntoView({ inline: 'center', block: 'nearest' })
+})
+// 状态筛选行同样可能超宽,切换筛选项后把它带回视野
+watch(taskFilter, async () => {
+	await nextTick()
+	statusFilterRef.value?.querySelector('.is-active')?.scrollIntoView({ inline: 'center', block: 'nearest' })
 })
 
 const taskProgressPercent = (item: any) => {
@@ -605,10 +646,6 @@ const getNewbieGiftPackageV = async()=>{
 //1 未完成 2 未领取 3已领取 4已结束
 const changeStatus = (val: any)=> {
 	const map = { 1: t('goComplete'), 2: t('receive'), 3: t('claimed'), 4: t('claimed')}
-	return map[val] || ''
-}
-const changeHeadStatus = (val: any)=> {
-	const map = { 1: t('undone'), 2: t('complete'), 3: t('complete'), 4: t('complete')}
 	return map[val] || ''
 }
 //领取状态 0 未完成 1 待领取 2已领取 3 领取完成
@@ -784,6 +821,9 @@ $buy-tint: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 
 		padding: 10px 20px 20px;
 		overflow-x: auto;
 		scrollbar-width: none;
+		// 手机触屏原生就能滑动;桌面用鼠标按住拖动(见 script 里 tabsDrag),这里只负责手型光标和禁止拖动时选中文字
+		cursor: grab;
+		user-select: none;
 		&::-webkit-scrollbar{
 			display: none;
 		}
@@ -839,6 +879,8 @@ $buy-tint: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 
 		margin: 24px 0 0;
 		overflow-x: auto;
 		scrollbar-width: none;
+		cursor: grab;
+		user-select: none;
 		&::-webkit-scrollbar{
 			display: none;
 		}
@@ -870,7 +912,7 @@ $buy-tint: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 
 		width: 100%;
 		max-width: 702px;
 		height: 80px;
-		margin: 32px auto 0;
+		margin: 32px auto 32px;
 		padding: 0 12px 0 24px;
 		background: #FFFFFF;
 		border-radius: 12px;
@@ -945,7 +987,19 @@ $buy-tint: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 
 			border-radius: 20px;
 			overflow: hidden;
 			padding: 0 0 10px;
-			margin-bottom: 20px;
+			margin-bottom: 16px;
+
+			// 每日/每周任务卡去掉了顶部状态横条(设计稿没有),改用顶部内边距顶开图标+标题行;
+			// 按设计稿实测(卡顶到图标顶)为 24px,新手礼包卡仍保留横条、不叠加这层内边距;
+			// 图标行自身原有 margin-top:20px(见 .task-item-type/.task-item-subject),
+			// 与这层 padding-top 会叠加(padding 会阻断 margin 塌陷),故下面把它清零,让 24px 内边距单独成立
+			&--card{
+				padding-top: 24px;
+				> .task-item-type,
+				> .task-item-subject{
+					margin-top: 0;
+				}
+			}
 
 			// 已结束(status 4):整卡叠一层灰,不必逐个子元素改色;按钮的置灰另见 .btnOther.status4
 			&.is-ended::after{
