@@ -153,7 +153,7 @@ const filteredActivityList = computed(() =>
 // 顶部图标行=「推荐位」,完全由下方活动列表里 recommend=true 的条目筛选+排序驱动(2026-09-23 二次拍板:
 // 连"活动奖励"也不再是前端写死排第一,它只是列表里一条 recommend=true 的普通配置,顺序跟列表走,没有
 // 任何一格是前端固定的)。这里只给"曾经是固定图标"的活动保留现成的 80×80 图标 + 复用原有红点/开关参数
-// 口径;没在这张表里的活动(锦标赛/首充奖励/积分商城/国庆充值活动等)如果也被勾成 recommend,用
+// 口径;没在这张表里的活动(锦标赛/积分商城/国庆充值活动等)如果也被勾成 recommend,用
 // ActivityEntryGrid 的通用图标兜底。enabled() 对应的是原来"这个入口该不该显示"的后台功能开关,与
 // recommend(是否被勾选推荐)是两个独立维度:开关关闭的活动即使被勾成推荐也不出现在图标行。
 const RECOMMEND_ICON_META: Partial<Record<string, { icon: string; enabled: () => boolean; badge: () => number }>> = {
@@ -164,6 +164,8 @@ const RECOMMEND_ICON_META: Partial<Record<string, { icon: string; enabled: () =>
 	newMemberPackage: { icon: 'a5', enabled: () => ActiveSotre.value.newMemberGiftPackageSwitch, badge: () => dotCount(redDot.value.firstGiftCount) },
 	// 第 6 个图标是普通幸运大转盘(v1 后台叫「大转盘配置」),不是邀请转盘,没有开关也没有红点
 	bigWheel: { icon: 'a6', enabled: () => true, badge: () => 0 },
+	// 首充奖励专用图标(2026-09-22 换掉通用兜底图),没有对应开关/红点
+	firstRecharge: { icon: 'a7', enabled: () => true, badge: () => 0 },
 }
 const navList = computed<ActivityEntryItem[]>(() =>
 	activityList.value
