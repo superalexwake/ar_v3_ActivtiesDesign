@@ -2,8 +2,8 @@
 	<div class="activity-panel">
 		<slot name="before-header"></slot>
 		<div class="activity-panel-header" :class="[`lg${showLength}`]">
-			<template v-for="item in navList" :key="item.goPath">
-				<div v-if="item.show" class="header-item" @click="$emit('navigate', item.goPath)">
+			<template v-for="item in navList" :key="item.bannerID">
+				<div class="header-item" @click="$emit('navigate', item.bannerID)">
 					<van-badge
 						:dot="isDot(item.noread)"
 						:content="badgeNum(item.noread)"
@@ -20,12 +20,14 @@
 </template>
 
 <script setup lang="ts">
+// 「推荐位」图标行的一项:内容取自下方活动列表里 recommend=true 的活动本身(活动名+图标),
+// 调用方已经按 recommend 过滤好并排好序,本组件不再做显隐判断
 export type ActivityEntryItem = {
+	/** 对应活动的 bannerID,点击时回传给调用方用来定位原始活动、复用同一套跳转逻辑 */
+	bannerID: number
 	name: string
 	icon: string
-	goPath: string
 	noread: number
-	show: boolean
 }
 
 defineProps<{
@@ -34,7 +36,7 @@ defineProps<{
 }>()
 
 defineEmits<{
-	(e: 'navigate', path: string): void
+	(e: 'navigate', bannerID: number): void
 }>()
 
 const isDot = (count?: number) => (count ?? 0) === 1
@@ -122,6 +124,13 @@ const badgeNum = (count?: number) => ((count ?? 0) > 1 ? count : undefined)
 					background: url("@/assets/icons/activity/invite_wheel.png") no-repeat;
 					background-position: center;
 					background-size: 80px, 80px;
+				}
+				// 没有专属图标映射的活动(每日签到/首充奖励/锦标赛/国庆充值活动等)被选进推荐位时的兜底通用图标
+				&.ageneric {
+					background: url("@/assets/icons/svg/activity.svg") no-repeat;
+					background-position: center;
+					background-size: 48px, 48px;
+					opacity: .7;
 				}
 			}
 		}

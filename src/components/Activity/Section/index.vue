@@ -13,9 +13,10 @@
 
 		<div v-show="activeTopTab === 'activity'">
 			<ActivityEntryGrid
+				v-if="navList.length"
 				:nav-list="navList"
-				:show-length="showLength"
-				@navigate="onNavigate"
+				:show-length="navList.length"
+				@navigate="onIconNavigate"
 			>
 				<template v-if="globalStore.token && ActiveSotre.isFinishUserGuidelines && ActiveSotre.isOpenActivityAward" #before-header>
 					<van-popover v-model:show="ActiveSotre.isFinishUserGuidelines" :overlay="true" placement="top-start" :close-on-click-overlay="false" class="arPopover">
@@ -60,7 +61,6 @@ import { AwaitApiResult } from '@/utils'
 import defaultImgAvatar from '@public/images/avatar.png'
 import { useRoute, useRouter } from 'vue-router'
 import type { ActivityList, UserInfo } from '@/types/api'
-import { useI18n } from 'vue-i18n'
 import { ref, computed, watch, onMounted, defineAsyncComponent } from 'vue'
 import { useActive } from '@/components/common/use'
 import { GetActivityList } from '@/api'
@@ -110,7 +110,6 @@ watch(()=>ActiveSotre.value.isOpenChampion,
 })
 
 const activityList = ref<ActivityList[]>([])
-const { t } = useI18n()
 const loading = ref(false);
 const finished = ref(false);
 const pageNo = ref(1);
@@ -124,7 +123,6 @@ const redDot = computed(() => ActiveSotre.value.activityRedDot)
 const dotCount = (n: number) => (hasLogin.value ? n : 0)
 
 // 活动/任务顶部切换:任务并入本页做 Tab,不再跳独立任务页(2026-09-22 拍板)。用地址参数 tab 记住,刷新后停在同一页签
-const ICON_TASK_SWITCH = '__switchTask__'
 const activeTopTab = ref<ActivityTopTab>(route.query.tab === 'task' ? 'task' : 'activity')
 // 任务 Tab 首次打开才挂载组件,之后一直用 v-show 保留状态(滚动位置/已加载数据),不随每次切换反复重建
 const hasOpenedTask = ref(activeTopTab.value === 'task')
@@ -152,26 +150,44 @@ const filteredActivityList = computed(() =>
 		: activityList.value.filter((item: any) => item.category === activeCategory.value)
 )
 
-const navList = computed<ActivityEntryItem[]>(()=>([
-	{ name: t('actTip1'), icon: 'a1', goPath: ICON_TASK_SWITCH, noread: dotCount(redDot.value.activityAwardCount), show: ActiveSotre.value.isOpenActivityAward },
-	{ name: t('invitationBonus'), icon: 'a2', goPath: 'InvitationBonus', noread: dotCount(redDot.value.invitationBonusCount), show: ActiveSotre.value.isTaskState},
-	{ name: t('laundryAmount'), icon: 'a3', goPath: 'Laundry', noread: dotCount(redDot.value.bettingRebateCount), show: ActiveSotre.value.isOpenWashCode},
-	{ name: t('superjackpot'), icon: 'a4', goPath: 'SuperJackpot', noread: dotCount(redDot.value.superJackpotCount), show: ActiveSotre.value.isOpenJackpotReward},
-	{ name: t('newMenberPackage'), icon: 'a5', goPath: "MemberPackage", noread: dotCount(redDot.value.firstGiftCount), show: ActiveSotre.value.newMemberGiftPackageSwitch},
-	// 第 6 个图标改为普通幸运大转盘(v1 后台叫「大转盘配置」),不是邀请转盘;目标路由是 /activity/Turntable(Turntable,大写)
-	{ name: t('activityBigWheel'), icon: 'a6', goPath: "Turntable", noread: 0, show: true },
-]))
-const showLength = computed(()=>{
-	return navList.value.filter(item=>item.show).length
-})
+// 顶部图标行=「推荐位」,由下方活动列表里 recommend=true 的条目筛选+排序驱动(2026-09-22 拍板),不再写死 6 个固定入口。
+// 这里只给"曾经是固定图标"的 6 个活动保留现成的 80×80 图标 + 复用原有红点参数口径;没在这张表里的活动
+// (每日签到/首充奖励/锦标赛/国庆充值活动等)如果也被选进推荐位,用 ActivityEntryGrid 的通用图标兜底(icon 留空)。
+// enabled() 对应的是原来"这个入口该不该显示"的后台功能开关,与 recommend(是否被选进推荐位)是两个独立维度:
+// 开关关闭的活动即使被选进推荐位也不出现在图标行,保持与老版本一致的功能可用性判断。
+const RECOMMEND_ICON_META: Partial<Record<string, { icon: string; enabled: () => boolean; badge: () => number }>> = {
+	taskReward: { icon: 'a1', enabled: () => ActiveSotre.value.isOpenActivityAward, badge: () => dotCount(redDot.value.activityAwardCount) },
+	invitationBonus: { icon: 'a2', enabled: () => ActiveSotre.value.isTaskState, badge: () => dotCount(redDot.value.invitationBonusCount) },
+	laundry: { icon: 'a3', enabled: () => ActiveSotre.value.isOpenWashCode, badge: () => dotCount(redDot.value.bettingRebateCount) },
+	superJackpot: { icon: 'a4', enabled: () => ActiveSotre.value.isOpenJackpotReward, badge: () => dotCount(redDot.value.superJackpotCount) },
+	newMemberPackage: { icon: 'a5', enabled: () => ActiveSotre.value.newMemberGiftPackageSwitch, badge: () => dotCount(redDot.value.firstGiftCount) },
+	// 第 6 个图标是普通幸运大转盘(v1 后台叫「大转盘配置」),不是邀请转盘,没有开关也没有红点
+	bigWheel: { icon: 'a6', enabled: () => true, badge: () => 0 },
+}
+const navList = computed<ActivityEntryItem[]>(() =>
+	activityList.value
+		.filter((item: any) => {
+			if (!item.recommend) return false
+			const meta = RECOMMEND_ICON_META[item.activityCode as string]
+			return meta ? meta.enabled() : true
+		})
+		.map((item: any) => {
+			const meta = RECOMMEND_ICON_META[item.activityCode as string]
+			return {
+				bannerID: item.bannerID,
+				name: item.bannerTitle,
+				icon: meta?.icon ?? 'ageneric',
+				noread: meta?.badge() ?? 0,
+			}
+		})
+)
 
-// 图标点击统一入口:「活动奖励」图标改为切到本页「任务」页签(不需要登录),其余图标仍按原逻辑登录后跳转
-const onNavigate = async (path: string) => {
-	if (path === ICON_TASK_SWITCH) {
-		switchTopTab('task')
-		return
-	}
-	await goProtectedPath(path)
+// 活动奖励(bannerID 1007)不是真的可进入活动,是"切到任务页签"的快捷方式,不走下面的正常跳转/登录判断
+const TASK_SWITCH_BANNER_ID = 1007
+// 图标点击统一入口:按 bannerID 找回原始活动,复用与下方卡片一样的 onClick 跳转/登录逻辑
+const onIconNavigate = (bannerID: number) => {
+	const item = activityList.value.find((entry: any) => entry.bannerID === bannerID)
+	if (item) onClick(item)
 }
 
 const onViewRecord = () => goProtectedPath('RedeemGift')
@@ -216,6 +232,11 @@ const checkActivityItemAccess = async (item: ActivityList, targetName?: string, 
 
 async function onClick(item: ActivityList) {
 	const {bannerID: id,jumpType, contents} = item;
+	// 活动奖励卡/图标:点击只切到「任务」页签,不需要登录、不走下面的跳转逻辑
+	if (id === TASK_SWITCH_BANNER_ID) {
+		switchTopTab('task')
+		return
+	}
 	if(jumpType == 2) {
 		if(contents?.startsWith('/')) {
 			if (!(await checkActivityItemAccess(item, undefined, contents))) return

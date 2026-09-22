@@ -427,14 +427,17 @@
 				{ "name": "redDot", "label": "入口红点", "type": "select", "default": "count", "options": [{ "value": "count", "label": "数字（活动奖励 2、其余 1）" }, { "value": "dot", "label": "全部圆点" }, { "value": "none", "label": "无" }], "drives": "activityRedDot.*、unJackpotCount、unWeeklyAwardCount、newbieGiftPackCount" },
 				{ "name": "guide", "label": "新手引导气泡", "type": "boolean", "default": false, "drives": "isFinishUserGuidelines（接口 false = 显示气泡，前端取反）" },
 				{ "name": "reminder", "label": "未领奖励提醒", "type": "boolean", "default": false, "drives": "isFirstUserDayRequest: true（需同时有未领数量）" },
-				{ "name": "banners", "label": "活动 Banner", "type": "select", "default": "six", "options": [{ "value": "six", "label": "6 张" }, { "value": "empty", "label": "无" }], "drives": "GetActivityList" }
+				{ "name": "banners", "label": "活动 Banner", "type": "select", "default": "six", "options": [{ "value": "six", "label": "6 张" }, { "value": "empty", "label": "无" }], "drives": "GetActivityList" },
+				{ "name": "recommendPreset", "label": "顶部图标行·推荐位方案", "type": "select", "default": "default", "options": [{ "value": "default", "label": "默认 6 个（活动奖励/邀请奖金/洗码返水/超级奖池/新会员礼包/大转盘）" }, { "value": "top3", "label": "只前 3 个（活动奖励/邀请奖金/洗码返水）" }, { "value": "none", "label": "全不推荐（图标区隐藏）" }], "drives": "GetActivityList 各活动的 recommend 字段；活动页顶部图标行只显示 recommend=true 的活动，顺序=它们在下方活动列表里的顺序。控制台没有多选清单控件，退一步用 3 组预设代替逐条勾选" }
 			],
 			"presets": [
 				{ "label": "默认", "values": {}, "note": "数字红点" },
 				{ "label": "无红点", "values": { "redDot": "none" } },
 				{ "label": "新手引导气泡", "values": { "guide": true }, "note": "“活动奖励”入口上方出现引导气泡，点击进每日任务" },
 				{ "label": "未领奖励提醒弹窗", "values": { "reminder": true }, "note": "进活动页弹“还有 N 笔奖励未领取”" },
-				{ "label": "无 Banner", "values": { "banners": "empty" }, "note": "空态" }
+				{ "label": "无 Banner", "values": { "banners": "empty" }, "note": "空态" },
+				{ "label": "推荐位：只前 3 个", "values": { "recommendPreset": "top3" }, "note": "顶部图标行只剩活动奖励/邀请奖金/洗码返水 3 个" },
+				{ "label": "推荐位：全不推荐", "values": { "recommendPreset": "none" }, "note": "顶部图标区整块隐藏" }
 			]
 		},
 		"rewardCenter": {
