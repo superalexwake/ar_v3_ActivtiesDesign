@@ -30,7 +30,7 @@ export interface ActivityCenterParams {
 	/**
 	 * 显示锦标赛(2026-09-22 拍板:锦标赛默认隐藏,不再从活动列表里删除——HOT 标签、倒计时/最高奖金数据
 	 * 仍保留在假数据里,只是默认不放进 GetActivityList 的返回结果,活动列表和顶部图标行都不出现;打开后原样
-	 * 出现(HOT、倒计时、最高奖金都在)。
+	 * 出现(HOT、倒计时、最高奖金都在)。2026-09-23 拍板对齐设计稿 `活动.png`，卡名改叫"电子锦标赛"。
 	 */
 	showChampionship: boolean
 	/**
@@ -84,14 +84,14 @@ export const bannerUrl = (ctx: MockContext, name: string): string =>
 
 /**
  * 图标行「推荐位」用的活动识别码，只给需要在图标行复用现成 80×80 图标 + 走红点/开关参数的活动用；
- * 没有 activityCode 的活动(锦标赛/积分商城/国庆充值活动)如果被勾成 recommend，前端用一张
+ * 没有 activityCode 的活动(电子锦标赛/积分商城/国庆充值活动)如果被勾成 recommend，前端用一张
  * 通用活动图标兜底，见 ActivityEntryGrid.vue 的 `.ageneric`。
  */
 export type RecommendActivityCode = 'taskReward' | 'invitationBonus' | 'laundry' | 'superJackpot' | 'newMemberPackage' | 'bigWheel' | 'firstRecharge'
 
 /**
  * "top3"预设的候选顺序：与下方活动列表展示顺序一致；积分商城(1011)、国庆充值活动(1006)不参与推荐(与
- * "default"预设口径一致，这两条从来不在推荐候选里)；活动奖励(1007)、锦标赛(1004)各自受各自的显示开关
+ * "default"预设口径一致，这两条从来不在推荐候选里)；活动奖励(1007)、电子锦标赛(1004)各自受各自的显示开关
  * 控制——开关关闭时对应候选从这份顺序表里被过滤掉，不占 top3 的名额。
  */
 const TOP3_CANDIDATE_ORDER = [1007, 1004, 1002, 1008, 1003, 1005, 1009, 1010]
@@ -102,10 +102,10 @@ const TOP3_CANDIDATE_ORDER = [1007, 1004, 1002, 1008, 1003, 1005, 1009, 1010]
  * 出现在图标行，勾选顺序跟着下面活动列表的展示顺序走)。控制台没有多选清单控件，用 3 组预设(按
  * bannerID)代替逐条勾选。
  *
- * @param showChampionship - 锦标赛(1004)默认从活动列表里隐藏(见 `showChampionship` 参数)。
+ * @param showChampionship - 电子锦标赛(1004)默认从活动列表里隐藏(见 `showChampionship` 参数)。
  * @param showActivityAward - 活动奖励(1007)默认从活动列表里隐藏(见 `showActivityAward` 参数)。
  * 两者任一隐藏时，"top3"预设按 `TOP3_CANDIDATE_ORDER` 顺序跳过它，取剩余候选的前 3 条；两个都保持
- * 默认(隐藏)时前 3 条是 首充奖励→邀请奖励→大转盘。
+ * 默认(隐藏)时前 3 条是 首充返利→邀请奖励→大转盘。
  */
 const recommendSetFor = (
 	preset: ActivityCenterParams['recommendPreset'],
@@ -113,7 +113,7 @@ const recommendSetFor = (
 	showActivityAward: boolean
 ): Set<number> => {
 	switch (preset) {
-		// 默认勾选:活动奖励(1007)、首充奖励(1002，卡片本来就挂着"推荐"标签)、邀请奖励(1008)、
+		// 默认勾选:活动奖励(1007)、首充返利(1002，卡片本来就挂着"推荐"标签)、邀请奖励(1008)、
 		// 大转盘(1003)、新会员礼包(1005)、洗码返水(1009)、超级奖池(1010)
 		case 'default':
 			return new Set([1007, 1002, 1008, 1003, 1005, 1009, 1010])
@@ -133,9 +133,10 @@ const recommendSetFor = (
 
 /**
  * 活动页的活动列表；顺序、名称、标签对齐设计稿 `活动.png` + 2026-09-23 两轮打回的最终口径：
- * 活动奖励(点击切任务页签，未登录也能点，2026-09-23 起默认隐藏，见 `showActivityAward` 参数) → 锦标赛
- * (HOT，带倒计时/最高奖金框，2026-09-22 起默认隐藏，见 `showChampionship` 参数) → 首充奖励 → 邀请奖励
- * (NEW) → 积分商城 → 其余活动。「每日签到」仍不放回来(它属于任务页签)。
+ * 活动奖励(点击切任务页签，未登录也能点，2026-09-23 起默认隐藏，见 `showActivityAward` 参数) → 电子锦标赛
+ * (HOT，带倒计时/最高奖金框，2026-09-22 起默认隐藏，见 `showChampionship` 参数) → 首充返利 → 邀请奖励
+ * (NEW) → 积分商城 → 其余活动。「每日签到」仍不放回来(它属于任务页签)。卡名"电子锦标赛""首充返利"按
+ * 2026-09-23 设计稿口径改名，之前分别叫"锦标赛""首充奖励"。
  *
  * @remarks 卡片上显示的"推荐"标签就是 recommend 字段本身(2026-09-23 拍板)：勾了 recommend 才会
  * 同时"上图标行"+"显示推荐标签"，两件事不再分开配置——所以这里不再有独立的 tag:'recommend' 字面量，
@@ -155,9 +156,9 @@ const banners = (ctx: MockContext) => {
 		// 活动奖励(HOT/倒计时等无关，但数据本身都留着):默认不放进返回结果,由 showActivityAward 开关控制显隐,不是删除；
 		// 不是真的可进入活动，是"切到任务页签"的快捷方式；前端按 bannerID===1007 特判，点击不导航、只切 Tab，也不需要登录
 		{ bannerID: 1007, bannerTitle: pick(ctx, '活动奖励', 'Activity Rewards', 'गतिविधि पुरस्कार'), jumpType: 0, contents: '', image: 'activity', category: 'game', specialTag: null, activityCode: 'taskReward' },
-		// 锦标赛(HOT、倒计时、最高奖金数据都留着):默认不放进返回结果,由 showChampionship 开关控制显隐,不是删除
-		{ bannerID: 1004, bannerTitle: pick(ctx, '锦标赛', 'Tournament', 'चैंपियनशिप'), jumpType: 2, contents: '/activity/Championship', image: 'championship', category: 'game', specialTag: 'hot', activityCode: null },
-		{ bannerID: 1002, bannerTitle: pick(ctx, '首充奖励', 'First Deposit Bonus', 'पहला डिपॉज़िट बोनस'), jumpType: 2, contents: '/activity/FirstRecharge', image: 'first-recharge', category: 'recharge', specialTag: null, activityCode: 'firstRecharge' },
+		// 电子锦标赛(HOT、倒计时、最高奖金数据都留着):默认不放进返回结果,由 showChampionship 开关控制显隐,不是删除
+		{ bannerID: 1004, bannerTitle: pick(ctx, '电子锦标赛', 'e-Tournament', 'ई-टूर्नामेंट'), jumpType: 2, contents: '/activity/Championship', image: 'championship', category: 'game', specialTag: 'hot', activityCode: null },
+		{ bannerID: 1002, bannerTitle: pick(ctx, '首充返利', 'First Deposit Rebate', 'पहला डिपॉज़िट वापसी'), jumpType: 2, contents: '/activity/FirstRecharge', image: 'first-recharge', category: 'recharge', specialTag: null, activityCode: 'firstRecharge' },
 		{ bannerID: 1008, bannerTitle: pick(ctx, '邀请奖励', 'Invitation Bonus', 'आमंत्रण बोनस'), jumpType: 2, contents: '/main/InvitationBonus', image: 'activity', category: 'game', specialTag: 'new', activityCode: 'invitationBonus' },
 		{ bannerID: 1011, bannerTitle: pick(ctx, '积分商城', 'Points Mall', 'पॉइंट्स मॉल'), jumpType: 2, contents: '/activity/PointMall', image: 'activity', category: 'game', specialTag: null, activityCode: null },
 		{ bannerID: 1003, bannerTitle: pick(ctx, '大转盘', 'Spin Wheel', 'स्पिन व्हील'), jumpType: 2, contents: '/activity/Turntable', image: 'turntable', category: 'game', specialTag: null, activityCode: 'bigWheel' },
