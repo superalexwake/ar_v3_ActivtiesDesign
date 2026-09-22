@@ -3483,6 +3483,7 @@ export default {
 	code8132: '充值等级奖励',
 	code8133: 'VIP充值等级奖励',
 	bonusDetails: '奖金明细',
+	rewardDetails: '奖励明细',
 	todayRewards: '今日奖金',
 	totalRewards: '总奖金',
 	bonusCollection: '奖金中心',

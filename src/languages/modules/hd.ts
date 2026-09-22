@@ -3299,6 +3299,7 @@ export default {
 	downReceiveText2:"इवेंट की शर्तें पूरी करें",
 	downReceiveText3:"आपके लिए विशेष उपहार",
 	bonusDetails:"बोनस विवरण",
+	rewardDetails: "इनाम विवरण",
 	todayRewards:"आज का बोनस",
 	totalRewards:"कुल बोनस",
 	bonusCollection:"बोनस संग्रह",

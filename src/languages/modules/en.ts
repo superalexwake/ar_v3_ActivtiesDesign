@@ -3643,6 +3643,7 @@ export default {
 	code8132: 'Top-up Rewards',
 	code8133: 'VIP Rewards',
 	bonusDetails: 'Bonus details',
+	rewardDetails: 'Reward details',
 	todayRewards: "Today's bonus",
 	totalRewards: 'Total bonus',
 	bonusCollection: 'Bonus collection',
