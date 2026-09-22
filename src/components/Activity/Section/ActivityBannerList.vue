@@ -110,9 +110,16 @@ const championshipOverlay = computed(() => {
 
 		.box-media {
 			position: relative;
+			width: 100%;
+			height: 260px;
+			border-radius: 16px 16px 0 0;
+			overflow: hidden;
 		}
 
 		& > .box-content {
+			width: 100%;
+			height: 100px;
+			box-sizing: border-box;
 			padding: 18px 24px;
 			line-height: 24px;
 
@@ -131,7 +138,9 @@ const championshipOverlay = computed(() => {
 		img {
 			display: block;
 			width: 100%;
-			height: 260px;
+			height: 100%;
+			margin: 0;
+			object-fit: cover;
 		}
 	}
 }
