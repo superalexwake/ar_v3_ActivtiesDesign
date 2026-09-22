@@ -36,7 +36,7 @@ const tabs = computed<{ key: ActivityTopTab; label: string }[]>(() => [
 .activity-switch-tabs {
 	display: flex;
 	height: 88px;
-	margin: 32px 24px 0;
+	margin: 24px 24px 0;
 	background: #FFFFFF;
 	border-radius: 16px;
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);

@@ -68,7 +68,7 @@ const formatBonusAmount = (value: number) => {
 	color: #fff;
 	font-style: normal;
 	background: #F95959;
-	padding: 56px 32px 30px;
+	padding: 16px 32px 16px;
 	&__row1{
 		display: flex;
 		align-items: center;
@@ -93,9 +93,9 @@ const formatBonusAmount = (value: number) => {
 		}
 	}
 	&__row2{
-		margin-top: 64px;
-		// 固定最小高度,已登录/未登录两种内容切换时不改变头部总高度
-		min-height: 78px;
+		margin-top: 20px;
+		// 固定最小高度(标签行高32+标签到金额6+金额行高36=74),已登录/未登录两种内容切换时不改变头部总高度
+		min-height: 74px;
 		display: flex;
 		align-items: center;
 	}
@@ -124,11 +124,13 @@ const formatBonusAmount = (value: number) => {
 			p{
 				font-weight: 400;
 				font-size: 26px;
-				margin-bottom: 10px;
+				line-height: 32px;
+				margin-bottom: 6px;
 			}
 			h3{
 				font-weight: 700;
 				font-size: 32px;
+				line-height: 36px;
 				color: #FFE45C;
 			}
 		}
