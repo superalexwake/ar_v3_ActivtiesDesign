@@ -64,15 +64,21 @@ const RECEIVE_STATE_MAP: Record<RewardItemStatus, number> = { progress: 0, claim
 export const bannerUrl = (ctx: MockContext, name: string): string =>
 	`mock-img/banner-${name}${ctx.lang === 'zh' ? '' : '.' + ctx.lang}.svg`
 
-/** 活动页的 6 个 Banner；bannerID 从 1001 开始，1～3 被 Section/index.vue 的 getActivityRouteName 占用 */
+/**
+ * 活动页的 6 个 Banner；bannerID 从 1001 开始，1～3 被 Section/index.vue 的 getActivityRouteName 占用。
+ *
+ * @remarks category(充值/游戏/新人)、tag(HOT/推荐/NEW/无)是活动页筛选与标签用的固定枚举，不走 pick()
+ * 本地化——展示文案由 ActivityFilterTabs.vue / ActivityBannerList.vue 按枚举值统一走 $t()，与筛选 Tab
+ * 自身的文案同一套体系，避免和 mock 层的 pick() 两处维护同一份译文。
+ */
 const banners = (ctx: MockContext) =>
 	[
-		{ bannerID: 1001, bannerTitle: pick(ctx, '每日签到', 'Daily Check-in', 'दैनिक चेक-इन'), jumpType: 2, contents: '/activity/DailySignIn', image: 'sign-in' },
-		{ bannerID: 1002, bannerTitle: pick(ctx, '首充奖励', 'First Deposit Bonus', 'पहला डिपॉज़िट बोनस'), jumpType: 2, contents: '/activity/FirstRecharge', image: 'first-recharge' },
-		{ bannerID: 1003, bannerTitle: pick(ctx, '大转盘', 'Spin Wheel', 'स्पिन व्हील'), jumpType: 2, contents: '/activity/Turntable', image: 'turntable' },
-		{ bannerID: 1004, bannerTitle: pick(ctx, '锦标赛', 'Tournament', 'चैंपियनशिप'), jumpType: 2, contents: '/activity/Championship', image: 'championship' },
-		{ bannerID: 1005, bannerTitle: pick(ctx, '新会员礼包', 'New Member Gift Pack', 'नए सदस्य उपहार पैक'), jumpType: 2, contents: '/activity/MemberPackage', image: 'member-package' },
-		{ bannerID: 1006, bannerTitle: pick(ctx, '国庆充值活动', 'National Day Deposit Event', 'राष्ट्रीय दिवस डिपॉज़िट इवेंट'), jumpType: 0, contents: '', image: 'activity' },
+		{ bannerID: 1001, bannerTitle: pick(ctx, '每日签到', 'Daily Check-in', 'दैनिक चेक-इन'), jumpType: 2, contents: '/activity/DailySignIn', image: 'sign-in', category: 'game', tag: null },
+		{ bannerID: 1002, bannerTitle: pick(ctx, '首充奖励', 'First Deposit Bonus', 'पहला डिपॉज़िट बोनस'), jumpType: 2, contents: '/activity/FirstRecharge', image: 'first-recharge', category: 'recharge', tag: 'recommend' },
+		{ bannerID: 1003, bannerTitle: pick(ctx, '大转盘', 'Spin Wheel', 'स्पिन व्हील'), jumpType: 2, contents: '/activity/Turntable', image: 'turntable', category: 'game', tag: null },
+		{ bannerID: 1004, bannerTitle: pick(ctx, '锦标赛', 'Tournament', 'चैंपियनशिप'), jumpType: 2, contents: '/activity/Championship', image: 'championship', category: 'game', tag: 'hot' },
+		{ bannerID: 1005, bannerTitle: pick(ctx, '新会员礼包', 'New Member Gift Pack', 'नए सदस्य उपहार पैक'), jumpType: 2, contents: '/activity/MemberPackage', image: 'member-package', category: 'newUser', tag: 'new' },
+		{ bannerID: 1006, bannerTitle: pick(ctx, '国庆充值活动', 'National Day Deposit Event', 'राष्ट्रीय दिवस डिपॉज़िट इवेंट'), jumpType: 0, contents: '', image: 'activity', category: 'recharge', tag: null },
 	].map(({ image, ...item }) => ({ ...item, bannerUrl: bannerUrl(ctx, image), jumpLinkType: 0, visibility: 0 }))
 
 /** 1006 国庆充值活动的图文详情，3 段正文 */

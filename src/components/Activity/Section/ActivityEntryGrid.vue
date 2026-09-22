@@ -16,27 +16,6 @@
 				</div>
 			</template>
 		</div>
-		<div class="activity-panel-content">
-			<div class="content-title" @click="$emit('navigate', 'RedeemGift')">
-				<img src="@public/activity/DailyTask/signInBanner.png" />
-				<div class="content-para">{{ $t('giftExchange') }}</div>
-				<p>{{ $t('activityTip3') }}</p>
-			</div>
-			<div class="content-title" @click="$emit('navigate', 'DailySignIn')">
-				<!-- position 用 top-left 是为避开 ar.scss 对 top-right 的 RTL 覆盖 -->
-				<van-badge
-					class="attendance-badge"
-					position="top-left"
-					:dot="isDot(attendanceCount)"
-					:content="badgeNum(attendanceCount)"
-					max="99"
-					color="#FA5B5B"
-				/>
-				<img src="@public/activity/DailyTask/giftRedeem.png" />
-				<div class="content-para">{{ $t('code8007') }}</div>
-				<p>{{ $t('activityTip4') }}</p>
-			</div>
-		</div>
 	</div>
 </template>
 
@@ -52,7 +31,6 @@ export type ActivityEntryItem = {
 defineProps<{
 	navList: ActivityEntryItem[]
 	showLength: number
-	attendanceCount?: number // 每日签到今日可领
 }>()
 
 defineEmits<{
@@ -145,42 +123,6 @@ const badgeNum = (count?: number) => ((count ?? 0) > 1 ? count : undefined)
 					background-position: center;
 					background-size: 80px, 80px;
 				}
-			}
-		}
-	}
-	&-content{
-		display: flex;
-		justify-content: space-between;
-		flex-wrap: wrap;
-		margin-top: 20px;
-		.content-title{
-			position: relative;
-			width: calc((100% - 18px) / 2);
-			display: flex;
-			flex-direction: column;
-			justify-content: flex-start;
-			background: var(--darkBg,var(--bg_color_L2));
-			border-radius: 10px;
-			padding-bottom: 20px;
-			box-shadow: var(--BoxShadowColor-35);
-			.attendance-badge{
-				position: absolute;
-				top: 16px;
-				right: 16px;
-				left: auto;
-				transform: none;
-				z-index: 2;
-				box-shadow: 0 0 0 3px #fff;
-			}
-			.content-para{
-				color: var(--darkTextW,var(--text_color_L1));
-				font-weight: bold;
-				padding: 10px 20px;
-				font-size: 28px;
-			}
-			p{
-				padding: 5px 20px;
-				color: var(--text_color_L2);
 			}
 		}
 	}

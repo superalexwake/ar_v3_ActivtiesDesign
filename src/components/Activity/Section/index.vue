@@ -9,58 +9,68 @@
 			@bonus="goProtectedPath('Bonus')"
 		/>
 
-		<ActivityEntryGrid
-			:nav-list="navList"
-			:show-length="showLength"
-			:attendance-count="dotCount(redDot.attendanceBonusCount)"
-			@navigate="goProtectedPath"
-		>
-			<template v-if="globalStore.token && ActiveSotre.isFinishUserGuidelines && ActiveSotre.isOpenActivityAward" #before-header>
-				<van-popover v-model:show="ActiveSotre.isFinishUserGuidelines" :overlay="true" placement="top-start" :close-on-click-overlay="false" class="arPopover">
-					<div class="msg-window">
-						<div class="msg-header">{{$t('activityTip8')}}</div>
-						<div class="msg-footer">
-							<div @click="goDetail">
-								<span>{{$t('dragonEntry')}}</span>
-								<van-icon name="arrow-double-right" color="var(main-color)"/>
+		<ActivitySwitchTabs :active="activeTopTab" @switch="onSwitchTopTab" />
+
+		<div v-show="activeTopTab === 'activity'">
+			<ActivityEntryGrid
+				:nav-list="navList"
+				:show-length="showLength"
+				@navigate="onNavigate"
+			>
+				<template v-if="globalStore.token && ActiveSotre.isFinishUserGuidelines && ActiveSotre.isOpenActivityAward" #before-header>
+					<van-popover v-model:show="ActiveSotre.isFinishUserGuidelines" :overlay="true" placement="top-start" :close-on-click-overlay="false" class="arPopover">
+						<div class="msg-window">
+							<div class="msg-header">{{$t('activityTip8')}}</div>
+							<div class="msg-footer">
+								<div @click="goDetail">
+									<span>{{$t('dragonEntry')}}</span>
+									<van-icon name="arrow-double-right" color="var(main-color)"/>
+								</div>
 							</div>
 						</div>
-					</div>
   					<template #reference>
 						<div class="nowidth"></div>
 					</template>
-				</van-popover>
-			</template>
-		</ActivityEntryGrid>
-		<div class="cardBox" v-if="ActiveSotre.isOpenChampion == 1">
-			<Card :itemD="championEntranceVO" :state="championEntranceVO.state" v-model:isRefresh="isRefresh" bgImgWidth="100%" bgImgHeight="150px"
-			@click="goProtectedPath('Championship')">
-			</Card>
+					</van-popover>
+				</template>
+			</ActivityEntryGrid>
+			<div class="cardBox" v-if="ActiveSotre.isOpenChampion == 1">
+				<Card :itemD="championEntranceVO" :state="championEntranceVO.state" v-model:isRefresh="isRefresh" bgImgWidth="100%" bgImgHeight="150px"
+				@click="goProtectedPath('Championship')">
+				</Card>
+			</div>
+
+			<GiftExchangeCard @view-record="onViewRecord" />
+
+			<ActivityFilterTabs v-model="activeCategory" />
+
+			<ActivityBannerList
+				v-model:loading="loading"
+				:list="filteredActivityList"
+				:finished="finished"
+				:is-show-empty="isShowEmpty"
+				:championship="championEntranceVO"
+				@load="onLoad"
+				@click-item="onClick"
+				@image-error="fixIcons"
+			/>
 		</div>
 
-		<ActivityBannerList
-			v-model:loading="loading"
-			:list="activityList"
-			:finished="finished"
-			:is-show-empty="isShowEmpty"
-			@load="onLoad"
-			@click-item="onClick"
-			@image-error="fixIcons"
-		/>
+		<DailyTasksPage v-if="hasOpenedTask" v-show="activeTopTab === 'task'" embedded />
 	</div>
 </template>
 
 <script setup lang="ts">
 import { AwaitApiResult } from '@/utils'
 import defaultImgAvatar from '@public/images/avatar.png'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import type { ActivityList, UserInfo } from '@/types/api'
 import { useI18n } from 'vue-i18n'
-import { ref,computed,watch,onMounted } from 'vue'
+import { ref, computed, watch, onMounted, defineAsyncComponent } from 'vue'
 import { useActive } from '@/components/common/use'
 import { GetActivityList } from '@/api'
 import Card from '@/components/Activity/Championship/card.vue'
-import { useChampionship, useHome } from "@/hooks"
+import { useChampionship } from "@/hooks"
 import { GlobalStore, SettingStore } from '@/stores'
 import { useServer } from '@/hooks/useServe.hook'
 import { requireLoginAction } from '@/hooks/useLoginIntercept'
@@ -72,13 +82,18 @@ import { ACTIVITY_UN_AWARD_REMINDER_DIALOG_KEY } from '@/hooks/dialogKeys'
 import ActivityRewardHeader from './ActivityRewardHeader.vue'
 import ActivityEntryGrid, { type ActivityEntryItem } from './ActivityEntryGrid.vue'
 import ActivityBannerList from './ActivityBannerList.vue'
+import ActivitySwitchTabs, { type ActivityTopTab } from './ActivitySwitchTabs.vue'
+import ActivityFilterTabs, { type ActivityCategory } from './ActivityFilterTabs.vue'
+import GiftExchangeCard from './GiftExchangeCard.vue'
+
+// 任务页签内容较重(周卡/月卡/新手礼包等一整套逻辑),异步加载,首次切到「任务」才拉取该 chunk
+const DailyTasksPage = defineAsyncComponent(() => import('@/views/activity/DailyTasks/index.vue'))
 
 const { getSelfCustomerServiceLink } = useServer({ServerType: 2})
 const { ActiveSotre, saveUserGuidelines, saveUserDayRequest,getDailyAwardCount,allUnAwardCount, getActive } = useActive()
 const setting = SettingStore()
 const globalStore = GlobalStore()
 const {championEntranceV,championEntranceVO} = useChampionship()
-const {isOpenInvitedWheel} = useHome()
 const dialogQueue = useDialogQueue()
 const userInfo = computed(() => globalStore.getUserInfo as UserInfo)
 const activityBonusHiddenUsers = [
@@ -114,21 +129,66 @@ const pageNo = ref(1);
 const isShowEmpty = ref(false);
 
 const router = useRouter()
+const route = useRoute()
 const hasLogin = computed(() => Boolean(globalStore.token))
 // 红点计数:未登录一律 0(后端未登录也返全 0,前端再兜底一层)
 const redDot = computed(() => ActiveSotre.value.activityRedDot)
 const dotCount = (n: number) => (hasLogin.value ? n : 0)
+
+// 活动/任务顶部切换:任务并入本页做 Tab,不再跳独立任务页(2026-09-22 拍板)。用地址参数 tab 记住,刷新后停在同一页签
+const ICON_TASK_SWITCH = '__switchTask__'
+const activeTopTab = ref<ActivityTopTab>(route.query.tab === 'task' ? 'task' : 'activity')
+// 任务 Tab 首次打开才挂载组件,之后一直用 v-show 保留状态(滚动位置/已加载数据),不随每次切换反复重建
+const hasOpenedTask = ref(activeTopTab.value === 'task')
+watch(activeTopTab, (val) => {
+	if (val === 'task') hasOpenedTask.value = true
+})
+watch(() => route.query.tab, (val) => {
+	activeTopTab.value = val === 'task' ? 'task' : 'activity'
+})
+const switchTopTab = (tab: ActivityTopTab) => {
+	if (activeTopTab.value === tab) return
+	activeTopTab.value = tab
+	router.replace({ query: { ...route.query, tab } })
+}
+// 顶部切换条直接点「任务」与图标入口口径一致,同样需要登录
+const onSwitchTopTab = async (tab: ActivityTopTab) => {
+	if (tab === 'task' && !(await requireLoginAction())) return
+	switchTopTab(tab)
+}
+
+// 活动列表筛选(全部/充值/游戏/新人),category 由 mock 假数据的 category 字段提供
+const activeCategory = ref<ActivityCategory>('all')
+const filteredActivityList = computed(() =>
+	activeCategory.value === 'all'
+		? activityList.value
+		: activityList.value.filter((item: any) => item.category === activeCategory.value)
+)
+
 const navList = computed<ActivityEntryItem[]>(()=>([
-	{ name: t('actTip1'), icon: 'a1', goPath: 'DailyTasks', noread: dotCount(redDot.value.activityAwardCount), show: ActiveSotre.value.isOpenActivityAward },
+	{ name: t('actTip1'), icon: 'a1', goPath: ICON_TASK_SWITCH, noread: dotCount(redDot.value.activityAwardCount), show: ActiveSotre.value.isOpenActivityAward },
 	{ name: t('invitationBonus'), icon: 'a2', goPath: 'InvitationBonus', noread: dotCount(redDot.value.invitationBonusCount), show: ActiveSotre.value.isTaskState},
 	{ name: t('laundryAmount'), icon: 'a3', goPath: 'Laundry', noread: dotCount(redDot.value.bettingRebateCount), show: ActiveSotre.value.isOpenWashCode},
 	{ name: t('superjackpot'), icon: 'a4', goPath: 'SuperJackpot', noread: dotCount(redDot.value.superJackpotCount), show: ActiveSotre.value.isOpenJackpotReward},
 	{ name: t('newMenberPackage'), icon: 'a5', goPath: "MemberPackage", noread: dotCount(redDot.value.firstGiftCount), show: ActiveSotre.value.newMemberGiftPackageSwitch},
-	{ name: t('inviteWheel'), icon: 'a6', goPath: "turntable", noread: dotCount(redDot.value.invitedWheelCount), show: isOpenInvitedWheel.value},
+	// 第 6 个图标改为普通幸运大转盘(v1 后台叫「大转盘配置」),不是邀请转盘;目标路由是 /activity/Turntable(Turntable,大写)
+	{ name: t('activityBigWheel'), icon: 'a6', goPath: "Turntable", noread: 0, show: true },
 ]))
 const showLength = computed(()=>{
 	return navList.value.filter(item=>item.show).length
 })
+
+// 图标点击统一入口:「活动奖励」图标改为切到本页「任务」页签,其余图标仍按原逻辑登录后跳转
+const onNavigate = async (path: string) => {
+	if (path === ICON_TASK_SWITCH) {
+		if (!(await requireLoginAction())) return
+		switchTopTab('task')
+		return
+	}
+	await goProtectedPath(path)
+}
+
+const onViewRecord = () => goProtectedPath('RedeemGift')
 
 const ACTIVITY_PROTECTED_ROUTE_NAMES = new Set(['DailyTasks', 'PointMall', 'InvitationBonus'])
 

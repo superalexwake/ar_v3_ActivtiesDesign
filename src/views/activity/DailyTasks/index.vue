@@ -1,5 +1,6 @@
 <template>
 	<div class="dailySignIn__container">
+		<template v-if="!props.embedded">
 		<NavBar title="" :placeholder="false" left-arrow @click-left="onClick" >
 			<template #right>
 				<div class="navi-record" @click="goRecord">
@@ -30,6 +31,7 @@
 				</p>
 			</div>
 		</div>
+		</template>
 		<div class="task-tabs" ref="tabsRef">
 			<button
 				v-for="tab in visibleTabs"
@@ -218,6 +220,8 @@ import CoinShower from './CoinShower.vue';
 import { BetRule } from '@/saasLottery/components';
 import { currencyTrim as money } from '@/utils';
 import { useWalletStore } from '@/stores';
+// embedded=true 时用于嵌进活动页「任务」页签:隐藏自身导航栏与顶部大图 banner,只保留子页签条+列表+弹窗
+const props = withDefaults(defineProps<{ embedded?: boolean }>(), { embedded: false })
 const { t } = useI18n()
 const showDialog = ref(false)
 const ruleDialog = ref(false)
