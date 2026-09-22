@@ -124,6 +124,15 @@ const flag = (on: boolean) => (on ? '1' : '0')
 /** 读取某个活动的开关参数 enabled */
 const isEnabled = (ctx: MockContext, activity: string) => params<{ enabled: boolean }>(ctx, activity).enabled
 
+/**
+ * 锦标赛入口是否对用户可见(2026-09-23 拍板:锦标赛全站默认隐藏)：既要 championship 活动自己的开关打开，
+ * 也要活动页「显示锦标赛」开关(activityCenter.showChampionship)打开；后者默认 false，所以锦标赛在两处
+ * 开关都保持默认时不可见——isOpenChampion 字段是"我的"页锦标赛入口、活动页赛事卡数据拉取共用的唯一开关，
+ * 这里统一收口，不用在各个消费它的前端文件里分别判断。
+ */
+const isChampionshipVisible = (ctx: MockContext) =>
+	isEnabled(ctx, 'championship') && params<ActivityCenterParams>(ctx, 'activityCenter').showChampionship
+
 const nickName = (ctx: MockContext) => pick(ctx, '原型用户', 'Prototype User', 'प्रोटोटाइप यूज़र')
 
 const now = () => dayjs().format(TIME_FORMAT)
@@ -150,7 +159,7 @@ function activeSetting(ctx: MockContext) {
 		isOpenWashCode: flag(isEnabled(ctx, 'laundry')),
 		isOpenActivityAward: flag(isEnabled(ctx, 'dailyTask')),
 		newMemberGiftPackageSwitch: flag(isEnabled(ctx, 'memberPackage')),
-		isOpenChampion: flag(isEnabled(ctx, 'championship')),
+		isOpenChampion: flag(isChampionshipVisible(ctx)),
 		unJackpotCount: other,
 		unWeeklyAwardCount: other,
 		// 接口 false 表示未完成引导，页面取反后显示气泡
@@ -271,7 +280,7 @@ export function userInfoOf(ctx: MockContext) {
 		amount: ctx.state.balance,
 		integral: pointMallState(ctx).points,
 		isOpenPointMall: flag(isEnabled(ctx, 'pointMall')),
-		isOpenChampion: flag(isEnabled(ctx, 'championship')),
+		isOpenChampion: flag(isChampionshipVisible(ctx)),
 		unUsedRechargeCouponCount: params<{ unused: number }>(ctx, 'coupon').unused,
 		// 不在 UserInfo 类型声明中，注册彩金弹窗文案读取（pushRegisterGiftDialog）
 		channelAmountofCode: params<RegisterGiftParams>(ctx, 'registerGift').turnover,

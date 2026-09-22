@@ -34,7 +34,7 @@ export function useBonusPack() {
 	const {t}=useI18n()
 	const router=useRouter();
 	const {onTriggerGoogle}=useTrigger()
-	const { refreshRedDot } = useActive()
+	const { refreshRedDot, ActiveSotre } = useActive()
 	const loading=ref(false);
 	const query=reactive({
 		date:null,
@@ -108,7 +108,8 @@ export function useBonusPack() {
 		20: { label: t('invitationBonus'), value: 20 },
 		119: { label: t('code8119'), value: 119 },
 		103: { label: t('code9309'), value: 103 },
-		114: { label: t('code8114'), value: 114 },
+		// 锦标赛奖励(114)跟随"显示锦标赛"开关(ActiveSotre.isOpenChampion),默认隐藏；不删定义，开关打开后原样出现
+		...(ActiveSotre.value.isOpenChampion == 1 ? { 114: { label: t('code8114'), value: 114 } } : {}),
 		126: { label: t('withdrawalRewards'), value: 126 },
 		116: { label: t('newMembersRewards'), value: 116 },
 		130: { label: t('code8130'), value: 130 },

@@ -22,7 +22,6 @@
 				{ "title": "保险箱收益", "type": 17, "kind": "route", "target": "/main/StrongBox", "activity": "strongBox" },
 				{ "title": "回归新充值奖励", "type": 134, "kind": "popup", "popup": "re-benefit", "note": "首页弹窗", "activity": "reBenefit" },
 				{ "title": "新手礼包", "type": 113, "kind": "route", "target": "/activity?tab=task", "note": "落在每日任务页的「新手礼包」Tab", "activity": "newbieGift" },
-				{ "title": "锦标赛奖励", "type": 114, "kind": "route", "target": "/activity/Championship", "activity": "championship" },
 				{ "title": "新会员玩游戏送彩金", "type": 117, "kind": "route", "target": "/activity/MemberPackage", "activity": "memberPackage" },
 				{ "title": "首充赠送", "type": 10, "kind": "route", "target": "/wallet/Recharge", "note": "充值页各通道展示首充赠送比例", "activity": "rechargeGift" }
 			]
