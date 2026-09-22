@@ -95,14 +95,15 @@ const championshipOverlay = computed(() => {
 .activitySection__container {
 	display: flex;
 	flex-direction: column;
-	gap: 26px;
+	gap: 20px;
 	width: 100%;
+	margin-top: 32px;
 	padding-left: 24px;
 	padding-right: 24px;
 
 	& > .box {
 		width: 100%;
-		border-radius: 20px;
+		border-radius: 16px;
 		background: var(--darkBg,var(--bg_color_L2));
 		overflow: hidden;
 		color: var(--darkTextW,var(--text_color_L1));

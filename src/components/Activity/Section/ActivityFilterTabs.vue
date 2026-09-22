@@ -50,9 +50,10 @@ const filters = computed<{ key: ActivityCategory; label: string }[]>(() => [
 		align-items: center;
 		justify-content: center;
 		border-radius: 12px;
-		background: var(--bg_color_L1, #fff);
+		background: #FFFFFF;
 		color: var(--text_color_L2, #768096);
 		font-size: 28px;
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
 
 		&.is-active {
 			background: #F95959;

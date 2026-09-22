@@ -34,11 +34,6 @@
 					</van-popover>
 				</template>
 			</ActivityEntryGrid>
-			<div class="cardBox" v-if="ActiveSotre.isOpenChampion == 1">
-				<Card :itemD="championEntranceVO" :state="championEntranceVO.state" v-model:isRefresh="isRefresh" bgImgWidth="100%" bgImgHeight="150px"
-				@click="goProtectedPath('Championship')">
-				</Card>
-			</div>
 
 			<GiftExchangeCard @view-record="onViewRecord" />
 
@@ -69,7 +64,6 @@ import { useI18n } from 'vue-i18n'
 import { ref, computed, watch, onMounted, defineAsyncComponent } from 'vue'
 import { useActive } from '@/components/common/use'
 import { GetActivityList } from '@/api'
-import Card from '@/components/Activity/Championship/card.vue'
 import { useChampionship } from "@/hooks"
 import { GlobalStore, SettingStore } from '@/stores'
 import { useServer } from '@/hooks/useServe.hook'
@@ -107,16 +101,10 @@ const isActivityBonusHidden = computed(() => {
 	const userId = Number(userInfo.value?.userId)
 	return activityBonusHiddenUsers.some(item => item.tenant === tenant && item.userIds.includes(userId))
 })
+// 锦标赛报名/倒计时数据仍需拉取:活动列表里那张带 HOT 标签的锦标赛卡要用它渲染倒计时/奖池覆盖层(见 ActivityBannerList 的 championship prop)
 watch(()=>ActiveSotre.value.isOpenChampion,
 (newValue)=>{
 	if(newValue==1){
-		championEntranceV()
-	}
-})
-const isRefresh = ref(false)
-watch(isRefresh,
-(val)=>{
-	if(val){
 		championEntranceV()
 	}
 })
@@ -151,9 +139,8 @@ const switchTopTab = (tab: ActivityTopTab) => {
 	activeTopTab.value = tab
 	router.replace({ query: { ...route.query, tab } })
 }
-// 顶部切换条直接点「任务」与图标入口口径一致,同样需要登录
-const onSwitchTopTab = async (tab: ActivityTopTab) => {
-	if (tab === 'task' && !(await requireLoginAction())) return
+// 顶部切换条切「任务」不需要登录:未登录也能看任务列表,登录门槛下沉到列表里具体的「领取/去完成」按钮上
+const onSwitchTopTab = (tab: ActivityTopTab) => {
 	switchTopTab(tab)
 }
 
@@ -178,10 +165,9 @@ const showLength = computed(()=>{
 	return navList.value.filter(item=>item.show).length
 })
 
-// 图标点击统一入口:「活动奖励」图标改为切到本页「任务」页签,其余图标仍按原逻辑登录后跳转
+// 图标点击统一入口:「活动奖励」图标改为切到本页「任务」页签(不需要登录),其余图标仍按原逻辑登录后跳转
 const onNavigate = async (path: string) => {
 	if (path === ICON_TASK_SWITCH) {
-		if (!(await requireLoginAction())) return
 		switchTopTab('task')
 		return
 	}
@@ -320,10 +306,6 @@ onMounted(async()=>{
 <style lang="scss" scoped>
 .activity-wrapper{
 	padding-bottom: 225px;
-
-	.cardBox{
-		padding: 0 20px;
-	}
 }
 :deep() .van-dialog.MsgRadius {
 	border-radius: 10px;

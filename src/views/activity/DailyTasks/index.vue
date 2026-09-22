@@ -220,6 +220,7 @@ import CoinShower from './CoinShower.vue';
 import { BetRule } from '@/saasLottery/components';
 import { currencyTrim as money } from '@/utils';
 import { useWalletStore } from '@/stores';
+import { requireLoginAction } from '@/hooks/useLoginIntercept';
 // embedded=true 时用于嵌进活动页「任务」页签:隐藏自身导航栏与顶部大图 banner,只保留子页签条+列表+弹窗
 const props = withDefaults(defineProps<{ embedded?: boolean }>(), { embedded: false })
 const { t } = useI18n()
@@ -361,24 +362,28 @@ const doneAmountParts = computed(() => {
 		: { before: text.slice(0, at), amount, after: text.slice(at + amount.length) }
 })
 
-const onBuyCard = (tier: any, totalDays: number) => runCardSubmit(async () => {
-	const res = await submitCard(BuyPeriodCard({ TierId: tier.tierId }))
-	// 后端只在 1031 下发差额;142 没有缺口字段,拿本卡售价让玩家判断该充多少
-	if (CARD_DIALOGS[res?.msgCode]) {
-		const amount = res.msgCode === LOW_BALANCE_CODE ? tier.sellPrice : res.data?.rechargeGapAmount ?? 0
-		openCardDialog(res.msgCode, amount)
-		// 1032 尤其要重拉:本地 todaySoldOut 不刷新,该档会一直亮着让玩家反复点反复失败
-		return loadPeriodCards()
-	}
-	// 购买成功弹窗与金币雨同时出,金币雨金额取立即返现
-	if (res?.code === 0) {
-		doneAmount.value = res.data?.realtimeRewardAmount ?? tier.realtimeRewardAmount
-		doneDays.value = totalDays
-		showDoneDialog.value = true
-		showCoins(doneAmount.value)
-	}
-	await afterCardSubmit(res)
-})
+// 购卡是参与类操作,未登录先弹登录,不进 runCardSubmit(避免占用提交锁)
+const onBuyCard = async (tier: any, totalDays: number) => {
+	if (!(await requireLoginAction())) return
+	return runCardSubmit(async () => {
+		const res = await submitCard(BuyPeriodCard({ TierId: tier.tierId }))
+		// 后端只在 1031 下发差额;142 没有缺口字段,拿本卡售价让玩家判断该充多少
+		if (CARD_DIALOGS[res?.msgCode]) {
+			const amount = res.msgCode === LOW_BALANCE_CODE ? tier.sellPrice : res.data?.rechargeGapAmount ?? 0
+			openCardDialog(res.msgCode, amount)
+			// 1032 尤其要重拉:本地 todaySoldOut 不刷新,该档会一直亮着让玩家反复点反复失败
+			return loadPeriodCards()
+		}
+		// 购买成功弹窗与金币雨同时出,金币雨金额取立即返现
+		if (res?.code === 0) {
+			doneAmount.value = res.data?.realtimeRewardAmount ?? tier.realtimeRewardAmount
+			doneDays.value = totalDays
+			showDoneDialog.value = true
+			showCoins(doneAmount.value)
+		}
+		await afterCardSubmit(res)
+	})
+}
 
 const onGoRecharge = () => {
 	showGateDialog.value = false
@@ -394,14 +399,17 @@ const showCoins = (amount: number | string) => {
 	coinSeq.value++
 }
 
-const onClaimCard = (holding: any) => runCardSubmit(async () => {
-	const res = await submitCard(TakeDailyReward({ OrderNo: holding.orderNo }))
-	if (res?.code === 0) {
-		// 撒后端回的到账额而非前端推算:实时与每日两笔金额不同,推算会在切换那次飘错数
-		showCoins(res.data?.rewardAmount ?? 0)
-	}
-	await afterCardSubmit(res)
-})
+const onClaimCard = async (holding: any) => {
+	if (!(await requireLoginAction())) return
+	return runCardSubmit(async () => {
+		const res = await submitCard(TakeDailyReward({ OrderNo: holding.orderNo }))
+		if (res?.code === 0) {
+			// 撒后端回的到账额而非前端推算:实时与每日两笔金额不同,推算会在切换那次飘错数
+			showCoins(res.data?.rewardAmount ?? 0)
+		}
+		await afterCardSubmit(res)
+	})
+}
 const visibleTabs = computed(() => [
 	{ key: 'newbie', label: t('actTip3'), show: newbieGiftPackage.value.length > 0 },
 	{ key: 'day', label: t('dailyMission'), show: dayList.value.length > 0 },
@@ -496,7 +504,9 @@ const newHeadStatus = (val: any)=> {
 	return map[val] || ''
 }
 const timerC = ref(null)
+// 领取/去完成属参与类操作,未登录先弹登录拦截;任务列表本身未登录也能看,不受影响
 const clickBtn = async (item: any)=> {
+	if (!(await requireLoginAction())) return
 	if (timerC.value) {
 		clearTimeout(timerC.value)
 	}
@@ -519,7 +529,9 @@ const clickBtn = async (item: any)=> {
 	}, 100) as any
 }
 const timer = ref(null)
+// 新手礼包领取同属参与类操作,同样先过登录拦截
 const clickBtnNew = async (item:any)=>{
+	if (!(await requireLoginAction())) return
 	if (timer.value) {
 		clearTimeout(timer.value)
 	}

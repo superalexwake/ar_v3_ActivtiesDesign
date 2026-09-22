@@ -37,8 +37,9 @@ const tabs = computed<{ key: ActivityTopTab; label: string }[]>(() => [
 	display: flex;
 	height: 88px;
 	margin: 32px 24px 0;
-	background: var(--bg_color_L1, #fff);
+	background: #FFFFFF;
 	border-radius: 16px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
 
 	&__item {
 		flex: 1;
