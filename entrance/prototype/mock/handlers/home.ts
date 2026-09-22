@@ -12,7 +12,16 @@ interface HomeParams {
 	announcement: boolean
 	/** 滚动公告有内容（GetSiteMessageList 返回 2 条公告，否则为空列表） */
 	noticeBar: boolean
+	/** 公告弹窗类型：text 文字公告，image 图片公告（只影响 GetSitePopMsgList，不影响滚动公告） */
+	announcementType: 'text' | 'image'
+	/** 公告弹窗是否带跳转内容（只影响 GetSitePopMsgList）：带则底部为“取消/前往查看”，不带则为“确认” */
+	announcementJump: boolean
 }
+
+/** 公告弹窗图片公告的占位图（528×668 比例，待设计稿导出的真图替换） */
+const ANNOUNCEMENT_BANNER_URL = 'announcement-banner.png'
+/** 公告弹窗“前往查看”跳转目标，原型内给一个站内路由占位 */
+const ANNOUNCEMENT_JUMP_URL = '/activity'
 
 /** 首页虚构电子游戏，键为 slotsTypeID；游戏名是专名，印地语沿用英文名 */
 const SLOT_GAMES: Record<number, { zh: string; en: string }> = {
@@ -47,9 +56,17 @@ const player = (ctx: MockContext, masked: string) => pick(ctx, '玩家', 'Player
 const typeName = (ctx: MockContext, type: 'slot' | 'lottery') =>
 	type === 'slot' ? pick(ctx, '电子', 'Slots', 'स्लॉट') : pick(ctx, '彩票', 'Lottery', 'लॉटरी')
 
-/** 首页公告，公告弹窗与滚动公告共用 */
-const notices = (ctx: MockContext) => {
+/**
+ * 首页公告，公告弹窗与滚动公告共用。
+ *
+ * @param withMedia - 是否按 home 参数附加 imageUrl / jumpUrl；只有公告弹窗（GetSitePopMsgList）传 true，
+ * 滚动公告 / 公告列表（GetSiteMessageList）只展示纯文字，不受“公告弹窗类型/跳转”两个参数影响。
+ */
+const notices = (ctx: MockContext, withMedia = false) => {
 	const addtime = dayjs().format('YYYY-MM-DD HH:mm:ss')
+	const { announcementType, announcementJump } = params<HomeParams>(ctx, 'home')
+	const media = withMedia && announcementType === 'image' ? { imageUrl: ANNOUNCEMENT_BANNER_URL } : {}
+	const jump = withMedia && announcementJump ? { jumpUrl: ANNOUNCEMENT_JUMP_URL } : {}
 	return [
 		{
 			title: pick(ctx, '系统公告', 'System Notice', 'सिस्टम सूचना'),
@@ -60,6 +77,8 @@ const notices = (ctx: MockContext) => {
 				'नियमित रखरखाव पूरा हो गया है और सभी सुविधाएँ सामान्य रूप से काम कर रही हैं।'
 			),
 			addtime,
+			...media,
+			...jump,
 		},
 		{
 			title: pick(ctx, '活动公告', 'Event Notice', 'इवेंट सूचना'),
@@ -70,6 +89,8 @@ const notices = (ctx: MockContext) => {
 				'नए इवेंट लाइव हैं। इन्हें गतिविधि पेज पर देखें!'
 			),
 			addtime,
+			...media,
+			...jump,
 		},
 	]
 }
@@ -193,7 +214,7 @@ const pwaDomainList: MockHandler = () => ok(['https://mock-pwa1.prototype.invali
  * @remarks 默认关闭：公告在弹窗队列里优先级最高，打开后会挡在控制台触发的其他奖励弹窗前面；
  * `announcementPipe` 对空数组有 `!!props?.notices?.length` 中间件短路，不会入队，也不会抛错。
  */
-const sitePopMsgList: MockHandler = (ctx) => ok(params<HomeParams>(ctx, 'home').announcement ? notices(ctx) : [])
+const sitePopMsgList: MockHandler = (ctx) => ok(params<HomeParams>(ctx, 'home').announcement ? notices(ctx, true) : [])
 
 /** GetSiteMessageList：首页滚动公告栏与公告列表页，分页结构 */
 const siteMessageList: MockHandler = (ctx) => ok(paged(params<HomeParams>(ctx, 'home').noticeBar ? notices(ctx) : [], ctx.body))

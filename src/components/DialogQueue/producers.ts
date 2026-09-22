@@ -67,6 +67,10 @@ export interface AnnouncementNotice {
 	title: string
 	siteMessage: string
 	addtime?: Date | string
+	/** 图片公告的图片地址；有值即按图片公告展示，内容区只放图片，不展示标题/正文 */
+	imageUrl?: string
+	/** 后台配置的跳转内容；有值则弹窗底部为“取消/前往查看”两个按钮，无值则为单个“确认”按钮 */
+	jumpUrl?: string
 }
 
 interface AgeGateDialogProps extends Record<string, unknown> {

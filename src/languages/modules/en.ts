@@ -2953,6 +2953,7 @@ export default {
 	Terms: 'Justice, and openness. We mainly operate fair lottery.The platform advocates fairness, blockchain games, live casinos, and slot machine games',
 	Terms2: 'Blockchain games, live casinos,and slot machine Works with over 10,000 online live game dealers and slot games, all verified fair games',
 	announcement: 'Information',
+	announcementGoToView: 'View Now',
 	CustomerService: '7 x 24 Customer Service',
 	AboutDaman: 'About us',
 	arbTip1: 'AR Pay transaction rules',

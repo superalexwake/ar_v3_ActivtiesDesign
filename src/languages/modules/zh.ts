@@ -2875,6 +2875,7 @@ export default {
 	Terms: '正义和开放。我们主要经营公平的彩票游戏，区块链游戏、现场赌场和老虎机游戏',
 	Terms2: '区块链游戏、现场赌场、老虎机 与超过 10,000 家在线真人游戏经销商和老虎机游戏合作，全部经过验证的公平游戏',
 	announcement: '公告',
+	announcementGoToView: '前往查看',
 	CustomerService: '7 x 24 客服服务',
 	AboutDaman: '关于我们',
 	arbTip1: 'AR Pay 交易规则',

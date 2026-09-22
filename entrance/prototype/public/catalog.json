@@ -406,11 +406,16 @@
 			"note": "首页的悬浮入口与大奖模块由各自活动控制：回归新充值奖励、奖励中心、邀请转盘奖励、大转盘、电子大奖。",
 			"params": [
 				{ "name": "announcement", "label": "公告弹窗", "type": "boolean", "default": false, "drives": "GetSitePopMsgList（路由常量 api.GetSiteMessage）返回 2 条公告 / []" },
-				{ "name": "noticeBar", "label": "滚动公告", "type": "boolean", "default": true, "drives": "GetSiteMessageList 有数据 / 空列表" }
+				{ "name": "noticeBar", "label": "滚动公告", "type": "boolean", "default": true, "drives": "GetSiteMessageList 有数据 / 空列表" },
+				{ "name": "announcementType", "label": "公告弹窗类型", "type": "select", "default": "text", "options": [{ "value": "text", "label": "文字" }, { "value": "image", "label": "图片" }], "drives": "GetSitePopMsgList 每条公告是否带 imageUrl（图片公告）" },
+				{ "name": "announcementJump", "label": "公告弹窗跳转", "type": "boolean", "default": false, "drives": "GetSitePopMsgList 每条公告是否带 jumpUrl；带则弹窗底部为“取消/前往查看”，不带则为“确认”" }
 			],
 			"presets": [
 				{ "label": "默认", "values": {}, "note": "无公告弹窗" },
-				{ "label": "公告弹窗", "values": { "announcement": true }, "note": "首页先弹公告，关闭后才轮到其他奖励弹窗" },
+				{ "label": "文字公告·无跳转", "values": { "announcement": true, "announcementType": "text", "announcementJump": false }, "note": "首页先弹公告，纯文字内容，底部“确认”按钮" },
+				{ "label": "文字公告·有跳转", "values": { "announcement": true, "announcementType": "text", "announcementJump": true }, "note": "首页先弹公告，纯文字内容，底部“取消/前往查看”两个按钮" },
+				{ "label": "图片公告·无跳转", "values": { "announcement": true, "announcementType": "image", "announcementJump": false }, "note": "首页先弹公告，内容区只有一张图，底部“确认”按钮" },
+				{ "label": "图片公告·有跳转", "values": { "announcement": true, "announcementType": "image", "announcementJump": true }, "note": "首页先弹公告，内容区只有一张图，底部“取消/前往查看”两个按钮" },
 				{ "label": "无滚动公告", "values": { "noticeBar": false }, "note": "滚动条不显示文字" }
 			]
 		},
