@@ -1,6 +1,6 @@
 <template>
 	<div class="dailySignIn__container">
-		<NavBar class="activity" :title="$t('checkIn')" :backgroundColor="'#f95959'" :placeholder="false" left-arrow @click-left="onClick" />
+		<NavBar v-if="!props.embedded" class="activity" :title="$t('checkIn')" :backgroundColor="'#f95959'" :placeholder="false" left-arrow @click-left="onClick" />
 
 		<div class="dailySignIn__container-hero">
 			<div class="dailySignIn__container-hero__header">
@@ -58,7 +58,7 @@
 					:disabled="isSignedToday"
 					:class="{ greyBtn: isSignedToday }"
 				>
-					{{ $t('checkIn') }}
+					{{ props.embedded ? $t('checkInAction') : $t('checkIn') }}
 				</button>
 			</div>
 		</div>
@@ -75,6 +75,8 @@ import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useActive } from '@/components/common/use'
 
+// embedded=true 时用于嵌进任务页「每日签到」子页签:隐藏自身导航栏,只保留红卡+7 天格+签到按钮
+const props = withDefaults(defineProps<{ embedded?: boolean }>(), { embedded: false })
 const { t } = useI18n()
 const { refreshRedDot } = useActive()
 
@@ -91,12 +93,10 @@ function onClick() {
 	router.go(-1)
 }
 
+// 固定写路由名,不取 router.currentRoute.value.name:embedded 模式下当前路由是 activity(任务页),取当前路由名会拼出不存在的路由
 function onButtonClick(type: 'rules' | 'record') {
 	router.push({
-		name:
-			type === 'rules'
-				? `${String(router.currentRoute.value.name)}-Rules`
-				: `${String(router.currentRoute.value.name)}-Record`
+		name: type === 'rules' ? 'DailySignIn-Rules' : 'DailySignIn-Record'
 	})
 }
 async function submitCheckIn() {

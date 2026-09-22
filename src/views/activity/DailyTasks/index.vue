@@ -38,10 +38,34 @@
 				:key="tab.key"
 				:class="{ active: activeTab === tab.key }"
 				@click="onSwitchTab(tab.key)"
-			>{{ tab.label }}</button>
+			>
+				{{ tab.label }}
+				<span class="tab-badge" v-if="tabBadgeCount(tab.key) > 0">{{ tabBadgeCount(tab.key) }}</span>
+			</button>
 		</div>
 		<Transition :name="`tab-${slideDir}`">
 		<div class="task-panel" :key="activeTab">
+			<DailySignInPage v-if="activeTab === 'signin'" embedded />
+
+			<template v-if="activeTab === 'day' || activeTab === 'week'">
+				<div class="status-filter">
+					<div
+						v-for="f in TASK_FILTERS"
+						:key="String(f.key)"
+						class="status-filter__item"
+						:class="{ 'is-active': taskFilter === f.key }"
+						@click="taskFilter = f.key"
+					>{{ t(f.labelKey) }}</div>
+				</div>
+				<div class="claim-all">
+					<div class="claim-all__info">
+						<span class="claim-all__label">{{ t('taskClaimableAmount') }}</span>
+						<span class="claim-all__amount">{{ currency(claimableAmount) }}</span>
+					</div>
+					<div class="claim-all__btn" :class="{ locked: isBatchClaiming }" @click="onOneKeyClaim">{{ t('taskOneKeyClaim') }}</div>
+				</div>
+			</template>
+
 			<div class="task-item" v-show="activeTab === 'newbie'" v-if="newbieGiftPackage.length>0">
 				<div class="task-item-header">
 					<div class="hearder-status new">
@@ -69,7 +93,7 @@
 				<div class="btn btnNew" :class="`status${newbieGiftPackage[0].status}`" @click="clickBtnNew(newbieGiftPackage[0])">{{ newStatus(newbieGiftPackage[0].status) }}</div>
 			</div>
 
-			<div class="task-item" v-for="(item, index) in currentTasks" :key="index">
+			<div class="task-item" :class="{ 'is-ended': item.status === 4 }" v-for="(item, index) in filteredCurrentTasks" :key="index">
 				<div class="task-item-header">
 					<div class="hearder-status" :class="`${item.type}`" >
 						{{ item.type=='week'?$t('actTip4'):$t('dailyMission') }}
@@ -98,7 +122,13 @@
 							<svg-icon :name="ActiveTaskMap[item.taskId].icon" />
 							<div>{{ item.taskTitle }}</div>
 						</div>
-						<div class="type-tip">{{item.schedule + '/' + item.taskTarget }}</div>
+					</div>
+					<div class="task-progress">
+						<div class="tp-track">
+							<div class="tp-fill" :style="{ width: taskProgressPercent(item) + '%' }"></div>
+							<span class="tp-text tp-text--light" :style="{ clipPath: `inset(0 ${100 - taskProgressPercent(item)}% 0 0)` }">{{ item.schedule + '/' + item.taskTarget }}</span>
+							<span class="tp-text tp-text--dark" :style="{ clipPath: `inset(0 0 0 ${taskProgressPercent(item)}%)` }">{{ item.schedule + '/' + item.taskTarget }}</span>
+						</div>
 					</div>
 				</template>
 				<div class="task-item-description">
@@ -210,9 +240,9 @@
 import { AwaitApiResult, AwaitWrap, currency } from '@/utils'
 import { showFailToast } from 'vant'
 import { GetWeeklyAwardList, ReceiveWeeklyAward,getNewbieGiftPackage,receiveAward,GetDailyAwardList ,ReceiveDailyAward, GetPeriodCardInfo, BuyPeriodCard, TakeDailyReward, GetActivityCenterTabSort } from '@/api'
-import { computed, nextTick, onMounted, ref,watch } from 'vue'
+import { computed, defineAsyncComponent, nextTick, onMounted, ref,watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useActive } from '@/components/common/use';
 import { useGlobalDialog } from '@/hooks';
 import CardPanel from './CardPanel/index.vue';
@@ -221,12 +251,16 @@ import { BetRule } from '@/saasLottery/components';
 import { currencyTrim as money } from '@/utils';
 import { useWalletStore } from '@/stores';
 import { requireLoginAction } from '@/hooks/useLoginIntercept';
+
+// 每日签到子页签内容较重(独立页面整体复用),异步加载,首次切到「每日签到」才拉取该 chunk
+const DailySignInPage = defineAsyncComponent(() => import('../DailySignIn/index.vue'))
 // embedded=true 时用于嵌进活动页「任务」页签:隐藏自身导航栏与顶部大图 banner,只保留子页签条+列表+弹窗
 const props = withDefaults(defineProps<{ embedded?: boolean }>(), { embedded: false })
 const { t } = useI18n()
 const showDialog = ref(false)
 const ruleDialog = ref(false)
 const router = useRouter()
+const route = useRoute()
 const { ActiveTaskMap,ActiveSotre,getActive,refreshRedDot } = useActive()
 getActive()
 const { downAppTip } = useGlobalDialog()
@@ -243,28 +277,30 @@ const sortTasks = (list: any[]) => [...list].sort((a, b) =>
 	// 仅未完成组按完成度倒序,其余组维持入参次序
 	|| (a.status == 1 ? calculatePercentage(b.schedule, b.taskTarget) - calculatePercentage(a.schedule, a.taskTarget) : 0)
 )
-// tab key → 该 Tab 的任务源;新手礼包不走列表渲染
+// tab key → 该 Tab 的任务源;新手礼包/每日签到不走列表渲染
 const TASK_SOURCES: Record<string, any> = { day: dayList, week: weekList }
 const activeTab = ref('')
 let isTabPicked = false
 // CardType 契约:1=周卡 2=月卡
-const CARD_TAB_KEY: Record<number, string> = { 1: 'weekCard', 2: 'monthCard' }
+const CARD_TAB_KEY: Record<number, string> = { 1: 'weekcard', 2: 'monthcard' }
 const CARD_TAB_LABEL: Record<number, string> = { 1: 'periodCardWeekTab', 2: 'periodCardMonthTab' }
 
 const TAB_KEY_BY_CONTRACT: Record<string, string> = {
 	GiftPack: 'newbie',
 	DailyTask: 'day',
 	WeeklyTask: 'week',
-	WeekCard: 'weekCard',
-	MonthCard: 'monthCard'
+	WeekCard: 'weekcard',
+	MonthCard: 'monthcard'
 }
-// 后台未配置时的契约默认值;其降序结果与本页原有硬编码顺序一致,故接口失败即维持原状
+// 子页签固定顺序(2026-09-22 拍板):每日任务、每周任务、每日签到、购买周卡、购买月卡、新手礼包
+// 每日签到无对应契约键,排序值只在这里维护;后台未配置时的契约默认值与此对齐(见 periodCard.ts 的 DEFAULT_TAB_SORT)
 const DEFAULT_TAB_SORT: Record<string, number> = {
-	newbie: 100,
-	day: 95,
-	week: 90,
-	weekCard: 90,
-	monthCard: 85
+	day: 100,
+	week: 95,
+	signin: 90,
+	weekcard: 85,
+	monthcard: 80,
+	newbie: 75
 }
 const tabSort = ref<Record<string, number>>({ ...DEFAULT_TAB_SORT })
 
@@ -411,21 +447,78 @@ const onClaimCard = async (holding: any) => {
 	})
 }
 const visibleTabs = computed(() => [
-	{ key: 'newbie', label: t('actTip3'), show: newbieGiftPackage.value.length > 0 },
 	{ key: 'day', label: t('dailyMission'), show: dayList.value.length > 0 },
 	{ key: 'week', label: t('actTip4'), show: weekList.value.length > 0 },
+	// 每日签到常驻不做空态判断,签到本身没有"空列表"概念
+	{ key: 'signin', label: t('code9007'), show: true },
 	// 卡活动的显隐与顺序完全跟随接口:资格不符时后端不返回该活动,前端不做资格判断
 	...periodCards.value.map((card: any) => ({
 		key: CARD_TAB_KEY[card.cardType],
 		label: t(CARD_TAB_LABEL[card.cardType]),
 		show: !!CARD_TAB_KEY[card.cardType]
-	}))
+	})),
+	{ key: 'newbie', label: t('actTip3'), show: newbieGiftPackage.value.length > 0 }
 ].filter((tab) => tab.show)
-	// 稳定排序:排序值并列时(默认配置下每周与周卡同为 90)保持上方字面量的先后
+	// 排序值互不相等(见 DEFAULT_TAB_SORT),固定顺序:每日任务、每周任务、每日签到、购买周卡、购买月卡、新手礼包
 	.sort((a, b) => tabSort.value[b.key] - tabSort.value[a.key]))
 const currentTasks = computed<any[]>(() => sortTasks(TASK_SOURCES[activeTab.value]?.value ?? []))
 
-// 卡 Tab 下 banner 换成该活动自己的图与文案;前三个 Tab 为 null,维持页面原有静态 banner
+// 状态筛选:全部/可领取(2)/可参与(1)/已领取(3)/已结束(4),仅每日任务、每周任务两个 Tab 用
+const TASK_FILTERS: { key: 'all' | number; labelKey: string }[] = [
+	{ key: 'all', labelKey: 'all' },
+	{ key: 2, labelKey: 'taskFilterClaimable' },
+	{ key: 1, labelKey: 'taskFilterOngoing' },
+	{ key: 3, labelKey: 'claimed' },
+	{ key: 4, labelKey: 'ended' }
+]
+const taskFilter = ref<'all' | number>('all')
+const filteredCurrentTasks = computed(() =>
+	taskFilter.value === 'all' ? currentTasks.value : currentTasks.value.filter((item: any) => item.status === taskFilter.value)
+)
+// 可领取金额与一键领取:按当前 Tab 未筛选的原始列表求和,不受筛选项影响
+const claimableAmount = computed(() =>
+	(TASK_SOURCES[activeTab.value]?.value ?? [])
+		.filter((item: any) => item.status === 2)
+		.reduce((sum: number, item: any) => sum + Number(item.taskAwardAmount || 0), 0)
+)
+const isBatchClaiming = ref(false)
+const onOneKeyClaim = async () => {
+	if (isBatchClaiming.value) return
+	if (!(await requireLoginAction())) return
+	const list = (TASK_SOURCES[activeTab.value]?.value ?? []).filter((item: any) => item.status === 2)
+	if (!list.length) return
+	isBatchClaiming.value = true
+	try {
+		let total = 0
+		for (const item of list) {
+			const res: any = activeTab.value === 'week'
+				? await AwaitApiResult(ReceiveWeeklyAward({ weeklyAwardId: item.configId }))
+				: await AwaitApiResult(ReceiveDailyAward({ dailyAwardId: item.configId }))
+			if (res?.code === 0) total += Number(item.taskAwardAmount || 0)
+		}
+		if (total > 0) {
+			showDialog.value = true
+			bonus.value = String(total)
+			showTaskTitle.value = t('taskOneKeyClaim')
+		}
+		onLoad()
+		refreshRedDot()
+	} finally {
+		isBatchClaiming.value = false
+	}
+}
+
+// 每个子页签右上角的可领数量角标,0 不显示
+const tabBadgeCount = (key: string): number => {
+	if (key === 'day') return dayList.value.filter((item: any) => item.status === 2).length
+	if (key === 'week') return weekList.value.filter((item: any) => item.status === 2).length
+	if (key === 'signin') return ActiveSotre.value.activityRedDot.attendanceBonusCount
+	if (key === 'newbie') return newbieGiftPackage.value[0]?.status === 1 ? 1 : 0
+	const card = periodCards.value.find((item: any) => CARD_TAB_KEY[item.cardType] === key)
+	return card ? (card.holdingOrders?.filter((holding: any) => holding.canTakeToday).length ?? 0) : 0
+}
+
+// 卡 Tab 下 banner 换成该活动自己的图与文案;其余 Tab 为 null,维持页面原有静态 banner
 const activeCardBanner = computed(
 	() => periodCards.value.find((card: any) => CARD_TAB_KEY[card.cardType] === activeTab.value) ?? null
 )
@@ -435,21 +528,45 @@ const onSwitchTab = (key: string) => {
 	isTabPicked = true
 	activeTab.value = key
 }
+// 地址参数记住当前子页签,刷新后停在同一页:进页面时若命中则锁定为已选,不再跟随排序自动回落
+const initialSub = typeof route.query.sub === 'string' ? route.query.sub : ''
 // 礼包异步到达/领完消失都会改可见项:用户未手动切过时跟随首项,切过后只在当前项消失时回落
 watch(visibleTabs, (tabs) => {
-	if (!isTabPicked || !tabs.some((tab) => tab.key === activeTab.value)) activeTab.value = tabs[0]?.key
+	if (!isTabPicked) {
+		if (initialSub && tabs.some((tab) => tab.key === initialSub)) {
+			activeTab.value = initialSub
+			isTabPicked = true
+			return
+		}
+		activeTab.value = tabs[0]?.key
+		return
+	}
+	if (!tabs.some((tab) => tab.key === activeTab.value)) activeTab.value = tabs[0]?.key
 }, { immediate: true })
+// 无论自动落位还是手动切换,都把当前子页签同步进地址栏,刷新后能停在原地
+watch(activeTab, (key) => {
+	if (!key || route.query.sub === key) return
+	router.replace({ query: { ...route.query, sub: key } })
+})
 
 // Tab 满 5 个后一屏放不下,选中项可能落在屏幕外,切换后要把它带回视野
 const tabsRef = ref<HTMLElement | null>(null)
 // 面板前后滑动的方向:切到靠后的 Tab 为 next。watch 默认 pre 冲刷,重渲染前方向已定好
 const slideDir = ref<'next' | 'prev'>('next')
 watch(activeTab, async (key, prevKey) => {
+	// 状态筛选不跟随切到的新 Tab,回到"全部"
+	taskFilter.value = 'all'
 	const keys = visibleTabs.value.map((tab) => tab.key)
 	slideDir.value = keys.indexOf(key) >= keys.indexOf(prevKey) ? 'next' : 'prev'
 	await nextTick()
 	tabsRef.value?.querySelector('.active')?.scrollIntoView({ inline: 'center', block: 'nearest' })
 })
+
+const taskProgressPercent = (item: any) => {
+	const target = Number(item.taskTarget) || 0
+	if (!target) return 0
+	return Math.min(100, Math.max(0, (Number(item.schedule) || 0) / target * 100))
+}
 
 const getWeekList = async() =>{
 	const res: any = await AwaitApiResult(GetWeeklyAwardList())
@@ -485,13 +602,13 @@ const getNewbieGiftPackageV = async()=>{
 		newbieGiftPackage.value.push(res?.data)
 	}
 }
-//1 未完成 2 未领取 3已领取
+//1 未完成 2 未领取 3已领取 4已结束
 const changeStatus = (val: any)=> {
-	const map = { 1: t('goComplete'), 2: t('receive'), 3: t('claimed')}
+	const map = { 1: t('goComplete'), 2: t('receive'), 3: t('claimed'), 4: t('claimed')}
 	return map[val] || ''
 }
 const changeHeadStatus = (val: any)=> {
-	const map = { 1: t('undone'), 2: t('complete'), 3: t('complete')}
+	const map = { 1: t('undone'), 2: t('complete'), 3: t('complete'), 4: t('complete')}
 	return map[val] || ''
 }
 //领取状态 0 未完成 1 待领取 2已领取 3 领取完成
@@ -512,7 +629,7 @@ const clickBtn = async (item: any)=> {
 	}
 	timerC.value = setTimeout(async () => {
 		if(item.status == 1) return goAnotherPage(item)
-		if(item.status == 3) return;
+		if(item.status == 3 || item.status == 4) return;
 		let res;
 		if(item.type=='week'){
 			res = await AwaitApiResult(ReceiveWeeklyAward({weeklyAwardId: item.configId}))
@@ -671,6 +788,7 @@ $buy-tint: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 
 			display: none;
 		}
 		button{
+			position: relative;
 			flex-shrink: 0;
 			display: flex;
 			align-items: center;
@@ -691,6 +809,105 @@ $buy-tint: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 
 				color: var(--text_color_L4);
 				font-weight: 700;
 				box-shadow: 0 6px 12px rgba(208, 208, 237, 0.6), inset 0 -4px 10px #FFF6F4;
+			}
+			// 可领数量角标,0 不渲染(模板层已判断)
+			.tab-badge{
+				position: absolute;
+				top: -10px;
+				inset-inline-end: -6px;
+				min-width: 32px;
+				height: 32px;
+				padding: 0 6px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				border-radius: 16px;
+				background: var(--norm_red-color, #F95959);
+				color: #fff;
+				font-size: 20px;
+				font-weight: 700;
+				line-height: 1;
+			}
+		}
+	}
+
+	// 状态筛选行:样式对齐活动页 ActivityFilterTabs 的选中态,单独维护避免耦合该组件的固定筛选项
+	.status-filter{
+		display: flex;
+		align-items: center;
+		gap: 16px;
+		margin: 24px 0 0;
+		overflow-x: auto;
+		scrollbar-width: none;
+		&::-webkit-scrollbar{
+			display: none;
+		}
+		&__item{
+			flex-shrink: 0;
+			min-width: 116px;
+			height: 60px;
+			padding: 0 20px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			border-radius: 12px;
+			background: #FFFFFF;
+			color: #768096;
+			font-size: 28px;
+			white-space: nowrap;
+			&.is-active{
+				background: #F95959;
+				color: #fff;
+			}
+		}
+	}
+
+	// 一键领取横条
+	.claim-all{
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		width: 100%;
+		max-width: 702px;
+		height: 80px;
+		margin: 32px auto 0;
+		padding: 0 12px 0 24px;
+		background: #FFFFFF;
+		border-radius: 12px;
+		box-shadow: 0 6px 12px 4px rgba(208, 208, 237, 0.2);
+
+		&__info{
+			display: flex;
+			align-items: baseline;
+			gap: 12px;
+			overflow: hidden;
+		}
+		&__label{
+			flex-shrink: 0;
+			font-size: 26px;
+			color: #768096;
+		}
+		&__amount{
+			font-size: 28px;
+			font-weight: 700;
+			color: #FEAA57;
+			white-space: nowrap;
+		}
+		&__btn{
+			flex-shrink: 0;
+			width: 200px;
+			height: 60px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			border-radius: 30px;
+			background: linear-gradient(90deg, #FE6868 0%, #FF8A87 100%);
+			color: #fff;
+			font-size: 26px;
+			font-weight: 600;
+			&.locked{
+				opacity: .6;
+				pointer-events: none;
 			}
 		}
 	}
@@ -722,13 +939,23 @@ $buy-tint: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 
 		}
 
 		.task-item{
+			position: relative;
 			width: 100%;
 			background:var(--bg_color_L2);
 			border-radius: 20px;
 			overflow: hidden;
 			padding: 0 0 10px;
 			margin-bottom: 20px;
-			
+
+			// 已结束(status 4):整卡叠一层灰,不必逐个子元素改色;按钮的置灰另见 .btnOther.status4
+			&.is-ended::after{
+				content: '';
+				position: absolute;
+				inset: 0;
+				background: rgba(176, 179, 185, 0.75);
+				pointer-events: none;
+			}
+
 			img{
 				width: 40px;
 				height: 40px;
@@ -829,11 +1056,11 @@ $buy-tint: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 
 					align-items: center;
 					justify-content: center;
 					column-gap: 14px;
-					height: 48px;
+					height: 40px;
 					color: var(--text_color_L2);
 					svg{
-						width:48px;
-						height: 48px;
+						width:40px;
+						height: 40px;
 					}
 
 					html:lang(ar) &{
@@ -845,6 +1072,41 @@ $buy-tint: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 
 					font-size: 28px;
 					font-weight: 400;
 					margin-left: 20px;
+				}
+			}
+			// 每日/每周任务的进度条:已完成部分渐变、未完成部分浅灰,文字按填充分界互补深浅色叠在条上
+			// 注意:类名是 .task-progress(非 &-progress 的 .task-item-progress),与模板里的独立 div 对应
+			.task-progress{
+				margin: 20px 20px 0;
+
+				.tp-track{
+					position: relative;
+					height: 32px;
+					border-radius: 16px;
+					background: #E5E5E5;
+					overflow: hidden;
+				}
+				.tp-fill{
+					height: 100%;
+					border-radius: 16px;
+					background: linear-gradient(90deg, #FF8E89 0%, #FFC3A2 100%);
+					transition: width .3s;
+				}
+				.tp-text{
+					position: absolute;
+					inset: 0;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					font-size: 24px;
+					line-height: 32px;
+					white-space: nowrap;
+					&--light{
+						color: #fff;
+					}
+					&--dark{
+						color: #1E2637;
+					}
 				}
 			}
 			&-subject{
@@ -910,24 +1172,31 @@ $buy-tint: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 
 				color: var(--darkTextW,var(--bg_color_L2));
 				font-size: 30px;
 				font-weight: 700;
-				border-radius: 40px;
+				height: 70px;
+				line-height: 70px;
+				border-radius: 35px;
 				text-align: center;
-				padding: 12px 0;
 				margin: 20px 15px 10px;
 			}
 			.btnOther{
 				&.status1{
 					color: var(--main-color);
 					border:1px solid var(--main-color);
+					line-height: 68px; // 减去 1px 边框,与其余三态视觉齐高
 				}
 				&.status2{
 					background: var(--main_gradient-color);
 					color: var(--text_color_L4);
-					
+
 				}
 				&.status3{
 					background: var(--button_dis_color, var(--bg_color_L3));
 					color: var(--text_white, var(--text_color_L1));
+				}
+				// 已结束:按钮同样置灰,不可点(clickBtn 已按 status 4 短路)
+				&.status4{
+					background: #AAADB3;
+					color: #fff;
 				}
 			}
 			.btnNew{

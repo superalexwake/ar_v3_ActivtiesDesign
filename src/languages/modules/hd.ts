@@ -3442,4 +3442,9 @@ export default {
 	periodCardMonthName: 'मासिक कार्ड',
 	code1031: 'पुनर्भरण की आवश्यकता पूरी नहीं हुई',
 	code1032: 'यह स्तर आज बिक चुका है',
+	taskFilterClaimable: 'दावा योग्य',
+	taskFilterOngoing: 'भाग लेने योग्य',
+	taskOneKeyClaim: 'सभी का दावा करें',
+	taskClaimableAmount: 'दावा योग्य राशि',
+	checkInAction: 'चेक इन करें',
 }

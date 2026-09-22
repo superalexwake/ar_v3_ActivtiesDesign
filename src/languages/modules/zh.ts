@@ -3620,4 +3620,9 @@ export default {
 	code1051: 'USDT钱包地址格式不正确',
 	code1031: '未达到充值门槛',
 	code1032: '该档今日已售罄',
+	taskFilterClaimable: '可领取',
+	taskFilterOngoing: '可参与',
+	taskOneKeyClaim: '一键领取',
+	taskClaimableAmount: '可领取金额',
+	checkInAction: '签到',
 }

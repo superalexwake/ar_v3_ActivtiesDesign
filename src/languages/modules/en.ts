@@ -3834,5 +3834,10 @@ export default {
 	betMulti: 'Multi',
 	code1051: 'USDT wallet address format is incorrect',
 	code1031: 'Recharge requirement not met',
-	code1032: 'This tier is sold out today'
+	code1032: 'This tier is sold out today',
+	taskFilterClaimable: 'Claimable',
+	taskFilterOngoing: 'Ongoing',
+	taskOneKeyClaim: 'Claim all',
+	taskClaimableAmount: 'Claimable amount',
+	checkInAction: 'Check in'
 }

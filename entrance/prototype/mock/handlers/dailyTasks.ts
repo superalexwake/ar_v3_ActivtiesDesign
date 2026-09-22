@@ -32,7 +32,12 @@ interface TaskConfig {
 	schedule: number
 	taskAwardAmount: number
 	base: RewardItemStatus
+	/** 已结束(status 4,任务页整卡置灰的终态);为 true 时 status 恒为 4,不受 base/mix 影响 */
+	ended?: boolean
 }
+
+/** 已结束任务的展示 status,与 DailyTasks/index.vue 的 changeStatus/changeHeadStatus 新增分支对齐 */
+const ENDED_STATUS = 4
 
 /** 每日任务 5 条:充值、投注、邀请、签到、彩票局数 */
 const DAILY_TASKS: TaskConfig[] = [
@@ -86,6 +91,17 @@ const DAILY_TASKS: TaskConfig[] = [
 		taskAwardAmount: 12,
 		base: 'progress',
 	},
+	{
+		configId: 6,
+		taskId: 'B6',
+		taskTitle: ['体育游戏头组合', 'Sports Combo', 'खेल संयोजन'],
+		taskDescribe: ['单日累计投注满 ₹1000.00', 'Place bets totaling ₹1000.00 in a single day', 'एक दिन में कुल ₹1000.00 की शर्त लगाएं'],
+		taskTarget: 1000,
+		schedule: 1000,
+		taskAwardAmount: 18,
+		base: 'claimed',
+		ended: true,
+	},
 ]
 
 /** 每周任务 3 条,金额落在 ₹5~₹66 区间内 */
@@ -120,6 +136,17 @@ const WEEKLY_TASKS: TaskConfig[] = [
 		taskAwardAmount: 66,
 		base: 'claimed',
 	},
+	{
+		configId: 104,
+		taskId: 'D17',
+		taskTitle: ['体育游戏头组合', 'Sports Combo', 'खेल संयोजन'],
+		taskDescribe: ['本周电子游戏投注满 ₹2000.00', 'Bet ₹2000.00 on slot games this week', 'इस सप्ताह स्लॉट गेम में ₹2000.00 की शर्त लगाएं'],
+		taskTarget: 2000,
+		schedule: 2000,
+		taskAwardAmount: 35,
+		base: 'claimed',
+		ended: true,
+	},
 ]
 
 /** mixed 用任务自带的 base,其余取值强制覆盖全部任务(empty 由调用方在取列表前短路) */
@@ -137,7 +164,7 @@ const toTaskItem = (ctx: MockContext, prefix: 'dailyTask' | 'weeklyTask', task: 
 	receiveType: 1,
 	taskAwardAmount: task.taskAwardAmount,
 	isReceiveButtonHidden: false,
-	status: TASK_STATUS[rewardStatus(ctx, `${prefix}:${task.configId}`, effectiveBase(mix, task.base))],
+	status: task.ended ? ENDED_STATUS : TASK_STATUS[rewardStatus(ctx, `${prefix}:${task.configId}`, effectiveBase(mix, task.base))],
 })
 
 interface DailyTaskParams {
@@ -163,7 +190,7 @@ const weeklyAwardList: MockHandler = (ctx) => {
 const dailyAwardCount: MockHandler = (ctx) => {
 	const { mix } = params<DailyTaskParams>(ctx, 'dailyTask')
 	if (mix === 'empty') return ok(0)
-	return ok(DAILY_TASKS.filter((task) => TASK_STATUS[rewardStatus(ctx, `dailyTask:${task.configId}`, effectiveBase(mix, task.base))] === 2).length)
+	return ok(DAILY_TASKS.filter((task) => !task.ended && TASK_STATUS[rewardStatus(ctx, `dailyTask:${task.configId}`, effectiveBase(mix, task.base))] === 2).length)
 }
 
 /** ReceiveDailyAward:领取每日任务,读取 body.dailyAwardId(与 useBonusPack 的 convertData 一致) */

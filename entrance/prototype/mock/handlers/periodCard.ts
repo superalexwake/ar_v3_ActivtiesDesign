@@ -411,13 +411,15 @@ const getMyPeriodCardRecords: MockHandler = (ctx) => {
 	return ok([...live, ...buildStaticRecords(ctx)])
 }
 
+// 任务页子页签固定顺序(2026-09-22 拍板):每日任务、每周任务、每日签到、购买周卡、购买月卡、新手礼包
+// 每日签到不走契约(无 GetActivityCenterTabSort 对应键),排序值只在 DailyTasks/index.vue 的页面级默认里维护,这里只需保证其余五档权重与之对齐
 /** 契约默认的 Tab 排序值 */
 const DEFAULT_TAB_SORT: Record<string, number> = {
-	GiftPack: 100,
-	DailyTask: 95,
-	WeeklyTask: 90,
-	WeekCard: 90,
-	MonthCard: 85,
+	DailyTask: 100,
+	WeeklyTask: 95,
+	WeekCard: 85,
+	MonthCard: 80,
+	GiftPack: 75,
 }
 
 /** 落 Tab 规则:focus 命中的活动 → 该活动对应的 tabKey */
