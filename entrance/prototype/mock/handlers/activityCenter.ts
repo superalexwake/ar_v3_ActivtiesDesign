@@ -33,6 +33,12 @@ export interface ActivityCenterParams {
 	 * 出现(HOT、倒计时、最高奖金都在)。
 	 */
 	showChampionship: boolean
+	/**
+	 * 显示活动奖励(2026-09-23 拍板:"活动奖励"以前是每日/每周/月卡/周卡/新人几个活动的汇总入口,现在这些
+	 * 都迁进任务页签了,这条本身默认隐藏,处理方式与 showChampionship 一致——假数据不删,只是默认不放进
+	 * GetActivityList 的返回结果,活动列表和顶部图标行都不出现;打开后原样出现。
+	 */
+	showActivityAward: boolean
 }
 
 /** 奖励中心（rewardCenter）的参数，声明见 catalog.json */
@@ -84,25 +90,41 @@ export const bannerUrl = (ctx: MockContext, name: string): string =>
 export type RecommendActivityCode = 'taskReward' | 'invitationBonus' | 'laundry' | 'superJackpot' | 'newMemberPackage' | 'bigWheel' | 'firstRecharge'
 
 /**
+ * "top3"预设的候选顺序：与下方活动列表展示顺序一致；积分商城(1011)、国庆充值活动(1006)不参与推荐(与
+ * "default"预设口径一致，这两条从来不在推荐候选里)；活动奖励(1007)、锦标赛(1004)各自受各自的显示开关
+ * 控制——开关关闭时对应候选从这份顺序表里被过滤掉，不占 top3 的名额。
+ */
+const TOP3_CANDIDATE_ORDER = [1007, 1004, 1002, 1008, 1003, 1005, 1009, 1010]
+
+/**
  * 图标行(推荐位)完全由这里的 recommend 勾选驱动(2026-09-23 二次拍板：去掉上一轮"活动奖励固定排
  * 第一位"的前端写死逻辑——连活动奖励本身现在也只是列表里一条普通配置，靠这里勾了 recommend 才会
  * 出现在图标行，勾选顺序跟着下面活动列表的展示顺序走)。控制台没有多选清单控件，用 3 组预设(按
  * bannerID)代替逐条勾选。
  *
- * @param showChampionship - 锦标赛(1004)默认从活动列表里隐藏(见 `showChampionship` 参数)，隐藏时它
- * 不出现在列表里，"top3"预设自然也选不到它；只有打开显示锦标赛开关后，"top3"才按原来的列表顺序把它
- * 算进前 3 条。
+ * @param showChampionship - 锦标赛(1004)默认从活动列表里隐藏(见 `showChampionship` 参数)。
+ * @param showActivityAward - 活动奖励(1007)默认从活动列表里隐藏(见 `showActivityAward` 参数)。
+ * 两者任一隐藏时，"top3"预设按 `TOP3_CANDIDATE_ORDER` 顺序跳过它，取剩余候选的前 3 条；两个都保持
+ * 默认(隐藏)时前 3 条是 首充奖励→邀请奖励→大转盘。
  */
-const recommendSetFor = (preset: ActivityCenterParams['recommendPreset'], showChampionship: boolean): Set<number> => {
+const recommendSetFor = (
+	preset: ActivityCenterParams['recommendPreset'],
+	showChampionship: boolean,
+	showActivityAward: boolean
+): Set<number> => {
 	switch (preset) {
 		// 默认勾选:活动奖励(1007)、首充奖励(1002，卡片本来就挂着"推荐"标签)、邀请奖励(1008)、
 		// 大转盘(1003)、新会员礼包(1005)、洗码返水(1009)、超级奖池(1010)
 		case 'default':
 			return new Set([1007, 1002, 1008, 1003, 1005, 1009, 1010])
-		// 只前 3 个:按下面列表的展示顺序取前 3 条。锦标赛默认隐藏时前 3 条是 活动奖励→首充奖励→邀请奖励；
-		// 打开显示锦标赛开关后按原列表顺序变回 活动奖励→锦标赛→首充奖励
-		case 'top3':
-			return showChampionship ? new Set([1007, 1004, 1002]) : new Set([1007, 1002, 1008])
+		case 'top3': {
+			const visible = TOP3_CANDIDATE_ORDER.filter((id) => {
+				if (id === 1007) return showActivityAward
+				if (id === 1004) return showChampionship
+				return true
+			})
+			return new Set(visible.slice(0, 3))
+		}
 		case 'none':
 		default:
 			return new Set()
@@ -111,9 +133,9 @@ const recommendSetFor = (preset: ActivityCenterParams['recommendPreset'], showCh
 
 /**
  * 活动页的活动列表；顺序、名称、标签对齐设计稿 `活动.png` + 2026-09-23 两轮打回的最终口径：
- * 活动奖励(点击切任务页签，未登录也能点)排最前面 → 锦标赛(HOT，带倒计时/最高奖金框，2026-09-22 起默认
- * 隐藏，见 `showChampionship` 参数) → 首充奖励 → 邀请奖励(NEW) → 积分商城 → 其余活动。「每日签到」仍不
- * 放回来(它属于任务页签)。
+ * 活动奖励(点击切任务页签，未登录也能点，2026-09-23 起默认隐藏，见 `showActivityAward` 参数) → 锦标赛
+ * (HOT，带倒计时/最高奖金框，2026-09-22 起默认隐藏，见 `showChampionship` 参数) → 首充奖励 → 邀请奖励
+ * (NEW) → 积分商城 → 其余活动。「每日签到」仍不放回来(它属于任务页签)。
  *
  * @remarks 卡片上显示的"推荐"标签就是 recommend 字段本身(2026-09-23 拍板)：勾了 recommend 才会
  * 同时"上图标行"+"显示推荐标签"，两件事不再分开配置——所以这里不再有独立的 tag:'recommend' 字面量，
@@ -127,10 +149,11 @@ const recommendSetFor = (preset: ActivityCenterParams['recommendPreset'], showCh
  * ActivityFilterTabs.vue 按枚举值统一走 $t()。
  */
 const banners = (ctx: MockContext) => {
-	const { recommendPreset, showChampionship } = params<ActivityCenterParams>(ctx, 'activityCenter')
-	const recommendSet = recommendSetFor(recommendPreset, showChampionship)
+	const { recommendPreset, showChampionship, showActivityAward } = params<ActivityCenterParams>(ctx, 'activityCenter')
+	const recommendSet = recommendSetFor(recommendPreset, showChampionship, showActivityAward)
 	return [
-		// 活动奖励:不是真的可进入活动，是"切到任务页签"的快捷方式；前端按 bannerID===1007 特判，点击不导航、只切 Tab，也不需要登录
+		// 活动奖励(HOT/倒计时等无关，但数据本身都留着):默认不放进返回结果,由 showActivityAward 开关控制显隐,不是删除；
+		// 不是真的可进入活动，是"切到任务页签"的快捷方式；前端按 bannerID===1007 特判，点击不导航、只切 Tab，也不需要登录
 		{ bannerID: 1007, bannerTitle: pick(ctx, '活动奖励', 'Activity Rewards', 'गतिविधि पुरस्कार'), jumpType: 0, contents: '', image: 'activity', category: 'game', specialTag: null, activityCode: 'taskReward' },
 		// 锦标赛(HOT、倒计时、最高奖金数据都留着):默认不放进返回结果,由 showChampionship 开关控制显隐,不是删除
 		{ bannerID: 1004, bannerTitle: pick(ctx, '锦标赛', 'Tournament', 'चैंपियनशिप'), jumpType: 2, contents: '/activity/Championship', image: 'championship', category: 'game', specialTag: 'hot', activityCode: null },
@@ -143,7 +166,7 @@ const banners = (ctx: MockContext) => {
 		{ bannerID: 1009, bannerTitle: pick(ctx, '洗码返水', 'Betting Rebate', 'बेटिंग रिबेट'), jumpType: 2, contents: '/main/Laundry', image: 'activity', category: 'game', specialTag: null, activityCode: 'laundry' },
 		{ bannerID: 1010, bannerTitle: pick(ctx, '超级奖池', 'Super Jackpot', 'सुपर जैकपॉट'), jumpType: 2, contents: '/main/SuperJackpot', image: 'activity', category: 'game', specialTag: null, activityCode: 'superJackpot' },
 	]
-		.filter((item) => showChampionship || item.bannerID !== 1004)
+		.filter((item) => (showChampionship || item.bannerID !== 1004) && (showActivityAward || item.bannerID !== 1007))
 		.map(({ image, activityCode, specialTag, ...item }) => {
 			const recommend = recommendSet.has(item.bannerID)
 			return {
