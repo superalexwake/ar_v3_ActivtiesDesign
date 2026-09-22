@@ -1,0 +1,19 @@
+{
+	"manifest_version": 2,
+	"name": "ar066",
+	"version": "1.2",
+	"display": "standalone",
+	"background_color": "#fff",
+	"description": "11game",
+	"icons": [
+		{
+			"src": "/ar066@192.png",
+			"sizes": "192x192"
+		},
+		{
+			"src": "/ar066@512.png",
+			"sizes": "512x512"
+		}
+	],
+	"start_url": "/#/"
+}

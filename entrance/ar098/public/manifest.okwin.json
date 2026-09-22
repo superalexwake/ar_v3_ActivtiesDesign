@@ -1,0 +1,20 @@
+{
+	"manifest_version": 2,
+	"name": "BDGbet",
+	"short_name": "BDGbet",
+	"version": "1.0",
+	"display": "standalone",
+	"background_color": "#240005",
+	"description": "BDGbet - India's Premium Online Lottery & Casino",
+	"icons": [
+		{
+			"src": "/ar098@192.png",
+			"sizes": "192x192"
+		},
+		{
+			"src": "/ar098@512.png",
+			"sizes": "512x512"
+		}
+	],
+	"start_url": "/#/"
+}

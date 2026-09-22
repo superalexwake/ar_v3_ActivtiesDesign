@@ -1,0 +1,68 @@
+:root {
+    // main color 主题色
+	--main-color: #61a9ff;
+    // gradient 渐变色
+    --main_gradient-color: linear-gradient(90deg, #2AAAF3 0%, #2979F2 100%);
+    --main_gradient-color2: linear-gradient(180deg, #2AAAF3 0%, #2979F2 100%);
+
+    // complementary colors 辅助色
+    --norm_red-color: #D23838;
+    --norm_green-color: #17B15E;
+    --norm_secondary-color: #DD9138;
+    --norm_Purple-color: #9B48DB;
+    --norm_bule-color: #5088D3;
+    --button_dis_color: #454456;
+    // text 文字颜色 
+    --text_color_L1: #F0F1F5;
+    --text_color_L2:#ACAFC2;
+    --text_color_L3: #757BA6;
+    --text_color_L4:#F0F1F5;
+    // background-L1 背景色
+    --bg_color_L1: #22275B;
+    --bg_color_L2: #2B3270;
+    --bg_color_L3: #374992;
+    // other 其他
+    --Dividing-line_color: #374992; // 分割线颜色 dividing line color
+    --sheet_nva_color: #374992; // 表格标题底色 Table title background color
+    --sheet_detail_bg_color: #2B3270; //表格内容区分底色之一 One of the background colors for distinguishing table content
+
+	//摩托车配色
+	--Secondary_red_color: #FD565C;
+	--Secondary_green_color: #40AD72;
+	--Secondary_Color1: #FFEBEC;
+	--Secondary_Color2: #DAFFEB;
+	--Secondary_moto_Color9: #3367AA;
+	--Secondary_moto_Color8: #384A92;
+
+    // svg-icon
+    --icon1: rgba(7, 221, 209,.6);
+    --icon2: rgba(7, 221, 209,.3);
+
+    /*reset van*/
+    --van-sidebar-text-color:var(--main-color);
+    --van-picker-background: var(--bg_color_L2);
+    --van-picker-mask-color: linear-gradient(180deg, rgba(32, 29, 43, .9), rgba(32, 29, 43, .4)), linear-gradient(0deg, rgba(32, 29, 43, .9), rgba(32, 29, 43, .4));
+    --van-picker-option-text-color: var(--text_color_L2);
+    --van-picker-confirm-action-color: var(--main-color);
+    --van-popup-background: #201D2B;
+    --van-checkbox-checked-icon-color: var(--main-color);
+    --van-checkbox-label-color: var(--text_color_L2);
+    --van-field-input-text-color: var(--text_color_L1);
+    --van-radio-checked-icon-color: var(--main-color);
+    --van-grid-item-content-background:var(--bg_color_L1);
+    --van-text-color: var(--text_color_L1);
+    --van-dialog-background: var(--bg_color_L2);
+    --van-circle-color: var(--main-color);
+    --van-calendar-background: var(--bg_color_L1);
+    --van-calendar-range-edge-background: var(--main-color);
+    --van-radio-label-color: var(--text_color_L2);
+    --van-cell-background: var(--bg_color_L2);
+    --van-button-default-background:var(--main_gradient-color);
+    --van-popover-light-background: var(--bg_color_L2);
+    --van-circle-layer-color: var(--bg_color_L3);
+    --van-dialog-confirm-button-text-color: var(--text_color_L1);
+    --van-dialog-has-title-message-text-color: var(--text_color_L2);
+    [class*=van-hairline]:after {
+        content: none;
+    }
+}

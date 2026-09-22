@@ -1,0 +1,80 @@
+:root {
+    // main color 主题色
+	--main-color: #006B23;
+    // gradient 渐变色
+    --main_gradient-color: linear-gradient(90deg, #0DDA50 0%, #006B23 100%);
+    --main_gradient-color2: linear-gradient(180deg, #0DDA50 0%, #006B23 100%);
+    // 部分亮色专用颜色
+    --light-main_gradient-color: var(--main_gradient-color);
+    --text_white: #fff;
+    --light-bg_white: #fff;
+    --light-main-color: var(--main-color);
+
+	// complementary colors 辅助色
+	--norm_red-color: #FB5B5B;
+	--norm_green-color: #18B660;
+	--norm_secondary-color: #FEAA57;
+	--norm_Purple-color: #C86EFF;
+	--norm_bule-color: #6EA8F4;
+	--button_dis_color: linear-gradient(90deg, #CCCEDC 15.38%, #CDCFDD 98.73%);
+
+	// 摩托车专用配色
+	--Secondary_red_color: #FD565C;
+	--Secondary_green_color: #40AD72;
+	--Secondary_Color1: #FFEBEC;
+	--Secondary_Color2: #DAFFEB;
+	--Secondary_moto_Color9: #E93a3a;
+	--Secondary_moto_Color8: #FFDBDB;
+
+    // text 文字颜色
+    --text_color_L1: #1E2637;
+    --text_color_L2: #768096;
+    --text_color_L3: #B6BCC8;
+    --text_color_L4: #ffffff;
+
+	// 功能色
+	--norm_purple1_color: #7B8EFF;
+	--norm_Orange_color: #FBB84D;
+	--norm_green_color: #3AC967;
+	--norm_blue_color: #54B0FD;
+	--norm_purple2_color: #C36FFF;
+	--norm_brown_color: #B7805F;
+	--norm_blue2_color: #2AD4C5;
+	--norm_blue3_color: #7FADD1;
+	--norm_Orange2_color: #FD8654;
+
+    // background-L1 背景色
+    --bg_color_L1: #F2F2F1;
+    --bg_color_L2: #FFFFFF;
+    --bg_color_L3: #F6F6F6;
+
+    // other 其他
+    --Dividing-line_color: #E1E1E1; // 分割线颜色 dividing line color
+    --sheet_nva_color: var(--main-color); // 表格标题底色 Table title background color
+    --sheet_detail_bg_color: #F6F6F6; //表格内容区分底色之一 One of the background colors for distinguishing table content
+    --pop_bg-color: linear-gradient(180deg, #0DDA50 0%, #006B23 68.59%);
+
+    --icon1: rgba(7, 221, 209,.6);
+    --icon2: rgba(7, 221, 209,.3);
+    --tab1: #FB5755;
+    --tab2: #FF745B;
+    //icon color
+    --iconSecondary: rgba(24, 182, 96,.3);
+    /*reset van*/
+    --van-sidebar-text-color:var(--main-color);
+    --van-picker-background: var(--bg_color_L2);
+    --van-picker-option-text-color: var(--text_color_L2);
+    --van-picker-confirm-action-color: var(--main-color);
+    --van-checkbox-checked-icon-color: var(--main-color);
+    --van-checkbox-label-color: var(--text_color_L2);
+    --van-field-input-text-color: var(--text_color_L1);
+    --van-radio-checked-icon-color: var(--main-color);
+    --van-grid-item-content-background:var(--bg_color_L1);
+    --van-text-color: var(--text_color_L1);
+    --van-dialog-background: var(--bg_color_L2);
+    --van-circle-color: var(--main-color);
+    --van-circle-layer-color: var(--bg_color_L3);
+    --van-calendar-range-edge-background: var(--main-color);
+    --van-button-primary-background: var(--main-color);
+    --van-button-primary-border-color: var(--main-color);
+}

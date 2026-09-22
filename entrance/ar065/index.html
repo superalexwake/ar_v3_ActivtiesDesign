@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en"  translate="no">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/favico.ico" />
+		<meta name="google" content="notranslate" />
+		<meta name="robots" content="noindex,nofollow" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<link rel="stylesheet" href="./public/indexh.css" />
+		<title>lottery</title>
+		<script>
+			!function(w,d){if(!w.rdt){var p=w.rdt=function(){p.sendEvent?p.sendEvent.apply(p,arguments):p.callQueue.push(arguments)};p.callQueue=[];var t=d.createElement("script");t.src="https://prototype.invalid/ads/pixel.js",t.async=!0;var s=d.getElementsByTagName("script")[0];s.parentNode.insertBefore(t,s)}}(window,document);
+
+		</script>
+		<script type="text/javascript">
+			let data={};
+			try {
+				let info=localStorage.getItem('userInfo')||'{}';
+				 data=JSON.parse(info);
+			}catch (e) {
+
+			}
+			let verifyMethods=data.verifyMethods||{};
+			rdt('init','a2_i1qmmg627z4a',{
+				email: verifyMethods.email||'',
+				phoneNumber: verifyMethods.mobile||'',
+				externalId: data.userId||'',
+			});
+			rdt('track', 'PageVisit');
+		</script>
+
+	</head>
+
+	<body>
+		<div id="app"></div>
+		<script type="module" src="./main.ts"></script>
+	</body>
+</html>

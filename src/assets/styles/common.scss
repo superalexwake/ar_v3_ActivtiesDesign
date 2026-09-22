@@ -1,0 +1,115 @@
+@import 'vars.scss';
+@import 'always.scss';
+@import 'fonts.scss';
+
+// @import 'VIP/vip.scss';
+* {
+	box-sizing: border-box;
+	// font-family: 'Roboto', 'Inter', sans-serif;
+	//font-family: 'bahnschrift';
+}
+
+#app {
+	background: var(--bg_color_L1);
+}
+.flex-center{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.popup {
+	position: fixed;
+	max-height: 100%;
+
+	&-center {
+		top: 50%;
+		left: 0;
+		right: 0;
+		width: fit-content;
+		margin: 0 auto;
+		transform: translateY(-50%);
+		// transform: translateY(-50%);
+	}
+	&-overlay {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: rgba(0, 0, 0, 0.35);
+	}
+}
+.iosDialog {
+	padding: 40px 24px;
+	.title {
+		color: var(--text_color_L1, #1E2637);
+		font-size: 36px;
+		font-weight: 600;
+		margin-bottom: 40px;
+	}
+	.websit_info {
+		padding: 18px 28px;
+		border-radius: 10px;
+		background: var(--bg_color_L3, #F6F6F6);
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		margin-bottom: 40px;
+		img {
+			border-radius: 21.094px;
+			width: 108px;
+			height: 108px;
+			margin-right: 24px;
+			box-shadow: 0px 2px 4px 0px rgba(176, 186, 202, 0.50);
+		}
+		.link {
+			div:nth-child(1) {
+				color: var(--text_color_L1);
+				font-size: 32px;
+				font-weight: 500;
+				margin-bottom: 4px;
+			}
+			div:nth-child(2) {
+				color: var(--text_color_L2);
+				font-size: 28px;
+				font-weight: 500;
+			}
+		}
+	}
+
+	.text {
+		font-size: 32px;
+		color: var(--text_color_L2);
+		margin-bottom: 36px;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		svg {
+			width: 32px;
+			margin-left: 16px;
+		}
+		img {
+			width: 42px;
+			height: 42px;
+			margin: 0 18px;
+		}
+		span {
+			margin-left: 16px;
+			border-radius: 4px;
+			padding: 0 12px;
+			color: var(--text_color_L1);
+			background: var(--bg_color_L3);
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+		}
+	}
+}
+.van-floating-bubble {
+    background: transparent !important;
+    overflow:inherit;
+}
+
+.fail_message_toast {
+	width: 400px;
+}

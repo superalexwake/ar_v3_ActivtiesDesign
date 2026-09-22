@@ -1,0 +1,19 @@
+{
+	"manifest_version": 2,
+	"name": "BDGPlay",
+	"version": "1.2",
+	"display": "standalone",
+	"background_color": "#fff",
+	"description": "BDG Game",
+	"icons": [
+		{
+			"src": "/ar097@192.png",
+			"sizes": "192x192"
+		},
+		{
+			"src": "/ar097@512.png",
+			"sizes": "512x512"
+		}
+	],
+	"start_url": "/#/"
+}

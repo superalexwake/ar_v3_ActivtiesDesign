@@ -1,0 +1,1 @@
+export { default  as Winning3} from './Winning.vue';

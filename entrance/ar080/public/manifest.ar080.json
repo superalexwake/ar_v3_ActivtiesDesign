@@ -1,0 +1,19 @@
+{
+	"manifest_version": 2,
+	"name": "POPBEM",
+	"version": "1.2",
+	"display": "standalone",
+	"background_color": "#fff",
+	"description": "POPBEM Game",
+	"icons": [
+		{
+			"src": "/ar080@192.png",
+			"sizes": "192x192"
+		},
+		{
+			"src": "/ar080@512.png",
+			"sizes": "512x512"
+		}
+	],
+	"start_url": "/#/"
+}

@@ -1,0 +1,90 @@
+#app {
+  .noticeBar__container {
+    background: var(--bg_color_L2);
+    color: var(--text_color_L1);
+  }
+  .swiper_box {
+    padding: 0;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+  .daman-lottery {
+    .daman-btn {
+      border-color: #fff;
+    }
+  }
+  .WinningTip__C-body {
+    &-l3 {
+      .head {
+        color: #3C9CF6;
+      }
+      .bonus {
+        color: #2979F2;
+      }
+    }
+  }
+  .K3__C {
+    .WinningTip__C-body {
+      &-l2 {
+        .line2 div {
+          background-color: var(--norm_green-color);
+        }
+      }
+    }
+  }
+  .WinningTip__C-body:not(.isL) {
+    background-image: url(./icons/AllGames/missningBg.png);
+    .WinningTip__C-body-l2 {
+      margin-bottom: 100px;
+    }
+  }
+  .prompt-dialog {
+    .van-button {
+      background: transparent;
+    }
+  }
+	.ruleHead svg {
+		position: absolute;
+		top: -2px;
+		left: 0;
+		right: 0;
+		margin-inline: auto;
+		width: 494px;
+		height: 60px;
+		z-index: 1;
+		color: var(--main-color);
+	}
+}
+.van-calendar {
+	background: var(--bg_color_L1);
+	.van-calendar__header {
+		background: var(--bg_color_L2);
+	    color: var(--text_color_L1);
+		.van-calendar__weekdays {
+			color: var(--text_color_L2);
+		}
+
+	}
+	.van-calendar__month-mark {
+		color: #2B3270;
+	}
+}
+.van-picker__title, .van-calendar__header-title , .van-calendar__header-subtitle,.van-calendar__day, .van-calendar__month-title{
+	color: var(--text_color_L1);
+}
+.van-dialog__header {
+  color: var(--text_color_L1);
+}
+.van-collapse-item__content{
+	background: var(--bg_color_L2);
+}
+body {
+	.van-popup--bottom{
+		.betting-container{
+			.header-left .select-text{
+				color: var(--text_color_L1);
+			}
+			background: var(--bg_color_L1);
+		}
+	}
+}

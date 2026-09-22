@@ -1,0 +1,84 @@
+body{
+	.van-collapse-item__content{
+		background:var(--bg_color_L2);
+	}
+
+	#app {
+		.navbar__content-left .van-icon-arrow-left{
+			width: 50px;
+			height: 50px;
+			background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAMAAADVRocKAAAAbFBMVEX///8AAAD///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////+nAQA6AAAAI3RSTlMfABkKFg8H+gVxIzxV7pF/TdvKJ+jTwi3ksamaXlA0t6KIRRmPMmYAAALZSURBVGjezZrZkusgDER7MNjGe+Lsmaz8/z/eZF48MRikDK6bU5U80oVaYJDAF400UVIKIYDHn5QqSb9oUAQSJeBAqCSGQCLhQQY1wBudrwHf8AIkhE8CgeGpEmyBXIKFzHkCCmwUQyAVeAORUgUU3kTRBCTeRhIEcoE/ICyvwQg/3whbIMGfSXwCCRBbAbzx+QrgxZ/vA4j5w88lW0AgGsIloBARZQukiEpqCQhERYwFFCKjXgVyRCd/EZCIjhwEGEuYv6DBc5jvM3gT4E8BPAf4LoC8xoqq2W/2umeuNhAn0B1r80OteVPA8xei1xsz0LJsRtjiol2Z32QVx2aEIlS0OzPiwokRAhHSK2NRF6DyFPDlULU2LipGHsGzj5YX4+bG2FMxuU30TWYmODBMwJQF3zszyRJ0E5DDRXE0HnYgkyOBg25hfGQgk0DB5pYZPz3dZUg7PAcT4kx32RboNyZIiYFtefrWbXPdb9aLZVNaAgKvFEsT5o4fTvt1nY3s0XhBWAI3Q6DDk9ZpVRUQsPJncpDSnQqbkcCYjCygjZMafmqywLdxsgK8c9gbAic8KNxb7TXgQZmRTS5dCb3YBgSgM3KaomuPh8tyMeRqdujHAZL2PprRF9qw2rrHarvpLWElA6eVCbBlbBUKNue1ibWbKvd2XTTeMK0423UOsL8Ia5DJh08mYxIXkPF89HGf3FePrI++wiR6Z5xo1rFlcJkcpxJU0uDR8Xy1JRYgQzj8ojyMJRrm4TdBgPOxflkFZ9bxnXTHLPSQUbs7yDCuUCjb5TNU2XXLv0KloFGcqq4H+xI4xCg2cv6L+PylhPmLIfOXc+YvSM1fUpu/KDh/WXP+wmz0TJLu6ruIa4AtkIu4xfdBILLR6X9osczaJGIp8Puy4PUx+f1MeBq9fGT+Ec3S99u9n9Owfqvl/mmPBnjPHj714Qbp6cnnP5759fxHCAgAAoLx/OcfpSanB4oYWz0AAAAASUVORK5CYII=);
+			background-size: 50px;
+			background-position: center;
+			&:before{
+				display: none;
+			}
+		}
+		.gameItem1 .win-odds{
+			background-color: var(--bg_color_L2);
+		}
+		.video_list .video_item .video_title{
+			color: #DEDEDE;
+		}
+		.withdrawWay > div.select,
+		.Recharge__container-tabcard__items.active{
+			color: var(--bg_color_L1);
+		}
+
+		.recycleBtnD button,
+		.redeem-container-receive button,
+		.dailySignIn__container-content__footer button,
+		.pointMall__container-treasureActivity button,{
+			color: var(--bg_color_L1);
+		}
+
+		.gamestats-container-header .van-tabs--card .van-tabs__wrap .van-tab--active{
+			color: var(--bg_color_L1);
+		}
+
+		.GameList__C-item.active > div{
+			color: var(--bg_color_L1);
+		}
+
+		.record__main-more,
+		.record__main-info .report,
+		.content .shareBtnContainer .shareBtn,
+		.rechargeh__container-content__item .report,
+		.Recharge__content-quickInfo .item_active div,
+		.treasure__container__treasure-item__footer-button,
+		.wallet-container-content .container .recycleBtnD .recycleBtn{
+			color: var(--bg_color_L1);
+		}
+
+		.wallet-container-content .gameList .select span,
+		.wallet-container-content .gameList .select h3{
+			color: var(--bg_color_L1) !important;
+		}
+
+		.ruleHead svg {
+			position: absolute;
+			top: -2px;
+			left: 0;
+			right: 0;
+			margin-inline: auto;
+			width: 494px;
+			height: 60px;
+			z-index: 1;
+			color: var(--main-color);
+		}
+	}
+	.van-dialog__header{
+		color: #FFFFFF;
+	}
+	.van-dialog__cancel {
+		color:#B3B3B3;
+		background:#666666;
+	}
+	.van-dialog__confirm {
+		color: var(--bg_color_L1);
+		background: var(--main_gradient-color);
+	}
+	.van-dialog__message--has-title{
+		color: var(--text_color_L1);
+	}
+}

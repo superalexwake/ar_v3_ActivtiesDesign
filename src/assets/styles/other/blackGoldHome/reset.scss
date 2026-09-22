@@ -1,0 +1,99 @@
+.balance {
+    background-color: var(--colorText-2);
+}
+
+.noticeBar__container {
+	display: flex;
+	align-items: center;
+	width: 100%;
+	height: 74px;
+	padding-inline: 20px;
+	color: #303a4c;
+	font-size: 24px;
+	border-radius: 99rem;
+	background: #fff;
+	gap: 8px;
+
+	&-body {
+		width: 700px;
+		height: 100%;
+		overflow: hidden;
+		/* 隐藏溢出内容 */
+		position: relative;
+		/* 设置相对定位，以便设置跑马灯内容的绝对定位 */
+		height: 60px;
+		line-height: 74px;
+		display: flex;
+		align-items: center;
+
+		&-text {
+			width: 100%;
+			height: fit-content;
+			max-height: 74px;
+			line-height: 37px;
+			animation: marquee 7s linear infinite;
+			display: flex;
+			justify-content: column;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			word-wrap: break-word;
+			word-break: break-all;
+		}
+
+		@keyframes marquee {
+			0% {
+				transform: translateY(100%);
+				/* 初始位置：向上平移0 */
+			}
+
+			10% {
+				transform: translateY(0);
+				/* 中间停顿5秒，保持位置不变 */
+			}
+
+			90% {
+				transform: translateY(0);
+				/* 中间停顿5秒，保持位置不变 */
+			}
+
+			100% {
+				transform: translateY(-100%);
+				/* 终止位置：向上平移100% */
+			}
+		}
+	}
+
+	& > svg {
+		width: 32px;
+		flex-shrink: 0;
+		height: auto;
+		margin-right: 17px;
+	}
+
+	button {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-shrink: 0;
+		gap: 5px;
+		width: 150px;
+		height: 50px;
+		margin-left: auto;
+		color: var(--main-color);
+		border: 1px solid var(--main-color);
+		border-radius: 40px;
+		background: #fff;
+		&.hotIcon {
+			&::before {
+				content: '';
+				display: block;
+				width: 24px;
+				height: 24px;
+				background-position: left;
+				background-repeat: no-repeat;
+				background-size: 24px;
+				background-image: url('@icon/blueHome/redhomeN.svg');
+			}
+		}
+	}
+}

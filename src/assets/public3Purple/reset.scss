@@ -1,0 +1,286 @@
+#app {
+	.tabbar__container .tabbar__container-item.active span{
+		color: var(--main-color);
+	}
+	.noticeBar__container {
+		display: flex;
+		align-items: center;
+		width: 100%;
+		height: 74px;
+		padding-inline: 20px;
+		color: var(--text_color_L1);
+		font-size: 24px;
+		border-radius: 99rem;
+		background-color: var(--bg_color_L2);
+		gap: 8px;
+		&.lottery-notice {
+			background-color: var(--bg_color_L3);
+		}
+		//&.game-record{
+		//	background-color: var(--bg_color_L3);
+		//}
+
+		.notice_svg {
+			background-repeat: no-repeat;
+			background-position: center;
+			background-image: url('@icon/home/noticeBarSpeaker.svg');
+			background-size: cover;
+			width: 32px;
+			height: 32px;
+			flex: none;
+			margin-right: 10px;
+		}
+
+		&-body {
+			width: 700px;
+			height: 100%;
+			overflow: hidden;
+			/* 隐藏溢出内容 */
+			position: relative;
+			/* 设置相对定位，以便设置跑马灯内容的绝对定位 */
+			height: 60px;
+			line-height: 74px;
+			display: flex;
+			align-items: center;
+
+			&-text {
+				width: 100%;
+				height: fit-content;
+				max-height: 64px;
+				line-height: 32px;
+				animation: marquee 7s linear infinite;
+				display: flex;
+				justify-content: column;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				word-wrap: break-word;
+				word-break: break-all;
+			}
+
+			@keyframes marquee {
+				0% {
+					transform: translateY(100%);
+					/* 初始位置：向上平移0 */
+				}
+
+				10% {
+					transform: translateY(0);
+					/* 中间停顿5秒，保持位置不变 */
+				}
+
+				90% {
+					transform: translateY(0);
+					/* 中间停顿5秒，保持位置不变 */
+				}
+
+				100% {
+					transform: translateY(-100%);
+					/* 终止位置：向上平移100% */
+				}
+			}
+		}
+
+		& > svg {
+			width: 32px;
+			flex-shrink: 0;
+			height: auto;
+			margin-right: 17px;
+		}
+
+		button {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			flex-shrink: 0;
+			gap: 5px;
+			width: 150px;
+			height: 50px;
+			margin-left: auto;
+			color: var(--text_color_L4);
+			border-radius: 40px;
+			background: var(--main_gradient-color);
+			border: 0;
+			&.hotIcon {
+				&::before {
+					content: '';
+					display: block;
+					width: 24px;
+					height: 24px;
+					background-position: left;
+					background-repeat: no-repeat;
+					background-size: 24px;
+					color: #fff;
+					background-image: url('./icons/public/hot.svg');
+				}
+			}
+		}
+	}
+	.pointMall__container {
+		.navbar-fixed{
+			color: var(--textW);
+		 .navbar__content {
+				background: var(--bgColor-5);
+				.van-icon{
+					color: var(--textW);
+				}
+			}
+		}
+		
+	}
+	.lotterySlotItem {
+        background: var(--main_gradient-color);
+        span,h4 {
+            color: #fff;
+        }
+    }
+	.tabbar__container{
+		background: #fff;
+	}
+	.tabbar__container .tabbar__container-item:nth-of-type(3) .svg-icon{
+		color: #fff;
+	}
+	.game-content .homeNav .more{
+		background-color: #F7E2F7;
+		background-image: url('./icons/home/p3morebg.png');
+	}
+	.homeNav .more-l1, .homeNav .more-l1 svg{
+		color: #F390F7;
+		margin-bottom: 4px;
+	}
+	.game-content .homeNav .more-l2{
+		background: linear-gradient(180deg, rgba(243, 144, 247, 0.10) 0%, #F390F7 100%);
+		color: #fff;
+	}
+	.homeNav .van-tabs__wrap .van-tabs__nav .tabs-btn{
+		color: #989898;
+	}
+	.homeNav .van-tabs__wrap .van-tabs__nav .van-tab.van-tab--active .tabs-btn{
+		color: #fff;
+	}
+	#bigaward .btn{
+		background: #fff;
+	}
+
+	.TeamReport__C-body .header-container {
+		background: var(--main-color);
+		&>div {
+			color: #fff;
+			&>div {
+				&:last-of-type{
+					color: #fff;
+				}
+			}
+		}
+	}
+	.promotion-grade-th {
+		color: var(--text_color_L4);
+	}
+	.ruleHead {
+		position: relative;
+		svg {
+			position: absolute;
+			top: -2px;
+			left: 0;
+			right: 0;
+			margin-inline: auto;
+			width: 494px;
+			height: 60px;
+			z-index: 1;
+			color: var(--main-color);
+		}
+		.promotion-title {
+			color: var(--text_color_L4);
+		}
+	}
+	
+	.pointMall__container-info {
+		color: #1E2637;
+		div {
+			background: var(--linearGradien-52);
+			box-shadow: none;
+		}
+	}
+	.pointMall__container-products__content-item__header {
+		background: var(--linearGradien-52);
+	}
+	.package-time, .package-tips {
+		color: var(--Red2);
+	}
+	.package-rule {
+		span {
+			color: var(--Red2);
+		}
+	}
+	.package-item-top {
+		background: var(--main-color);
+	}
+	.package-item-bottom {
+		background: var(--linerGradient-86);
+		border-radius: 0 0 16px 16px;
+	}
+	.first-list-item {
+		.title, .number {
+			color: var(--colorText-27);
+		}
+	}
+	.member-package-rule-bonus-title {
+		color: var(--colorText-27);
+	}
+	.Xg-page, .jackpot-star {
+		// background: #f7f8ff;
+		.receive-all {
+			//border-color: var(--bgColor-10) !important;
+			.no-receive {
+				border-color: var(--bgColor-10) !important;
+			}
+		}
+		.rowcontent {
+			background: var(--k3NavBg);
+		}
+	}
+	.pointMall-rule__container {
+		.van-icon-upgrade {
+			color: var(--main-color);
+		}
+	}
+
+	.redeem__container {
+		.van-icon {
+			color: var(--main-color);
+		}
+	}
+
+	/*main*/
+	.financialServices__container-footer > div > div > div h4{
+		background:linear-gradient(90deg, #E2BEFF 0%, #F0CFFF 100%);
+		color: var(--main-color);
+	}
+	.financialServices__container-footer{
+		color: #fff;
+	}
+	.userInfo__container{
+		&-content{
+			&-uid{
+				background: transparent;
+			}
+		}
+	}
+    .empty__container svg{
+        opacity: .2;
+    }
+	.financialServices__container-footer > div{
+		background: linear-gradient(90deg, #FD8AFF 0.14%, #BFA1FF 99.92%);
+	}
+	.sysMessage__container-msgWrapper__item-title .svg{
+		color: var(--main-color);
+	}
+}
+.van-calendar .van-calendar__body .van-calendar__day--middle{
+	background: rgba(253 ,144, 247, .2);
+	color:rgba(243, 144, 247, 1);
+}
+body{
+	.van-hairline--top-bottom:after, .van-hairline-unset--top-bottom:after{
+		border: none !important;
+	}
+}

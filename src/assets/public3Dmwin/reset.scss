@@ -1,0 +1,165 @@
+body {
+  #app {
+    .userInfo__container-setting-center, .userInfo__container {
+      background: var(--bg_color_L2);
+    }
+    .userinfo-content{
+      .totalSavings__container{
+        background: var(--bg_color_L2);
+      }
+    }
+    .tabbar__container{
+      background: #fff;
+      .tabbar__container-item:nth-of-type(3){
+        .svg-icon{
+          color: #fff;
+        }
+  
+      }
+    }
+    .lotterySlotItem {
+      background: var(--main_gradient-color);
+      span,
+      h4 {
+        color: #fff;
+      }
+    }
+    // 首充奖励
+    .progress {
+      background: #d8d8d8 !important;
+    }
+    .gameList {
+      .box {
+        svg {
+          color: rgba(217, 217, 217, 0.2);
+        }
+      }
+    }
+    .championship {
+      .tabs {
+        background: var(--main-color);
+        & > div {
+          color: #fff !important;
+          &.active {
+            &::after {
+              border-bottom-color: #fff;
+            }
+          }
+        }
+      }
+    }
+    .TeamReport__C-body .header-container {
+      background: var(--main-color);
+      & > div {
+        color: #fff;
+        & > div {
+          &:last-of-type {
+            color: #fff;
+          }
+        }
+      }
+    }
+    .ruleHead {
+      position: relative;
+      svg {
+        position: absolute;
+        top: -2px;
+        left: 0;
+        right: 0;
+        margin-inline: auto;
+        width: 494px;
+        height: 60px;
+        z-index: 1;
+        color: var(--main-color);
+      }
+      .promotion-title {
+        color: var(--text_color_L4);
+      }
+    }
+    .promotion-grade-th {
+      color: var(--text_color_L4);
+    }
+    .wallet-container {
+      .imgD {
+        img {
+          position: relative;
+          width: calc(100% + 24px);
+        }
+      }
+    }
+    
+    .Wallet__C::before {
+      background: var(--bg_color_L2);
+    }
+    .BettingRecordWin__C {
+      &-head {
+        background: var(--main_gradient-color);
+        color: #fff;
+      }
+    }
+    .notification-container {
+      .navbar-fixed {
+        background: var(--main_gradient-color);
+        .van-icon,
+        .navbar__content {
+          color: #fff;
+        }
+      }
+    }
+      .empty__container svg{
+          opacity: .2;
+      }
+      
+    .tabbar__container {
+      background: var(--bg_color_L2);
+    }
+    .homeNav .more {
+      background-color: #D6E0FF;
+      background-image: url(./icons/home/p3morebg.png);
+      &-l1 {
+        color: #436DF4;
+      }
+      &-l2 {
+        color: var(--text_color_L4);
+        background: linear-gradient(180deg, rgba(67, 109, 244, .1) -25.19%, #436DF4 57.97%);
+      }
+    }
+    .noticeBar__container {
+      background: var(--bg_color_L3);
+      button {
+        &.hotIcon {
+          &::before {
+            background-image: url('./icons/home/hotIcon.svg');
+          }
+        }
+      }
+
+    }
+	  .turntable-pointRule__title{
+		  background: var(--sheet_nva_color);
+	  }
+    .activity-wrapper .activity-banner, .navbar.main .navbar-fixed{
+      background: var(--bg_color_L2);
+    }
+   .TimeLeft__C-l1-r, .TimeLeft__C-l1-tip, .TimeLeft__C-time > div{
+    background: var(--text_color_L1);
+    color: var(--main-color);
+   } 
+   .TimeLeft__C-rule{
+    border-color: var(--text_color_L1);
+   } 
+  }
+  .van-dialog__confirm
+      {
+          background: var(--main_gradient-color);
+          color: var(--text_white);
+      }
+     .van-dialog__cancel {
+        color: var(--text_color_L1);
+        background: var(--button_dis_color);
+    }
+    .promptContent{
+      color: var(--text_white);
+      padding: 10px 0;
+    }
+}

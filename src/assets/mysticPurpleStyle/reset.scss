@@ -1,0 +1,102 @@
+body {
+  // rest calendar style
+  .van-calendar {
+    &__header {
+      background: var(--bg_color_L2);
+      color: var(--text_color_L1);
+
+      &-title {
+        color: var(--text_color_L1);
+      }
+    }
+
+    &__header-subtitle {
+      color: var(--text_color_L1);
+    }
+
+    &__confirm {
+      background: var(--main_gradient-color);
+      border: 0;
+    }
+
+    &__day--start {
+      background: var(--main-color);
+    }
+
+    &__day--end {
+      background: var(--main-color);
+    }
+
+    &__day {
+      color: var(--text_color_L1);
+    }
+
+    &__weekday {
+      color: var(--text_color_L1);
+    }
+  }
+
+  .van-cell:after {
+    content: none;
+  }
+
+  .ruleHead {
+    position: relative;
+    svg {
+      position: absolute;
+      top: -2px;
+      left: 0;
+      right: 0;
+      margin-inline: auto;
+      width: 494px;
+      height: 60px;
+      z-index: 0;
+      color: var(--sheet_detail_bg_color);
+    }
+
+    .promotion-title {
+      color: var(--text_color_L4);
+    }
+  }
+
+  .promotion-grade-th {
+    color: var(--text_color_L4);
+  }
+
+  .van-dialog__confirm {
+    background: var(--bg_color_L3);
+    color: var(--text_color_L1)
+  }
+  .van-dialog__header {
+    color: var(--text_color_L1);
+  }
+  .van-dialog__cancel {
+    color: var(--text_color_L1);
+    background: var(--button_dis_color);
+  }
+  .van-dialog__confirm {
+    color: var(--text_color_L4);
+    background: var(--main_gradient-color);
+  }
+  .wallet-container-header-belly {
+      svg {
+        path:nth-child(1) {
+          fill: var(--bg_color_L3);
+        }
+        path:nth-child(2) {
+          fill: var(--main-color);
+        }
+        path:nth-child(3) {
+          fill: var(--bg_color_L3);
+        }
+      }
+  }
+  #app .tabbar__container {
+    background: #1D2124;
+  }
+	.tabbar__container-item:nth-of-type(3){
+		.svg-icon{
+			color: var(--text_color_L4);
+		}
+	}
+}

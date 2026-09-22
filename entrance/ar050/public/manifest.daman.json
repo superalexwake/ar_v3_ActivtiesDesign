@@ -1,0 +1,19 @@
+{
+	"manifest_version": 2,
+	"name": "DAMAN",
+	"version": "1.2",
+	"display": "standalone",
+	"background_color": "#fff",
+	"description": "daman",
+	"icons": [
+		{
+			"src": "/daman@192.png",
+			"sizes": "192x192"
+		},
+		{
+			"src": "/daman@512.png",
+			"sizes": "512x512"
+		}
+	],
+	"start_url": "/#/"
+}

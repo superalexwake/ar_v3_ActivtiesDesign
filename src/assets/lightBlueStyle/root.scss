@@ -1,0 +1,58 @@
+:root {
+    // main color 主题色
+	--main-color: #6EC9DF;
+    // gradient 渐变色
+    --main_gradient-color: linear-gradient(90deg, #6ED0F6 0%, #6FC7D5 100%);
+    --main_gradient-color2: linear-gradient(180deg, #6ED0F6 0%, #6FC7D5 100%);
+    // 部分亮色专用颜色
+    --light-main_gradient-color: var(--main_gradient-color);
+    --text_white: #fff;
+    --light-bg_white: #fff;
+    --light-main-color: var(--main-color);
+	
+
+    // complementary colors 辅助色
+    --norm_red-color: #FB5B5B;
+    --norm_green-color: #18B660;
+    --norm_secondary-color: #FEAA57;
+    --norm_Purple-color: #C86EFF;
+    --norm_bule-color: #6EA8F4;
+    --button_dis_color: linear-gradient(90deg, #CCCEDC 15.38%, #CDCFDD 98.73%);
+
+    // text 文字颜色
+    --text_color_L1: #1E2637;
+    --text_color_L2:#768096;
+    --text_color_L3: #B6BCC8;
+    --text_color_L4:#FFF;
+
+    // background-L1 背景色
+    --bg_color_L1: #F7F8FF;
+    --bg_color_L2: #FFF;
+    --bg_color_L3: #F6F6F6;
+
+    // other 其他
+    --Dividing-line_color: #E1E1E1; // 分割线颜色 dividing line color
+    --sheet_nva_color: var(--main-color); // 表格标题底色 Table title background color
+    --sheet_detail_bg_color: #F6F6F6; //表格内容区分底色之一 One of the background colors for distinguishing table content
+    --pop_bg-color: linear-gradient(180deg, #6FC7D5, #6ED0F6);
+
+    //icon color
+    --iconSecondary: rgba(24, 182, 96,.3);
+    /*reset van*/
+    --van-sidebar-text-color:var(--main-color);
+    --van-picker-background: var(--bg_color_L2);
+    --van-picker-option-text-color: var(--text_color_L2);
+    --van-picker-confirm-action-color: var(--main-color);
+    --van-checkbox-checked-icon-color: var(--main-color);
+    --van-checkbox-label-color: var(--text_color_L2);
+    --van-field-input-text-color: var(--text_color_L1);
+    --van-radio-checked-icon-color: var(--main-color);
+    --van-grid-item-content-background:var(--bg_color_L1)
+    --van-text-color: var(--text_color_L1);
+    --van-dialog-background: var(--bg_color_L2);
+    --van-circle-color: var(--main-color);
+    --van-circle-layer-color: var(--bg_color_L3);
+    --van-calendar-range-edge-background: var(--main-color);
+    --van-button-primary-background: var(--main-color);
+    --van-button-primary-border-color: var(--main-color);
+}

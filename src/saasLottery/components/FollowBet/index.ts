@@ -1,0 +1,1 @@
+export { default as FollowBet } from './main.vue';

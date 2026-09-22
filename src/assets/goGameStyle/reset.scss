@@ -1,0 +1,132 @@
+body {
+  // rest calendar style
+  #app {
+    
+  .van-calendar {
+    &__header {
+      background: var(--bg_color_L2);
+      color: var(--text_color_L1);
+
+      &-title {
+        color: var(--text_color_L1);
+      }
+    }
+
+    &__header-subtitle {
+      color: var(--text_color_L1);
+    }
+
+    &__confirm {
+      background: var(--main_gradient-color);
+      border: 0;
+    }
+
+    &__day--start {
+      background: var(--main-color);
+    }
+
+    &__day--end {
+      background: var(--main-color);
+    }
+
+    &__day {
+      color: var(--text_color_L1);
+    }
+
+    &__weekday {
+      color: var(--text_color_L1);
+    }
+  }
+
+  .van-cell:after {
+    content: none;
+  }
+
+  .ruleHead {
+    position: relative;
+    svg {
+      position: absolute;
+      top: -2px;
+      left: 0;
+      right: 0;
+      margin-inline: auto;
+      width: 494px;
+      height: 60px;
+      z-index: 0;
+      color: var(--sheet_detail_bg_color);
+    }
+
+    .promotion-title {
+      color: var(--text_color_L4);
+    }
+  }
+
+  .promotion-grade-th {
+    color: var(--text_color_L4);
+  }
+
+  .van-dialog__header {
+    color: var(--text_color_L1);
+  }
+  .van-dialog__cancel {
+    color: var(--text_color_L1);
+    background: var(--button_dis_color);
+  }
+  .wallet-container-header-belly {
+      svg {
+        path:nth-child(1) {
+          fill: var(--bg_color_L3);
+        }
+        path:nth-child(2) {
+          fill: var(--main-color);
+        }
+        path:nth-child(3) {
+          fill: var(--bg_color_L3);
+        }
+      }
+  }
+	.tabbar__container-item:nth-of-type(3){
+		.svg-icon{
+			color: #221F2E;
+		}
+
+	}
+  .tabbar__container {
+    background: #221F2E;
+  }
+    .login__container {
+      .login__container-heading,.navbar-fixed {
+        background: var(--main_gradient-color);
+      }
+    }
+    .resgister__C {
+      .resgister__C-heading,.navbar-fixed {
+        background: var(--main_gradient-color);
+      }
+    }
+    .tabbar__container-item:nth-of-type(3) .promotionBg::after {
+      background: linear-gradient(180deg,#3C9CF6 0%,#4DD8EF 100%);
+      border: 6px solid #fff;
+    }
+    .financialServices__container-footer > div {
+      background: var(--main_gradient-color);
+    }
+  }
+}
+.van-picker__title, .van-calendar__header-title , .van-calendar__header-subtitle,.van-calendar__day, .van-calendar__month-title{
+	color: var(--text_color_L1);
+}
+.van-calendar {
+	background: var(--bg_color_L1);
+	.van-calendar__header {
+		background: var(--bg_color_L2);
+	    color: var(--text_color_L1);
+		.van-calendar__weekdays {
+			color: var(--text_color_L2);
+		}
+
+	}
+	.van-calendar__month-mark {
+		color:  var(--bg_color_L3);
+	}
+}

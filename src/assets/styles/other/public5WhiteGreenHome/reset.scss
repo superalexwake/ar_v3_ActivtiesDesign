@@ -1,0 +1,103 @@
+// public8Home 浅蓝白色主题 - 渐变高亮按钮
+.blue-gradient-btn {
+	border: none;
+	background: linear-gradient(90deg, #36FFBB 0%, #488FFD 100%);
+	color: #fff;
+	border-radius: 50px;
+}
+
+// public8Home 浅蓝白色主题通知栏全局样式
+.noticeBar__container {
+	display: flex;
+	align-items: center;
+	width: 100%;
+	height: 80px;
+	padding-inline: 20px;
+	color: var(--text_color_L2);
+	font-size: 24px;
+	border-radius: 0;
+	background: transparent;
+	border: none;
+
+	.notice_svg {
+		background-repeat: no-repeat;
+		background-position: center;
+		background-image: url('@icon/home/noticeBarSpeaker.svg');
+		background-size: cover;
+		width: 32px;
+		height: 32px;
+		flex: none;
+		margin-right: 10px;
+	}
+
+	&-body {
+		width: 700px;
+		height: 100%;
+		overflow: hidden;
+		position: relative;
+		height: 60px;
+		line-height: 80px;
+		display: flex;
+		align-items: center;
+
+		&-text {
+			width: 100%;
+			height: fit-content;
+			max-height: 80px;
+			line-height: 37px;
+			animation: marquee 7s linear infinite;
+			display: flex;
+			justify-content: column;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			word-wrap: break-word;
+			word-break: break-all;
+		}
+
+		@keyframes marquee {
+			0% {
+				transform: translateY(100%);
+			}
+
+			10% {
+				transform: translateY(0);
+			}
+
+			90% {
+				transform: translateY(0);
+			}
+
+			100% {
+				transform: translateY(-100%);
+			}
+		}
+	}
+
+	& > svg {
+		width: 32px;
+		flex-shrink: 0;
+		height: auto;
+		margin-right: 17px;
+		color: var(--main-color);
+	}
+
+	button {
+		@extend .blue-gradient-btn;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-shrink: 0;
+		gap: 5px;
+		width: 96px;
+		height: 41px;
+		padding: 0 24px;
+		margin-left: auto;
+		background: var(--main_gradient-color2) !important;
+
+		&.hotIcon {
+			&::before {
+				display: none;
+			}
+		}
+	}
+}

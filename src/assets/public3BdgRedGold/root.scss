@@ -1,0 +1,109 @@
+// public3BdgRedGold —— BDGbet 印度站主题（红+金+深暗）
+:root {
+    // 主红
+    --main-color: #902A32;
+    --main-color-dark: #60121D;
+
+    // 金渐变（核心装饰）
+    --main_gradient-color: linear-gradient(90deg, #AE8639 0%, #F6E3A3 50%, #D2A753 100%);
+    --main_gradient-color2: linear-gradient(180deg, #AE8639 0%, #F6E3A3 50%, #D2A753 100%);
+    --gold-gradient-vertical: linear-gradient(0deg, #C4933F 0%, #FAE59F 100%);
+    --gold-gradient-dim: linear-gradient(360deg, #9B732D -0.01%, #B29E5F 100%);
+    --rect-86-gradient: linear-gradient(180deg, #F6DC88 0%, #DAAD51 100%);
+
+    // 亮色专用
+    --light-main_gradient-color: var(--main_gradient-color);
+    --text_white: #fff;
+    --light-bg_white: #fff;
+    --light-main-color: var(--main-color);
+
+    // 语义色
+    --norm_red-color: #D23838;       // 错误
+    --norm_green-color: #17B15E;     // 成功
+    --norm_secondary-color: #DD9138; // 警告
+    --norm_Purple-color: #DC75E8;    // Lucky WinGo 装饰
+    --norm_bule-color: #5088D3;      // 信息
+    --button_dis_color: #240005;     // 禁用按钮
+
+    // SaaS 彩票 accent 红
+    --accent_red-color: #FB5B5B;       // 倒计时 / 警示
+    --accent_red-deep-color: #FA484C;  // 钱包图标 / 翻页强调
+
+    // 文字（金色 4 级）
+    --text_color_L1: #F6E3A3;  // 高亮金米黄（标题）
+    --text_color_L2: #D3A05B;  // 次级金棕（副文案）
+    --text_color_L3: #BCA570;  // 弱金（footer）
+    --text_color_L4: #240005;  // 深暗红（金按钮文字）
+
+    // 背景（深暗红 3 级）
+    --bg_color_L1: #240005;
+    --bg_color_L2: #311111;
+    --bg_color_L3: #4A1418;
+
+    // 其他
+    --Dividing-line_color: #B14850;
+    --sheet_nva_color: #311111;
+    --sheet_detail_bg_color: #240005;
+
+    // 摩托车（保留 mysteriousPurple 默认）
+    --Secondary_red_color: #FD565C;
+    --Secondary_green_color: #40AD72;
+    --Secondary_Color1: #FFEBEC;
+    --Secondary_Color2: #DAFFEB;
+    --Secondary_moto_Color9: #B453E4;
+    --Secondary_moto_Color8: #4C2E54;
+
+    // svg-icon
+    --icon1: rgba(246, 227, 163, 0.6);
+    --icon2: rgba(246, 227, 163, 0.3);
+    --tab1: #AE8639;
+    --tab2: #D2A753;
+
+    // 组件专属 token
+    --noticeBar-bg-color: #6B1B26;       // NoticeBar 底
+    --noticeBar-btn-bg-color: #E6D195;   // NoticeBar Detail 按钮底
+    --noticeBar-btn-text-color: #5E1A24; // NoticeBar Detail 按钮字
+    --wallet-balance-bg: #552122;        // 钱包余额卡
+
+    // 彩票 active 渐变（K3 / TrxWinGo trx2 / D5_3 共用）
+    --wingo3-tab-active-bg: linear-gradient(90deg, #FF6962 0%, #FFAC7F 100%);
+    --wingo3-tab-default-bg: #B62933;
+    --bet-multiple-default-bg: #B53942;  // TrxWinGo trx2 .r 默认底
+
+    /* Vant 组件库覆盖 */
+    --van-sidebar-text-color: var(--main-color);
+    --van-picker-background: var(--bg_color_L2);
+    --van-picker-mask-color: linear-gradient(180deg, rgba(36, 0, 5, .9), rgba(36, 0, 5, .4)), linear-gradient(0deg, rgba(36, 0, 5, .9), rgba(36, 0, 5, .4));
+    --van-picker-option-text-color: var(--text_color_L2);
+    --van-picker-confirm-action-color: var(--main-color);
+    --van-popup-background: #240005;
+    --van-checkbox-checked-icon-color: var(--main-color);
+    --van-checkbox-label-color: var(--text_color_L2);
+    --van-field-input-text-color: var(--text_color_L1);
+    --van-radio-checked-icon-color: var(--main-color);
+    --van-grid-item-content-background: var(--bg_color_L1);
+    --van-text-color: var(--text_color_L1);
+    --van-dialog-background: var(--bg_color_L2);
+    --van-circle-color: var(--main-color);
+    --van-calendar-background: var(--bg_color_L1);
+    --van-calendar-range-edge-background: var(--main-color);
+    --van-radio-label-color: var(--text_color_L2);
+    --van-cell-background: var(--bg_color_L2);
+    --van-popover-light-background: var(--bg_color_L2);
+    --van-circle-layer-color: var(--bg_color_L3);
+    --van-button-primary-background: var(--main_gradient-color);
+    --van-button-primary-border-color: var(--main-color);
+    --van-slider-active-background: var(--main-color);
+    --van-slider-inactive-background: var(--bg_color_L1);
+    --van-collapse-item-content-background: var(--bg_color_L1);
+    --van-action-sheet-item-background: var(--bg_color_L2);
+    --van-action-sheet-item-text-color: var(--text_color_L1);
+    --van-button-primary-color: var(--text_color_L4);
+    --van-dialog-has-title-message-text-color: var(--text_color_L2);
+    [class*=van-hairline]:after {
+        content: none;
+    }
+    --van-calendar-selected-day-color: var(--main-color);
+    --van-calendar-selected-day-background: var(--bg_color_L2);
+    --van-button-default-background: var(--main_gradient-color);
+}

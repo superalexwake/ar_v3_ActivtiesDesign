@@ -1,0 +1,19 @@
+{
+	"manifest_version": 2,
+	"name": "Win101",
+	"version": "1.2",
+	"display": "standalone",
+	"background_color": "#fff",
+	"description": "win101 GAME",
+	"icons": [
+		{
+			"src": "/ar063@192.png",
+			"sizes": "192x192"
+		},
+		{
+			"src": "/ar063@512.png",
+			"sizes": "512x512"
+		}
+	],
+	"start_url": "/#/"
+}

@@ -1,0 +1,61 @@
+:root {
+    // main color 主题色
+	--main-color: #3478FE;
+    // gradient 渐变色
+    --main_gradient-color: linear-gradient(90deg, #0A5EFF 0%, #3C7DFE 100%);
+
+    // complementary colors 辅助色
+    --Secondary_red_color: #FD565C;
+    --Secondary_green_color: #40AD72;
+    --Secondary_Color1: #FFEBEC;
+    --Secondary_Color2: #DAFFEB;
+
+    // 功能色
+    --norm_red_color: #FD5358;
+    --norm_purple1_color: #7B8EFF;
+    --norm_Orange_color: #FBB84D;
+    --norm_green_color: #3AC967;
+    --norm_blue_color: #54B0FD;
+    --norm_purple2_color: #C36FFF;
+    --norm_brown_color: #B7805F;
+    --norm_blue2_color: #2AD4C5;
+    --norm_blue3_color: #7FADD1;
+    --norm_Orange2_color: #FD8654;
+
+
+    // text 文字颜色
+    --text_color_L1: #04060A;
+    --text_color_L2:#646C7B;
+    --text_color_L3: #6788B2;
+    --text_color_L4:#FFF;
+
+    // background-L1 背景色
+    --bg_color_L1: #F6F6F6;
+    --bg_color_L2: #FFF;
+    --bg_color_L3: #F6F6F6;
+    --box_nav_color: #DBEAFF; // 玩法按钮，游戏记录弹窗标题底色
+
+    // other 其他
+    --Dividing-line_color: #E2E2E2; // 分割线颜色 dividing line color
+    --title_Gradient_color: linear-gradient(90deg, #0A5EFF 0%, #3C7DFE 100%); // 标题渐变色
+    --title_Solid_color: #0A44FF; // 标题实色
+
+
+    /*reset van*/
+    --van-sidebar-text-color:var(--main-color);
+    --van-picker-background: var(--bg_color_L2);
+    --van-picker-option-text-color: var(--text_color_L2);
+    --van-picker-confirm-action-color: var(--main-color);
+    --van-checkbox-checked-icon-color: var(--main-color);
+    --van-checkbox-label-color: var(--text_color_L2);
+    --van-field-input-text-color: var(--text_color_L1);
+    --van-radio-checked-icon-color: var(--main-color);
+    --van-grid-item-content-background:var(--bg_color_L1);
+    --van-text-color: var(--text_color_L1);
+    --van-dialog-background: var(--bg_color_L2);
+    --van-circle-color: var(--main-color);
+    --van-circle-layer-color: var(--bg_color_L3);
+    --van-calendar-range-edge-background: var(--main-color);
+    --van-button-primary-background: var(--main-color);
+    --van-button-primary-border-color: var(--main-color);
+}

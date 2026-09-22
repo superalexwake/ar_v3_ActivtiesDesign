@@ -1,0 +1,80 @@
+%content-format {
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+	padding-inline: 24px;
+	padding-bottom: 160px;
+}
+
+/**
+ * @mixin grid-min-max-cols
+ *
+ * @param {Number} $min-cols 最少列数
+ * @param {Number} $max-cols 最多列数
+ * @param {String} $cols-min-width 列最小宽度
+ * @param {String} $grid-row-gap 行间距
+ * @param {String} $grid-column-gap 列间距
+ *
+ * @description
+ * 用grid来生成一个自适应列数的网格布局的scss方法
+ */
+@mixin grid-min-max-cols($min-cols, $max-cols, $cols-min-width, $grid-row-gap: 0px, $grid-column-gap: 0px) {
+	--min-cols: #{$min-cols};
+	--max-cols: #{$max-cols};
+	--cols-min-width: #{$cols-min-width};
+	--grid-row-gap: #{$grid-row-gap};
+	--grid-column-gap: #{$grid-column-gap};
+
+	display: grid;
+	grid-template-columns: repeat(
+		auto-fit,
+		minmax(
+			min(
+				(100% / var(--min-cols) - var(--grid-column-gap) * (var(--min-cols) - 1) / var(--min-cols)),
+				max(
+					var(--cols-min-width),
+					(100% / var(--max-cols) - var(--grid-column-gap) * (var(--max-cols) - 1) / var(--max-cols))
+				)
+			),
+			1fr
+		)
+	);
+	gap: $grid-row-gap $grid-column-gap;
+}
+
+/*
+按钮的默认样式
+$fontSize:字体大小
+$height：高
+$width：宽
+$color：字体颜色
+$background：背景色
+$borderRadius:边框圆角
+$letterSpacing:文本间距
+$fontWeight:字体粗细
+$boxShadow:框架阴影
+$textShadow:文本阴影
+*/
+@mixin button(
+	$borderRadius: 80px,
+	$fontSize: 30px,
+	$fontWeight: 700,
+	$height: 70px,
+	$width: 100%,
+	$color: #ffffff,
+	$letterSpacing: 10px,
+	$boxShadow: 0px 4px 0px #e04846,
+	$textShadow: none,
+	$background: linear-gradient(180deg, #ff897c 0%, #f95959 100%)
+) {
+	border-radius: $borderRadius;
+	border: none;
+	color: $color;
+	letter-spacing: $letterSpacing;
+	font-weight: $fontWeight;
+	font-size: $fontSize;
+	height: $height;
+	width: $width;
+	background: $background;
+	text-shadow: $textShadow;
+}

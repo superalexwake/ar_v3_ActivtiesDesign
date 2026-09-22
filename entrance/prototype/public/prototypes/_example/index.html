@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="robots" content="noindex,nofollow" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>示例原型</title>
+	<style>
+		:root {
+			--c-bg: #f5f6f8;
+			--c-panel: #fff;
+			--c-text: #1f2329;
+			--c-muted: #8f959e;
+			--c-border: #e5e6eb;
+			--c-primary: #1664ff;
+			--c-danger: #f54a45;
+			--radius: 8px;
+		}
+
+		* {
+			box-sizing: border-box;
+		}
+
+		body {
+			margin: 0;
+			width: 100%;
+			min-height: 100vh;
+			background: var(--c-bg);
+			color: var(--c-text);
+			font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+		}
+
+		.example__header {
+			padding: 20px 16px;
+			background: var(--c-panel);
+			border-bottom: 1px solid var(--c-border);
+		}
+
+		.example__title {
+			margin: 0;
+			font-size: 18px;
+		}
+
+		.example__body {
+			padding: 16px;
+		}
+
+		.example__steps {
+			margin: 0;
+			padding: 0;
+			list-style: none;
+			display: flex;
+			flex-direction: column;
+			gap: 12px;
+		}
+
+		.example__step {
+			display: flex;
+			gap: 10px;
+			padding: 12px;
+			background: var(--c-panel);
+			border: 1px solid var(--c-border);
+			border-radius: var(--radius);
+		}
+
+		.example__step-index {
+			flex-shrink: 0;
+			width: 22px;
+			height: 22px;
+			border-radius: 50%;
+			background: var(--c-primary);
+			color: #fff;
+			font-size: 12px;
+			line-height: 22px;
+			text-align: center;
+		}
+
+		.example__step-text {
+			font-size: 14px;
+			line-height: 1.6;
+		}
+
+		.example__step-text code {
+			padding: 1px 4px;
+			border-radius: 4px;
+			background: var(--c-bg);
+			color: var(--c-danger);
+			font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+			font-size: 13px;
+		}
+	</style>
+</head>
+
+<body>
+	<header class="example__header">
+		<h1 class="example__title">示例原型</h1>
+	</header>
+	<main class="example__body">
+		<ol class="example__steps">
+			<li class="example__step">
+				<span class="example__step-index">1</span>
+				<span class="example__step-text">复制本目录并改名为 <code>prototypes/&lt;名称&gt;/</code></span>
+			</li>
+			<li class="example__step">
+				<span class="example__step-index">2</span>
+				<span class="example__step-text">修改 <code>index.html</code>（可以内联 CSS 和 JS，不需要构建）</span>
+			</li>
+			<li class="example__step">
+				<span class="example__step-index">3</span>
+				<span class="example__step-text">在 <code>catalog.json</code> 的“新设计”分组登记 <code>{ "title": "...", "kind": "html", "target": "prototypes/&lt;名称&gt;/index.html" }</code></span>
+			</li>
+		</ol>
+	</main>
+</body>
+
+</html>

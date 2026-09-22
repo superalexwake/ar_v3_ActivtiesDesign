@@ -1,0 +1,50 @@
+Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+.agents*
+.claude*
+apps*
+packages/icons*
+
+package-lock.json
+
+node_modules
+.vite
+dist*
+languageCvs*
+dist-ssr
+*.local
+*.rar
+*.zip
+*.idea
+*.tar
+*.gz
+web_new
+_gsdata_
+
+# Editor directories and files
+# .vscode/*
+# !.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+yarn.lock
+npm-cache
+# pnpm-lock.yaml 必须入库：构建用 pnpm install --frozen-lockfile 保证可复现
+npm-cache
+settings.json
+.dccache
+.playwright-mcp/
+.codegraph
+.spec-workflow/
+.serena/
+docs-m*/

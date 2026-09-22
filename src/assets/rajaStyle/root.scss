@@ -1,0 +1,78 @@
+:root {
+    // main color 主题色
+	--main-color: #F3BD0B;
+    // gradient 渐变色
+    --main_gradient-color: linear-gradient(90deg, #F9CA0E 0%, #FC9D10 100%);
+    --main_gradient-color2: linear-gradient(0deg, #FFA514 0%, #F9CA0E 98.5%);
+
+    // 部分亮色专用颜色
+    --light-main_gradient-color: var(--bg_color_L2);
+    --text_white: #fff;
+    //--light-bg_white: #fff;
+    --light-main-color: var(--main-color);
+	
+
+    // complementary colors 辅助色
+    --norm_red-color: #D45656;
+    --norm_green-color: #327A53;
+    --norm_secondary-color: #CA893D;
+    --norm_Purple-color: #8045AD;
+    --norm_bule-color: #4570C3;
+    --button_dis_color: #591C1B;
+
+
+	// 摩托车专用配色
+	--Secondary_red_color: #FD565C;
+	--Secondary_green_color: #40AD72;
+	--Secondary_Color1: #FFEBEC;
+	--Secondary_Color2: #DAFFEB;
+	--Secondary_moto_Color9: #D49737;
+	--Secondary_moto_Color8: #70302F;
+
+    // text 文字颜色
+    --text_color_L1: #FFF;
+    --text_color_L2:#B69090;
+    --text_color_L3: #956565;
+    --text_color_L4:#380A09;
+
+    // background-L1 背景色
+    --bg_color_L1: #380A09;
+    --bg_color_L2: #461918;
+    --bg_color_L3: #70302F;
+
+    // other 其他
+    --Dividing-line_color: #753E3E; // 分割线颜色 dividing line color
+    --sheet_nva_color: #6D3433; // 表格标题底色 Table title background color
+    --sheet_detail_bg_color: #592B2A; //表格内容区分底色之一 One of the background colors for distinguishing table content
+    --pop_bg-color: linear-gradient(180deg, #13BF77 13.44%, #4CCC77 86.56%);
+
+
+    //icon color
+    --iconSecondary: rgba(24, 182, 96,.3);
+    /*reset van*/
+    --van-sidebar-text-color:var(--main-color);
+    --van-picker-background: var(--bg_color_L2);
+    --van-picker-option-text-color: var(--text_color_L1);
+    --van-picker-confirm-action-color: var(--norm_red-color);
+    --van-checkbox-checked-icon-color: var(--main-color);
+    --van-checkbox-label-color: var(--text_color_L2);
+    --van-field-input-text-color: var(--text_color_L1);
+    --van-radio-checked-icon-color: var(--main-color);
+    --van-grid-item-content-background:var(--bg_color_L1);
+    --van-text-color: var(--text_color_L1);
+    --van-dialog-background: var(--bg_color_L2);
+    --van-circle-color: var(--main-color);
+    --van-circle-layer-color: var(--bg_color_L3);
+    --van-calendar-range-edge-background: var(--main-color);
+    --van-button-primary-background: var(--main-color);
+    --van-button-primary-border-color: var(--main-color);
+	--van-popup-background: var(--bg_color_L2);
+	--van-button-default-background: var(--bg_color_L2);
+	--van-dialog-confirm-button-text-color: var(--text_color_L4);
+	--van-dialog-has-title-message-text-color: var(--text_color_L2);
+	--van-button-default-color: var(--main-color);
+	--van-calendar-background: var(--bg_color_L2);
+	--van-calendar-month-mark-color: rgba(242, 243, 245, .2);
+	--van-picker-mask-color: linear-gradient(180deg, rgba(32, 29, 43, .9), rgba(32, 29, 43, .4)), linear-gradient(0deg, rgba(32, 29, 43, .9), rgba(32, 29, 43, .4));
+	--van-border-color: var(--Dividing-line_color);
+}

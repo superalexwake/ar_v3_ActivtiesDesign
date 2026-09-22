@@ -1,0 +1,73 @@
+:root {
+    // main color 主题色
+	--main-color: rgb(125, 200, 255);
+    // gradient 渐变色
+    --main_gradient-color: linear-gradient(90deg, #80D4FF 0%, #EA80FF 100%);
+    --main_gradient-color2: linear-gradient(180deg, #80D4FF 0%, #EA80FF 100%);
+
+    // complementary colors 辅助色
+    --norm_red-color: #D23838;
+    --norm_green-color: #17B15E;
+    --norm_secondary-color: #DD9138;
+    --norm_Purple-color: #9B48DB;
+    --norm_bule-color: #5088D3;
+    --button_dis_color: #454456;
+    // text 文字颜色 
+    --text_color_L1: #E6EBF0;
+    --text_color_L2:#9EA2A8;
+    --text_color_L3: #6E7277;
+    --text_color_L4:#221F2E;
+    // background-L1 背景色
+    --bg_color_L1: #121618;
+    --bg_color_L2: #1D2124;
+    --bg_color_L3: #292E30;
+    // other 其他
+    --Dividing-line_color: #313B3E; // 分割线颜色 dividing line color
+    --sheet_nva_color: #2E3740; // 表格标题底色 Table title background color
+    --sheet_detail_bg_color: #272E30; //表格内容区分底色之一 One of the background colors for distinguishing table content
+
+    // svg-icon
+    --icon1: rgba(7, 221, 209,.6);
+    --icon2: rgba(7, 221, 209,.3);
+    --tab1: #80D4FF;
+    --tab2: #EA80FF;
+
+    --downBg: linear-gradient(180deg, #FADF9C 0%, #EA9828 100%);
+
+    /*reset van*/
+    --van-sidebar-text-color:var(--main-color);
+    --van-picker-background: var(--bg_color_L2);
+    --van-picker-mask-color: linear-gradient(180deg, rgba(32, 29, 43, .9), rgba(32, 29, 43, .4)), linear-gradient(0deg, rgba(32, 29, 43, .9), rgba(32, 29, 43, .4));
+    --van-picker-option-text-color: var(--text_color_L2);
+    --van-picker-confirm-action-color: var(--main-color);
+    --van-popup-background: #201D2B;
+    --van-checkbox-checked-icon-color: var(--main-color);
+    --van-checkbox-label-color: var(--text_color_L2);
+    --van-field-input-text-color: var(--text_color_L1);
+    --van-radio-checked-icon-color: var(--main-color);
+    --van-grid-item-content-background:var(--bg_color_L1);
+    --van-text-color: var(--text_color_L1);
+    --van-dialog-background: var(--bg_color_L2);
+    --van-circle-color: var(--main-color);
+    --van-calendar-background: var(--bg_color_L1);
+    --van-calendar-range-edge-background: var(--main-color);
+    --van-radio-label-color: var(--text_color_L2);
+    --van-cell-background: var(--bg_color_L2);
+    --van-button-default-background:var(--main_gradient-color);
+    --van-popover-light-background: var(--bg_color_L2);
+    --van-circle-layer-color: var(--bg_color_L3);
+	--van-button-primary-background: var(--main_gradient-color);
+	--van-button-primary-border-color: var(--main-color);
+    --van-slider-active-background:var(--main-color);
+    --van-slider-inactive-background:var(--bg_color_L1);
+    --van-collapse-item-content-background: var(--bg_color_L1);
+    --van-action-sheet-item-background: var(--bg_color_L2);
+    --van-action-sheet-item-text-color: var(--text_color_L1);
+    --van-button-primary-color: var(--text_color_L4);
+	--van-dialog-has-title-message-text-color: var(--text_color_L2);
+    [class*=van-hairline]:after {
+        content: none;
+    }
+	--van-calendar-selected-day-color:var(--main-color);
+	--van-calendar-selected-day-background:var(--bg_color_L2);
+}

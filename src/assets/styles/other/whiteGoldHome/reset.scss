@@ -1,0 +1,91 @@
+
+.noticeBar__container {
+	display: flex;
+	align-items: center;
+	width: 100%;
+	height: 74px;
+	padding-inline: 20px;
+	color: #303a4c;
+	font-size: 24px;
+	border-radius: 99rem;
+	background: #fff;
+	box-shadow: 0px 8px 12px rgba(208, 208, 237, 0.3);
+
+	&-body {
+		width: 700px;
+		height: 100%;
+		overflow: hidden;
+		/* 隐藏溢出内容 */
+		position: relative;
+		/* 设置相对定位，以便设置跑马灯内容的绝对定位 */
+		height: 60px;
+		line-height: 60px;
+		display: flex;
+		align-items: center;
+
+		&-text {
+			width: 100%;
+			height: fit-content;
+			max-height: 60px;
+			line-height: 30px;
+			animation: marquee 5s linear infinite;
+			display: flex;
+			justify-content: column;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			word-wrap: break-word;
+			word-break: break-all;
+		}
+
+		@keyframes marquee {
+			0% {
+				transform: translateY(100%);
+				/* 初始位置：向上平移0 */
+			}
+
+			10% {
+				transform: translateY(0);
+				/* 中间停顿5秒，保持位置不变 */
+			}
+
+			90% {
+				transform: translateY(0);
+				/* 中间停顿5秒，保持位置不变 */
+			}
+
+			100% {
+				transform: translateY(-100%);
+				/* 终止位置：向上平移100% */
+			}
+		}
+	}
+
+	& > svg {
+		width: 32px;
+		flex-shrink: 0;
+		height: auto;
+		margin-right: 17px;
+	}
+
+	button {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-shrink: 0;
+		gap: 5px;
+		width: 150px;
+		height: 50px;
+		margin-left: auto;
+		color: #fff;
+		border: none;
+		border-radius: 40px;
+		background: linear-gradient(0deg, #F54545 20.19%, #FF7C7C 100%);
+		svg {
+			width: 24px;
+			height: auto;
+		}
+	}
+}
+.hot_container .win-odds{
+	display: none !important;
+}

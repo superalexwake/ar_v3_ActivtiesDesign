@@ -1,0 +1,189 @@
+#app {
+	.noticeBar__container {
+		display: flex;
+		align-items: center;
+		width: 100%;
+		height: 74px;
+		padding-inline: 20px;
+		color: var(--text_color_L1);
+		font-size: 24px;
+		border-radius: 99rem;
+		background-color: var(--bg_color_L2);
+		gap: 8px;
+		&.lottery-notice {
+			background-color: var(--bg_color_L3);
+		}
+		//&.game-record{
+		//	background-color: var(--bg_color_L3);
+		//}
+
+		.notice_svg {
+			background-repeat: no-repeat;
+			background-position: center;
+			background-image: url('@icon/home/noticeBarSpeaker.svg');
+			background-size: cover;
+			width: 32px;
+			height: 32px;
+			flex: none;
+			margin-right: 10px;
+		}
+
+		&-body {
+			width: 700px;
+			height: 100%;
+			overflow: hidden;
+			/* 隐藏溢出内容 */
+			position: relative;
+			/* 设置相对定位，以便设置跑马灯内容的绝对定位 */
+			height: 60px;
+			line-height: 74px;
+			display: flex;
+			align-items: center;
+
+			&-text {
+				width: 100%;
+				height: fit-content;
+				max-height: 64px;
+				line-height: 32px;
+				animation: marquee 7s linear infinite;
+				display: flex;
+				justify-content: column;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				word-wrap: break-word;
+				word-break: break-all;
+			}
+
+			@keyframes marquee {
+				0% {
+					transform: translateY(100%);
+					/* 初始位置：向上平移0 */
+				}
+
+				10% {
+					transform: translateY(0);
+					/* 中间停顿5秒，保持位置不变 */
+				}
+
+				90% {
+					transform: translateY(0);
+					/* 中间停顿5秒，保持位置不变 */
+				}
+
+				100% {
+					transform: translateY(-100%);
+					/* 终止位置：向上平移100% */
+				}
+			}
+		}
+
+		& > svg {
+			width: 32px;
+			flex-shrink: 0;
+			height: auto;
+			margin-right: 17px;
+		}
+
+		button {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			flex-shrink: 0;
+			gap: 5px;
+			width: 150px;
+			height: 50px;
+			margin-left: auto;
+			color: var(--text_color_L4);
+			border-radius: 40px;
+			background: var(--main_gradient-color);
+			border: 0;
+			&.hotIcon {
+				&::before {
+					content: '';
+					display: block;
+					width: 24px;
+					height: 24px;
+					background-position: left;
+					background-repeat: no-repeat;
+					background-size: 24px;
+					color: #fff;
+					background-image: url('@icon/public/hot.svg');
+				}
+			}
+		}
+	}
+	.homeNav {
+		.van-tabs__wrap {
+			height: 100px;
+			margin-bottom: 24px;
+			.van-tabs__nav {
+				background: var(--bg_color_L2);
+				padding: 0;
+				.van-tab {
+					color: var(--text_color_L2);
+					border-radius: 10px;
+					&.van-tab--active {
+						color: var(--text_color_L4);
+						background: var(--main_gradient-color2);
+					}
+				}
+				.van-tabs__line {
+					display: none;
+				}
+				.tabs-btn {
+					display: flex;
+					flex-direction: column;
+					align-items: center;
+					min-width: 100px;
+				}
+			}
+		}
+
+		.more {
+			width: calc((100% - 24px) / 3);
+			height: 300px;
+			display: flex;
+			flex-direction: column;
+			background-image: url('@/assets/icons/home/p3morebg.png');
+			background-color: #221f2e;
+			background-repeat: no-repeat;
+			background-size: 165px 174px;
+			background-position: top right;
+			border-radius: 10px;
+			overflow: hidden;
+			color: var(--text_color_L1);
+			&-l1 {
+				flex: 1;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				svg {
+					width: 50px;
+					height: 50px;
+				}
+			}
+			&-l2 {
+				height: 96px;
+				line-height: 80px;
+				padding-top: 12px;
+				font-size: 28px;
+				text-align: center;
+				background: linear-gradient(180deg, rgba(34, 31, 46, 0.5) -25.19%, #38374b 57.97%);
+			}
+		}
+	}
+	.tool-container {
+		padding: 40px 0;
+	}
+	.tabbar__container {
+		align-items: center;
+	}
+	// .tabbar__container-item:nth-of-type(3) {
+	// 	.promotionBg {
+	// 		position: inherit;
+	// 		left: 0;
+	// 		display: flex;
+	// 	}
+	// }
+}

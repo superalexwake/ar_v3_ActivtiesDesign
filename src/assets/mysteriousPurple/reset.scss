@@ -1,0 +1,349 @@
+body {
+	#app {
+		.userInfo__container-setting-center {
+			background: var(--bg_color_L2);
+		}
+		.tabbar__container{
+			background: #fff;
+			.tabbar__container-item:nth-of-type(3){
+				.svg-icon{
+					color: #fff;
+				}
+			}
+		}
+		.right{
+			color: var(--text_color_L1);
+		}
+		.lotterySlotItem {
+			background: var(--main_gradient-color);
+			span,
+			h4 {
+				color: #fff;
+			}
+		}
+		// 首充奖励
+		.firstSaveDialog {
+			.header {
+				background: var(--main-color);
+				color: var(--text_color_L4);
+			}
+		}
+		.progress {
+			background: #d8d8d8 !important;
+		}
+		.gameList {
+			.box {
+				svg {
+					color: rgba(217, 217, 217, 0.2);
+				}
+			}
+		}
+		.championship {
+			.tabs {
+				background: var(--main-color);
+				& > div {
+					color: #fff !important;
+					&.active {
+						&::after {
+							border-bottom-color: #fff;
+						}
+					}
+				}
+			}
+		}
+		.TeamReport__C-body .header-container {
+			background: var(--main-color);
+			& > div {
+				color: #fff;
+				& > div {
+					&:last-of-type {
+						color: #fff;
+					}
+				}
+			}
+		}
+		.ruleHead {
+			position: relative;
+			svg {
+				position: absolute;
+				top: -2px;
+				left: 0;
+				right: 0;
+				margin-inline: auto;
+				width: 494px;
+				height: 60px;
+				z-index: 1;
+				color: var(--main-color);
+			}
+			.promotion-title {
+				color: var(--text_color_L4);
+			}
+		}
+		.promotion-grade-th {
+			color: var(--text_color_L4);
+		}
+		.wallet-container {
+			.imgD {
+				img {
+					position: relative;
+					width: calc(100% + 24px);
+				}
+			}
+		}
+		.GameList__C {
+			background: var(--bg_color_L3);
+		}
+		.Wallet__C::before {
+			background: var(--bg_color_L2);
+		}
+		.BettingRecordWin__C {
+			&-head {
+				background: var(--main_gradient-color);
+				color: #fff;
+			}
+		}
+		.notification-container {
+			.navbar-fixed {
+				background: var(--bg_color_L2);
+				.van-icon,
+				.navbar__content {
+					color: #fff;
+				}
+			}
+		}
+		.van-dialog__confirm{
+			background:var(--main_gradient-color);
+			color: var(--text_white);
+		}
+		.tabbar__container {
+			background: var(--bg_color_L2);
+		}
+		.Wallet__C-balance {
+			background-color: var(--bg_color_L3);
+		}
+		.homeNav{
+			.btn{
+				margin:40px auto 0 auto;
+				//margin-top: 40px;
+				//margin-bottom: 0px;
+			}
+			.more {
+				background-color: #221F2E;
+				border-radius: 16px;
+				background-image: url(./icons/home/p3morebg.png);
+				&-l1 {
+					color: #B7B6C8;
+				}
+				&-l2 {
+					color: #fff;
+					background: linear-gradient(180deg, rgba(46, 41, 31, 0.50) -25.19%, #4B4437 57.97%);
+				}
+			}
+		}
+		.totalSavings__container{
+			background: var(--bg_color_L2);
+		}
+		.navbar.main .navbar-fixed{
+			background: var(--bg_color_L2) !important;
+		}
+		.noticeBar__container.lottery-notice{
+			background-color: var(--bg_color_L2);
+		}
+		.sysMessage__container-msgWrapper{
+			margin-top: 24px;
+		}
+		.bonus-header .nav{
+			background: var(--bg_color_L2);
+		}
+		.vip-content-empirical > div{
+			background: var(--bg_color_L2);
+		}
+		.rechargeh__container-content{
+			padding-top: 0;
+		}
+		.gameTypeHome .van-tabs__wrap .van-tabs__nav .van-tab.van-tab--active{
+			color: var(--main-color);
+		}
+		.ruleHead .promotion-title{
+			color: var(--text_color_L1);
+		}
+		.explain .input input{
+			color: var(--text_color_L2);
+		}
+		.promptContent{
+			color: var(--text_color_L1);
+			padding: 24px;
+		}
+		.safebox-dialog .content{
+			background: var(--bg_color_L3);
+			color: var(--text_color_L1);
+		}
+		.safebox-dialog .question{
+			border: none;
+		}
+
+
+		/*sass样式*/
+		.lottery-container .content .amount-buttons .default{
+			background: var(--bg_color_L3);
+			color: var(--text_color_L1);
+		}
+		.lottery-container .content .multiplier-section .multiplier-buttons .default{
+			background: var(--bg_color_L3);
+			color: var(--text_color_L1);
+		}
+		.lottery-container .content .section-header .label{
+			color: var(--text_color_L1);
+		}
+		.van-stepper__minus, .van-stepper__plus{
+			background: var(--bg_color_L3);
+			color: var(--text_color_L1);
+		}
+		.van-stepper__input{
+			background: var(--bg_color_L3);
+			color: var(--text_color_L1);
+		}
+		.t-foot-previous.disabled, .t-foot-next.disabled{
+			background: var(--button_dis_color);
+			pointer-events: none;
+		}
+		.t-foot-previous, .t-foot-next{
+			background: var(--main-color);
+		}
+		.t-foot{
+			background: var(--darkBg, var(--bg_color_L2));
+			color: var(--text_color_L2);
+		}
+		.my_r-body .list-item-m-top{
+			color: var(--text_color_L1);
+		}
+
+		.FDB__C-H{
+			color: var(--text_color_L1);
+		}
+		.FDB__C-nav > div{
+			background: var(--button_dis_color);
+			color: #fff;
+		}
+		.FDB__C-nav > div.active{
+			background: var(--main-color);
+			color: var(--text_color_L4);
+		}
+		.FDB__C-nav > div.active::after{
+			background: radial-gradient(circle at 100% 0,var(--bg_color_L2) 0.26667rem, var(--main-color) 0.26667rem);
+		}
+		.bet_p-input{
+			background: var(--bg_color_L3);
+		}
+		.my_r-body .list-detail-text{
+			color: var(--text_color_L1);
+		}
+		.empty__container p{
+			color: var(--text_color_L3);
+		}
+		.moto-note-result .lottery_reslut{
+			color: var(--text_color_L1);
+		}
+	}
+	.van-calendar__day{
+		color: var(--text_color_L2);
+	}
+	.van-calendar__day--disabled{
+		color: var(--text_color_L1);
+	}
+	.van-calendar__month-mark{
+		color: rgb(168,165,161,0.8);
+	}
+	.van-calendar__day--start,.van-calendar__day--end{
+		color: var(--text_color_L1);
+	}
+	.van-dialog__cancel{
+		color: var(--text_color_L1);
+		background: var(--button_dis_color);
+	}
+	.van-dialog__confirm{
+		background: var(--main_gradient-color);
+		color: var(--text_color_L4);
+	}
+
+	/*sass新样式*/
+	.van-popup--bottom{
+		.bet{
+			background: var(--bg_color_L1);
+			.bet-body{
+				background: var(--bg_color_L1);
+				.title{
+					font-size: 32px;
+					color: var(--text_color_L1);
+				}
+			}
+			.bet-body .l2{
+				color: var(--text_color_L1);
+			}
+			.bet-body .active{
+				background: var(--main-color) !important;
+			}
+			.bet-body .l2 .true{
+				border:none;
+			}
+			.bet-body .l1 .m .Betting__Popup-input{
+				background: var(--bg_color_L2);
+				color: var(--text_color_L1);
+			}
+			.bet-title{
+				color: var(--text_color_L1);
+			}
+			.bet-body .l1 .m > div{
+				background: var(--main-color);
+			}
+			.bet-foot{
+				.bet-foot-c{
+					background: var(--bg_color_L3);
+					color: var(--text_color_L2);
+				}
+				.bet-foot-s{
+					color: var(--text_color_L1);
+					background: var(--main-color);
+				}
+				.bet-foot-s span{
+					color: var(--text_color_L1);
+				}
+			}
+		}
+		.lottery-container{
+			background: var(--bg_color_L1);
+		}
+		.bet_p-body{
+			background: var(--bg_color_L1);
+		}
+		.Betting__Popup-body{
+			background: var(--bg_color_L1);
+		}
+		.betting-container{
+			.header-left .select-text{
+				color: var(--text_color_L1);
+			}
+			background: var(--bg_color_L1);
+		}
+	}
+
+	.van-popup--center .bet-rule-foot .bet-rule-foot-btn{
+		background: var(--main-color);
+	}
+	.van-popup--center {
+		.bet_p-PreSale-body{
+			color: var(--text_color_L1) !important;
+		}
+		.bet-rule-body{
+			color: var(--text_color_L1) !important;
+		}
+		.bet-rule-body > div{
+			p{
+				color: var(--text_color_L1) !important;
+				span{
+					color: var(--text_color_L1) !important;
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" translate="no">
+
+<head>
+	<meta charset="UTF-8" />
+	<link rel="icon" type="image/svg+xml" href="/favico.ico" />
+	<meta name="google" content="notranslate" />
+	<meta name="robots" content="noindex,nofollow" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+	<link rel="stylesheet" href="./public/indexh.css" />
+	<title>lottery</title>
+	<script>
+		// PC 顶层访问时进入演示控制台；在控制台 iframe 内、手机上或带 h5=1 参数时保持 H5
+		if (window.top === window.self && window.innerWidth >= 900 && !/[?&]h5=1/.test(location.search)) {
+			location.replace('console.html' + location.hash)
+		}
+	</script>
+</head>
+
+<body>
+	<div id="app"></div>
+	<script type="module" src="./main.ts"></script>
+</body>
+
+</html>

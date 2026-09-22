@@ -1,0 +1,294 @@
+#app {
+	div:not(.ranking),input{
+		box-shadow:none !important;
+	}
+	.pointMall__container {
+		.navbar__content {
+			background: var(--bgColor-5);
+		}
+
+	}
+	.pointMall__container-info {
+		color: #1E2637;
+		div {
+			background: var(--linearGradien-52);
+			box-shadow: none;
+		}
+	}
+	.pointMall__container-products__content-item__header {
+		background: var(--linearGradien-52);
+	}
+	.package-time, .package-tips {
+		color: var(--main-color);
+
+		svg{
+			path{
+				stroke: #B1835A;
+			}
+	}
+}
+	.package-rule {
+		span {
+			color: var(--main-color);
+		}
+	}
+	.package-rule-titlebox{
+		background: var(--linerGradient-82);
+	}
+	.package-item-top {
+		background: #FF7172;
+
+		h3{
+			color: var(---white-color);
+		}
+	}
+	.package-item-bottom {
+		// background: var(--linerGradient-86);
+		border-radius: 0 0 16px 16px;
+	}
+	.first-list-item {
+		.title, .number {
+			color: var(--main-color);
+		}
+	}
+	.member-package-rule-bonus-title {
+		color: var(--main-color);
+	}
+
+	.pointMall-rule__container {
+		.van-icon-upgrade {
+			color: var(--main-color);
+		}
+		.pointRule__body > div:nth-of-type(2) > div p{
+			background: black;
+		}
+	}
+
+	.pointMall-rule__container-pointRule__body > div:nth-of-type(2) > div {
+		background: linear-gradient(180deg, #D9AD82 0%, #D9AD82 100%);
+			p{
+				background: var(--promotionTitle1);   
+			}
+			li{
+				color:var(--whiteBg);
+				border-bottom: none;
+			}
+    }
+
+	.redeem__container {
+		.van-icon {
+			color: var(--main-color);
+		}
+	}
+	.redeem__container-detail__notes {
+		li {
+			&::before{
+				background: #B1835A;
+			}
+		}
+	}
+
+	.lotteryActivity__container, .myLottery__container {
+		.van-tabs__nav {
+			background: var(--bgColor-10);
+			.van-tab--active {
+				color: var(--textW);
+			}
+		}
+	}
+
+	.lotteryDetail__container-item__hero-progress .van-progress__portion{
+      background: #B1835A !important;
+	}
+
+	/*main*/
+	.financialServices__container-footer > div > div > div h4{
+		background:linear-gradient(90deg, #D9B38C 0%, #B1835A 100%);
+		color: #FFFFFF;
+	}
+	.NewVietnam__C .navbar-fixed{
+		background: linear-gradient(90deg, #B1835A 0%, #D9AD82 100%);
+	}
+	.game_container .driver,
+	.luckyWinners__container .driver,
+	.dailyProfitRank .driver{
+		background-color: #E5E8F5;
+		&::after,
+		&::before{
+            background-color: #E5E8F5;
+        }
+	}
+	.lottery_container .lotterySlotItem{
+		background: #E5E8F5;
+	}
+	.noticeBar__container button{
+		background: linear-gradient(97deg, #F2D5B2 9.64%, #D9B38C 84.03%);
+		box-shadow: unset;
+        color: #171717;
+	}
+	.content{
+		background-color: #fff !important;
+	}
+	.tabbar__container-item{
+		color: #D9AD82;
+	}
+	.setting_container .setting_container_item img{
+		width: 100px !important;
+		height: auto !important;
+	}
+	.vip,.ChampionshipDetail{
+		--bg_color_L1:#F7F8FF;
+		--textW:#FFF;
+	}
+	.wallet-container-content .container .userDetail > div .imgD,
+	.info-dialog-content,
+	.rechargeh__container .fun-tabs,
+	.fun-tabs,
+	.explain .input,
+	.c2cWithdraw__C-input,
+	.WC4__C-input,
+	.ChampionshipDetail .ranking,
+	.bonus-items .line::after, .bonus-items .line::before
+	{
+		background:#FFF;
+	}
+	.StrongBox__container,
+	.addBankCard__container,
+	.addUSDT__container,
+	.addKBZ{
+		--Red:var(--main-color);
+	}
+	.StrongBox__container-income-tip {
+		svg{
+			path{
+				stroke:#B1835A ;
+			}
+		}
+	}
+	.StrongBoxRecordCard__container-first.transferIn .StrongBoxRecordCard__container-buttom,
+	.dailySignIn__container-hero__header div
+	{
+		color: #896646;
+	}
+
+	.RpwdPopup-foot .dialogBtn,
+	.signIn__container .dialogBtn,
+	.dialog__container-footer button{
+		&:last-of-type{
+			border: none;
+		}
+	}
+	.feedback-container-content-text textarea,
+	.chooseBank__container .search input {
+		background: transparent;
+	}
+	.TeamReport__C-head-fixed{
+		background: var(--bg_color_L1);
+	}
+	.features .t2,
+	.Xg-list .item .header .red,
+	.jackpot-rule .table-content > div:nth-child(3){
+		color: var(--main-color);
+	}
+	.bankInfo .bankInfoItem.usdt > div:nth-of-type(3) > span{
+		color: #FC5D02;
+	}
+	.ar-1px-b:after{
+		color: #DBDBDB;
+		transform:scaleY(1);
+	}
+	.cardBox,.championship,.ChampionshipDetail{
+		.item .right .head > div.amount, .item .right .foot > div.amount{
+			background: #FFDF25;
+		}
+	}
+	.ChampionshipDetail > div{
+		filter: drop-shadow(0px 8px 16px rgba(208, 208, 237, 0.36));
+	}
+	.dailySignInRules__container-hero__wrapper ul{
+		background: linear-gradient(180deg, #D9AD82 0%, #D9B38C 100%);
+		color: #fff;
+	}
+	.dailySignInRules__container-hero__wrapper ul li{
+		border-bottom: 1px solid var(--main-color);
+	}
+	.dailySignIn__container .task-panel .task-item-header .hearder-status.week{
+		background: var(--main-color);
+	}
+	.dailySignIn__container .task-panel .task-item-header .hearder-status.new{
+		background: var(----colorText-42);
+	}
+	.dailySignIn__container .task-panel .task-item-description,
+	.bonus-items .detail,
+	.Xg-list .item .body .info .lab,
+	.jackpot-star .rowcontent{
+		background: #E5E8F5;
+	}
+	.bonus-items .head.isFinshed .left{
+		background-color: #00BA82;
+	}
+	.bonus-items .head .left
+	{
+		background-color: #BABFE0;
+	}
+	.jackpot-rule .table-content > div:nth-child(1){
+		color: #FF650F;
+	}
+	.treasure .container .treasure-item .footer .van-progress .portion{
+	background: black;
+	}
+	.treasure__container__treasure-item__footer .van-progress {
+		span{
+			background: #B1835A !important;
+		}
+	}
+    
+	.jackpot-rule-owener {
+		svg{
+			path{
+				fill:var(--colorText-26);
+			}
+		}
+	}
+    .wallet-container {
+        .imgD {
+            img {
+                position: relative;
+                width: calc(100% + 24px);
+            }
+        }
+    }
+    .empty__container svg{
+        opacity: .2;
+    }
+	.ruleHead svg {
+		position: absolute;
+		left: 0;
+		right: 0;
+		top:0;
+		margin-inline: auto;
+		width: 494px;
+		height: 60px;
+		z-index: 1;
+		color: var(--main-color);
+	}
+}
+
+body {
+	html:lang(ar) & {
+	  .arPopover {
+		left: 0!important;
+		direction: rtl;
+		.van-popover__arrow {
+			right: var(--van-padding-md);
+			left: 0;
+		}
+		.van-icon {
+			transform: rotateZ(180deg);
+		}
+	  }
+	}
+	.van-hairline--top-bottom:after, .van-hairline-unset--top-bottom:after{
+		border: none !important;
+	}
+  }

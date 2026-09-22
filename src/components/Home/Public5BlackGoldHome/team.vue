@@ -1,0 +1,177 @@
+<template>
+    <div class="terms">
+        <div class="terms-logo">
+            <span class="terms-logo-service">
+                <svg width="70" height="70" viewBox="0 0 70 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="35" cy="35" r="33" stroke="url(#paint0_linear_84_6311)" stroke-width="4" />
+                    <path
+                        d="M25.3809 33.7041V36.8906H12.7109V33.7041H25.3809ZM20.7852 28.6895V42.1465H17.3193V28.6895H20.7852ZM36.3496 25.4775V44H32.6934V29.6924L28.3008 31.0889V28.207L35.9561 25.4775H36.3496ZM54.8213 38.9346C54.8213 40.0941 54.5505 41.0716 54.0088 41.8672C53.4671 42.6543 52.7223 43.251 51.7744 43.6572C50.835 44.055 49.7686 44.2539 48.5752 44.2539C47.3818 44.2539 46.3112 44.055 45.3633 43.6572C44.4154 43.251 43.6663 42.6543 43.1162 41.8672C42.5661 41.0716 42.291 40.0941 42.291 38.9346C42.291 38.1559 42.4476 37.4535 42.7607 36.8271C43.0739 36.1924 43.5098 35.6507 44.0684 35.2021C44.6354 34.7451 45.2998 34.3981 46.0615 34.1611C46.8232 33.9157 47.6527 33.793 48.5498 33.793C49.7516 33.793 50.8265 34.0046 51.7744 34.4277C52.7223 34.8509 53.4671 35.4476 54.0088 36.2178C54.5505 36.988 54.8213 37.8936 54.8213 38.9346ZM51.1396 38.6934C51.1396 38.1263 51.0296 37.6396 50.8096 37.2334C50.598 36.8187 50.2975 36.5013 49.9082 36.2812C49.5189 36.0612 49.0661 35.9512 48.5498 35.9512C48.0335 35.9512 47.5807 36.0612 47.1914 36.2812C46.8021 36.5013 46.4974 36.8187 46.2773 37.2334C46.0658 37.6396 45.96 38.1263 45.96 38.6934C45.96 39.252 46.0658 39.7344 46.2773 40.1406C46.4974 40.5469 46.8021 40.86 47.1914 41.0801C47.5892 41.2917 48.0505 41.3975 48.5752 41.3975C49.0999 41.3975 49.5527 41.2917 49.9336 41.0801C50.3229 40.86 50.6191 40.5469 50.8223 40.1406C51.0339 39.7344 51.1396 39.252 51.1396 38.6934ZM54.4277 30.416C54.4277 31.3555 54.1781 32.1891 53.6787 32.917C53.1794 33.6364 52.4854 34.1992 51.5967 34.6055C50.7165 35.0117 49.7093 35.2148 48.5752 35.2148C47.4326 35.2148 46.417 35.0117 45.5283 34.6055C44.6396 34.1992 43.9456 33.6364 43.4463 32.917C42.9469 32.1891 42.6973 31.3555 42.6973 30.416C42.6973 29.2988 42.9469 28.3594 43.4463 27.5977C43.9541 26.8275 44.6481 26.2435 45.5283 25.8457C46.417 25.4479 47.4242 25.249 48.5498 25.249C49.6924 25.249 50.7038 25.4479 51.584 25.8457C52.4727 26.2435 53.1667 26.8275 53.666 27.5977C54.1738 28.3594 54.4277 29.2988 54.4277 30.416ZM50.7715 30.5811C50.7715 30.0817 50.6826 29.6501 50.5049 29.2861C50.3271 28.9137 50.0732 28.626 49.7432 28.4229C49.4215 28.2197 49.0238 28.1182 48.5498 28.1182C48.0928 28.1182 47.6992 28.2155 47.3691 28.4102C47.0475 28.6048 46.7979 28.8883 46.6201 29.2607C46.4508 29.6247 46.3662 30.0648 46.3662 30.5811C46.3662 31.0804 46.4508 31.5205 46.6201 31.9014C46.7979 32.2738 47.0518 32.5658 47.3818 32.7773C47.7119 32.9889 48.1097 33.0947 48.5752 33.0947C49.0407 33.0947 49.4342 32.9889 49.7559 32.7773C50.0859 32.5658 50.3356 32.2738 50.5049 31.9014C50.6826 31.5205 50.7715 31.0804 50.7715 30.5811Z"
+                        fill="url(#paint1_linear_84_6311)" />
+                    <defs>
+                        <linearGradient id="paint0_linear_84_6311" x1="35" y1="0" x2="35" y2="70"
+                            gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#FA2221" />
+                            <stop offset="1" stop-color="#FA5121" />
+                        </linearGradient>
+                        <linearGradient id="paint1_linear_84_6311" x1="34.5" y1="20" x2="34.5" y2="50"
+                            gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#FA2221" />
+                            <stop offset="1" stop-color="#FA5121" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </span>
+            <span class="terms-logo-service" v-for="(item, index) in contactList" :key="index"
+                @click="onItemClick(item.typeID)">
+                <i class="cstype-icon" :class="`cstype-${item.typeID}`"></i>
+            </span>
+        </div>
+        <p class="terms-rule">
+            <svg-icon name="Rectan" />
+            <span>
+                {{ t('damanRule', [store.getProjectName]) }}
+            </span>
+        </p>
+        <p class="terms-rule">
+            <svg-icon name="Rectan" />
+            <span>
+                {{ t('damanRule2', [store.getProjectName]) }}
+            </span>
+        </p>
+        <p class="terms-rule">
+            <svg-icon name="Rectan" />
+            <span>
+                {{ t('damanRule3', [store.getProjectName]) }}
+            </span>
+        </p>
+        <p class="terms-tips">
+            {{ t('damanWarn') }}
+        </p>
+        <p class="terms-tips">{{ t('damanWarn2', [store.getProjectName]) }}</p>
+    </div>
+</template>
+<script setup lang="ts">
+    import { AwaitApiResult } from '@/utils'
+    import { useRouter } from 'vue-router'
+    import { GetCustomerServiceTypelist } from '@/api'
+    import { onMounted, ref } from 'vue'
+    import { useI18n } from "vue-i18n";
+    const { t } = useI18n()
+    const router = useRouter()
+    const store = SettingStore();
+    import { SettingStore } from "@/stores";
+    let contactList = ref<any>([])
+    // 进入客服房间
+    function onItemClick(itemId: any) {
+        router.push({
+            name: 'CustomerService-ServiceCollection',
+            state: { itemId }
+        })
+    }
+    // 获取客服列表
+    const getList = async () => {
+        const res = await AwaitApiResult(GetCustomerServiceTypelist())
+        if (res) {
+            contactList.value = res.data || []
+        }
+    }
+    onMounted(() => {
+        getList()
+    })
+</script>
+
+<style scoped lang="scss">
+    .terms {
+        border-radius: 24px;
+        padding: 32px 24px 125px 24px;
+        box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.05);
+
+        &-logo {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+			padding-bottom: 20px;
+			border-bottom: 2px solid var(--Dividing-line_color, #3D363A);
+            &>* {
+                flex: 1;
+            }
+
+            &-left {
+                width: 186px;
+                height: 70px;
+
+                img {
+                    width: 100%;
+                }
+
+            }
+
+            &-service {
+                display: flex;
+                justify-content: center;
+                height: 80px;
+
+            }
+
+            .cstype-icon {
+                display: block;
+                width: 80px;
+                height: 80px;
+                margin: auto;
+                background-repeat: no-repeat;
+                background-position: center;
+                background-size: contain;
+            }
+
+            @for $i from 1 through 7 {
+                .cstype-#{$i} {
+                    background-image: url('@icon/main/CStype#{$i}.png');
+                }
+            }
+
+            svg,
+            img {
+                height: 80px;
+                margin: auto;
+            }
+        }
+
+        &-icons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-bottom: 50px;
+
+            svg {
+                width: 210px;
+                height: 80px;
+                margin-bottom: 16px;
+            }
+        }
+
+        &-rule {
+			color: var(--text_color_L3, #837064);
+            font-family: "Alibaba PuHuiTi 3.0";
+            font-size: 24px;
+            font-style: normal;
+            font-weight: 400;
+            display: flex;
+            line-height: 34px;
+            gap: 14px;
+            svg {
+                width: 16px;
+                height: 16px;
+                position: relative;
+                top: 8px;
+            }
+        }
+
+        &-tips {
+			color: var(--main-color, #FED358);
+            font-family: Inter;
+            font-size: 24px;
+            font-weight: 400;
+            padding-inline-start: 28px;
+        }
+    }
+</style>

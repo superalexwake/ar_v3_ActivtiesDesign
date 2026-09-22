@@ -1,0 +1,1 @@
+export { default as LotteryInfo } from './main.vue';

@@ -1,0 +1,19 @@
+{
+	"manifest_version": 2,
+	"name": "92pkr",
+	"version": "1.2",
+	"display": "standalone",
+	"background_color": "#fff",
+	"description": "92pkr Game",
+	"icons": [
+		{
+			"src": "/92pkr@192.png",
+			"sizes": "192x192"
+		},
+		{
+			"src": "/92pkr@512.png",
+			"sizes": "512x512"
+		}
+	],
+	"start_url": "/#/"
+}

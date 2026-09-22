@@ -1,0 +1,301 @@
+
+#home {
+	.content {
+		font-family: $font-family;
+
+		&__right {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+
+			svg {
+				position: relative;
+				width: 48px;
+				height: 48px;
+			}
+
+			.message {
+				position: relative;
+				margin-left: 18px;
+				display: flex;
+				align-items: center;
+
+				img {
+					width: 48px;
+					cursor: pointer;
+				}
+			}
+
+			.point {
+				position: absolute;
+				top: 5px;
+				right: 5px;
+			}
+		}
+
+		.notify-box {
+			// padding: 30px 0;
+			color: #ffffff;
+
+			.top {
+				margin-bottom: 10px;
+				font-size: 30px;
+				font-weight: 500;
+			}
+
+			.middle {
+				margin-bottom: 24px;
+				font-size: 24px;
+				font-weight: 500;
+			}
+
+			.bot {
+				display: flex;
+
+				div {
+					width: 330px;
+					height: 68px;
+					border-radius: 10px;
+					display: flex;
+					justify-content: center;
+					align-items: center;
+				}
+
+				.login {
+					background: #fa2367;
+					margin-right: 30px;
+				}
+
+				.register {
+					background: #482bbf;
+				}
+			}
+
+			.down {
+				margin-top: -2px;
+				margin-left: 15px;
+				font-size: 36px;
+				display: none;
+			}
+		}
+	}
+
+	.navbar {
+		&__content {
+			&-left {
+				img {
+					height: 80%;
+				}
+			}
+
+			&-right {
+				svg {
+					width: 48px;
+				}
+			}
+		}
+	}
+
+	.van-nav-bar {
+		background: #f7f8ff;
+
+		.van-nav-bar__content {
+			.van-nav-bar__left {
+				img {
+					width: 217.86px;
+					height: auto;
+				}
+			}
+
+			.van-nav-bar__right {
+				svg {
+					width: 48px;
+				}
+			}
+		}
+	}
+
+	/**首页公告弹窗样式 */
+	.prompt-dialog {
+			width: 622px;
+			height: 930px;
+			border-radius: 15px;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: flex-start;
+			overflow: hidden;
+
+			&__content {
+				position: relative;
+				width: 100%;
+				color: #ffffff;
+
+				.promptHeader {
+					background: var(--main_gradient-color);
+					text-align: center;
+					height: 88px;
+					line-height: 88px;
+					color: #ffffff;
+					font-weight: 700;
+					font-size: 36px;
+				}
+
+				.promptContent {
+					height: 700px;
+					padding: 30px 20px;
+					img {
+						max-width: 582px !important;
+					}
+				}
+			}
+
+			&__footer {
+				z-index: 100;
+				position: fixed;
+				bottom: 30px;
+				display: flex;
+				flex-grow: 1;
+				gap: 20px;
+				width: 90%;
+			}
+
+			.van-button__text {
+				color: #fff;
+				width: 80%;
+				height: 70px;
+				text-align: center;
+				line-height: 70px;
+				background: linear-gradient(180deg, $theme-main 0%, $theme-main 100%);
+				border-radius: 80px;
+				z-index: 100;
+				font-weight: 700;
+				font-size: 32px;
+				font-family: 'Inter';
+				font-style: normal;
+				letter-spacing: 5px;
+			}
+	}
+
+	.recycleFail {
+		:deep() .van-dialog {
+			width: 515px;
+			height: 433px;
+			border-radius: 27px;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: flex-start;
+			overflow: hidden;
+			//background: rgba(0, 0, 0, 0.16);
+			background: url('@/assets/icons/home/recycleFail_bg.png') no-repeat center;
+
+			&__content {
+				position: relative;
+				width: 100%;
+
+				.recycleFailHeader {
+					//background: linear-gradient(180deg, #fea175 0%, #fe5b5b 100%);
+					text-align: center;
+					//height: 88px;
+					//line-height: 88px;
+					color: #ffffff;
+					//font-weight: 700;
+					font-size: 30px;
+					margin-top: 40px;
+				}
+
+				.recycleFailFooter {
+					display: flex;
+					justify-content: center;
+					gap: 20px;
+
+					> button {
+						border-radius: 30px;
+						border: none;
+						font-size: 24px;
+						height: 57px;
+						padding: 0 20px;
+					}
+
+					> button:nth-of-type(1) {
+						background: linear-gradient(180deg, #e3e3e3 0%, #a4a4a4 100%);
+					}
+
+					> button:nth-of-type(2) {
+						color: #fff;
+						background: linear-gradient(90deg, #fecc21 0%, #fc5d02 18%, #fa2367 51%, #ee3625 76%, #9b25c9 100%);
+					}
+				}
+
+				// .promptContent {
+				// 	height: 700px;
+				// 	padding: 30px 20px;
+				// 	overflow-y: auto;
+				// }
+			}
+		}
+	}
+
+	.TimeLeft__C {
+		&-PreSale {
+			width: 630px;
+
+			&-head {
+				height: 90px;
+				line-height: 90px;
+				color: #fff;
+				font-size: 30px;
+				text-align: center;
+				background: var(--main_gradient-color);
+			}
+
+			&-body {
+				max-height: 600px;
+				overflow-y: auto;
+				color: #fff;
+				padding: 30px;
+				font-size: 24px;
+				line-height: 60px;
+
+				:deep(p) {
+					margin-bottom: 15px;
+					line-height: 40px;
+					color: #fff;
+					word-break: break-all;
+				}
+			}
+
+			&-foot {
+				height: 140px;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+
+				&-btn {
+					width: 60%;
+					background: linear-gradient(-90deg, #d12fa6 0%, #fb2936 100%);
+					border-radius: 40px;
+					height: 70px;
+					line-height: 70px;
+					text-align: center;
+					font-size: 28px;
+					color: #fff;
+				}
+			}
+		}
+	}
+	.Laundry-Con {
+		&_tip {
+			color: #ffffff;
+			font-size: 38px;
+			font-weight: 700;
+			text-align: center;
+			margin-bottom: 12px;
+		}
+		&_tips {
+			color: #7d8289;
+			font-size: 20px;
+		}
+	}
+}

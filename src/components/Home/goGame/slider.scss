@@ -1,0 +1,411 @@
+.gameScenes-daman {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	margin-bottom: 0.26667rem;
+	margin-top: 0.26667rem;
+	position: relative;
+	.game-menu {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		gap: 10px;
+		width: 116px;
+		height: 116px;
+		border-radius: 16px;
+		img ,svg{
+			width: 76px;
+			height: 54px;
+		}
+		.menu {
+			color: grey;
+			font-size: 0.26667rem;
+			text-align: center;
+		}
+	}
+	.game-menu:first-child {
+		background: var(--main_gradient-color);
+		.menu {
+			color: white;
+		}
+	}
+}
+
+.half-window {
+	display: flex;
+	top: 0;
+	right: 0;
+	flex-direction: row;
+	position: fixed;
+	height: 100vh;
+	z-index: 999;
+	width: 0;
+	overflow: hidden;
+	background-color: rgba(0, 0, 0, 0.7);
+	justify-content: flex-end;
+	transition: all 0.5s ease-out;
+	right: 50%;
+	transform: translateX(380px);
+	&.isWindowOpen {
+		width: 750px;
+		overflow: hidden;
+	}
+
+	.crossBtn {
+		height: 100%;
+		width: 170px;
+		background-repeat: no-repeat;
+		background-size: contain;
+		background-position: center;
+		background-image: url('@icon/goGame/Side_Close.png');
+		cursor: pointer;
+		position: relative;
+		margin-right: -94px;
+	}
+
+	.halfWindow {
+		margin-left: 0px;
+		display: flex;
+		flex-direction: column;
+		overflow-y: hidden;
+		width: 656px;
+		height: 100vh;
+		overflow: auto;
+		z-index: 999;
+		padding: 30px;
+		margin-left: -0.09067rem;
+		background: var(--bg_color_L1);
+		
+
+		.half-window-menu {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			height: 60px;
+			width: 100%;
+
+			.menuTitle {
+				display: flex;
+				font-family: Inter;
+				font-weight: 700;
+				font-size: 36px;
+				height: fit-content;
+				background: var(--Text-effects, linear-gradient(180deg, #F5F6FF -2.72%, rgba(245, 246, 255, 0.00) 219.64%));
+				background-clip: text;
+				-webkit-background-clip: text;
+				-webkit-text-fill-color: transparent;
+			
+			}
+
+			.menuIcon {
+				margin-top: 10px;
+				height: 40px;
+				width: 37px;
+				cursor: pointer;
+				background: url('./imgs/MenuNotification.svg') no-repeat;
+				
+			}
+		}
+
+		& > .title {
+			display: flex;
+			height: fit-content;
+			font-weight: 700;
+			font-size: 28px;
+			margin-top: 25px;
+			margin-bottom: 5px;
+			padding-left: 16px;
+			background: var(--Text-effects, linear-gradient(180deg, #F5F6FF -2.72%, rgba(245, 246, 255, 0.00) 219.64%));
+			background-clip: text;
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+			;
+		}
+
+		.containerWinGO {
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-end;
+			height: 226px;
+			margin-top: 0.26667rem;
+			background: url('./imgs/OnlineMachine.png'), lightgray -26px -35.3px / 109.286% 162.478% no-repeat;
+			border-radius: 0.08rem;
+            
+			.title {
+				color: #fff;
+				font-weight: 600;
+				font-family: Inter;
+				left:0;
+				font-size: 30px;
+				display: block;
+				line-height: 25px;
+				align-items: center;
+				
+				span {
+					font-size: 20px;
+					font-weight: 300;
+					font-family: Inter;
+				}
+			}
+
+			.bottomContainer {
+				padding: 0.13333rem;
+				display: flex;
+				// align-items: flex-end;
+				align-items: center;
+				justify-content: space-between;
+				height: 88px;
+				background: rgba(0, 39, 62, 0.7);
+				backdrop-filter: blur(2px);
+	
+				.clickBtn {
+					color: var(--Dark-blue-400, #2283f6);
+					display: flex;
+					letter-spacing: 0.00267rem;
+					font-family: "Bai Jamjuree";
+					border-radius: 10px;
+					font-weight: 600;
+					padding: 8px 15px;
+					gap: 0.08rem;
+					font-style: italic;
+					font-size: 20px;
+					background: var(--bg_color_L2);
+					
+				}
+			}
+		}
+
+		.containerTour {
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-end;
+			height: 226px;
+			margin-top: 0.26667rem;
+			background: url('./imgs/e-Tournment.png'), lightgray -26px -35.3px / 109.286% 162.478% no-repeat;
+			background-size: cover;
+			border-radius: 0.08rem;
+
+			.titleTour {
+				color: #fff;
+				font-weight: 600;
+				font-family: Inter;
+				left:0;
+				font-size: 30px;
+				display: block;
+				line-height: 25px;
+				align-items: center;
+				span {
+					font-size: 20px;
+					font-weight: 300;
+					font-family: Inter;
+				}
+			}
+
+			.bottomContainerTour {
+				padding: 0.13333rem;
+				display: flex;
+				// align-items: flex-end;
+				align-items: center;
+				justify-content: space-between;
+				height: 88px;
+				background: rgba(0, 39, 62, 0.7);
+				backdrop-filter: blur(2px);
+				.clickBtnTour {
+					color: var(--500, #dd234b);
+					display: flex;
+					letter-spacing: 0.00267rem;
+					font-family: "Bai Jamjuree";
+					border-radius: 10px;
+					font-weight: 600;
+					padding: 8px 15px;
+					gap: 0.08rem;
+					font-style: italic;
+					font-size: 20px;
+					background: var(--bg_color_L2);
+				}
+			}
+		}
+
+		.Games {
+			display: flex;
+			margin-top: 0.4rem;
+			font-weight: 700;
+			font-size: 0.33333rem;
+			margin-left: 0.26667rem;
+			align-items: flex-end;
+			background: linear-gradient(180deg, #f5f6ff -2.72%, rgba(245, 246, 255, 0) 219.64%);
+			background-clip: text;
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+			
+		}
+
+		.mainContainer {
+			display: flex;
+			margin-top: 0.13333rem;
+			height: 1.33333rem;
+			border-radius: 8px;
+			background: var(--bg_color_L2);
+			padding: 0.17333rem;
+			flex-direction: row;
+			justify-content: space-between;
+			
+			.imgCont {
+				height: auto;
+				width: auto;
+				
+				img {
+					width: auto;
+					height: auto;
+				}
+			}
+
+			.titleCont {
+				height: 0.93333rem;
+				display: flex;
+				justify-content: flex-start;
+				align-items: center;
+				width: 3.06667rem;
+				margin-right: 50px ;
+				
+
+				span {
+					color: var(--Grey-300, #717171);
+				}
+			}
+
+			.endCont {
+				display: flex;
+				height: 0.93333rem;
+				align-items: center;
+				flex-direction: row;
+
+				padding: 0.13333rem;
+
+				margin-left: 0.53333rem;
+
+				span {
+					margin: 0.13333rem;
+				}
+				span:last-of-type {
+					margin-right: -2px;
+				}
+				span:first-of-type {
+					color: #758097;
+				}
+				.number {
+					color: var(--main-color);
+					text-shadow: 0px 0px 4px rgba(15, 111, 255, 0.33);
+				}
+			}
+		}
+
+		.mainActivities {
+			display: flex;
+			flex-direction: column;
+			height: 128px;
+			background: url('./imgs/SliderActivityImage1.png'), lightgray 50% / cover no-repeat;
+
+			.activityImage {
+				height: 100px;
+				display: flex;
+				margin-top: 70px;
+				margin-bottom: -2px;
+				border-radius: 0.08rem;
+				svg{
+					width: 100%;
+					height: 100%;
+					fill: var(--main-color);
+				}
+				//background-image: url('./imgs/SliderActivities.svg');
+				//background-size: cover;
+			}
+
+			.activityText {
+				display: flex;
+				justify-content: space-between;
+				flex-direction: row;
+				height: 0.66667rem;
+				color: var(--Light-blue-0, #FFF);
+				margin-top: -35px;
+				font-size: 24px;
+				z-index: 999;
+				font-weight: 500;
+				margin-right: 15px;
+				font-family: Inter;
+				margin-left: 0.13333rem;
+				align-items: center;
+
+				.btnActivity {
+					display: flex;
+					margin-top: -0.3rem;
+					border-radius: 12px;
+					padding:10px 17px;
+					justify-content: center;
+					align-items: center;
+					gap: 0.08rem;
+					color: var(--main-color);
+					font-size: 20px;
+					font-weight: 500;
+					font-family: Inter;
+					background: var(--bg_color_L2);
+				}
+			}
+		}
+
+		.mainActivities2 {
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			margin-top: 0.26667rem;
+			height: 128px;
+			background: url('./imgs/SliderActivityImage2.png'), lightgray 50% / cover no-repeat;
+
+			.activityImage2 {
+				height: 100px;
+				display: flex;
+				margin-top: 70px;
+				top: 0;
+				margin-bottom: -2px;
+				svg{
+					width: 100%;
+					height: 100%;
+					fill: var(--main-color);
+				}
+			}
+
+			.activityText2 {
+				display: flex;
+				justify-content: space-between;
+				flex-direction: row;
+				height: 0.66667rem;
+				color: var(--Light-blue-0, #FFF);
+				margin-top: -35px;
+				font-size: 24px;
+				z-index: 999;
+				font-weight: 500;
+				margin-right: 15px;
+				font-family: Inter;
+				margin-left: 0.13333rem;
+				align-items: center;
+			
+				.btnActivity2 {
+					display: flex;
+					// height: 44px;
+					margin-top: -0.3rem;
+					border-radius: 12px;
+					padding:10px 17px;
+					justify-content: center;
+					align-items: center;
+					gap: 0.08rem;
+					color: var(--main-color);
+					font-size: 20px;
+					font-weight: 500;
+					font-family: Inter;
+					background: var(--bg_color_L2);
+				}
+			}
+		}
+	}
+}

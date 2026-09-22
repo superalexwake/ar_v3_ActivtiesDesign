@@ -1,0 +1,1473 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="robots" content="noindex,nofollow" />
+	<title>活动原型控制台</title>
+	<style>
+		:root {
+			--c-bg: #f5f6f8;
+			--c-panel: #fff;
+			--c-text: #1f2329;
+			--c-muted: #8f959e;
+			--c-border: #e5e6eb;
+			--c-primary: #1664ff;
+			--c-primary-soft: #eaf1ff;
+			--c-danger: #f54a45;
+			--c-danger-soft: #fff1f0;
+			--c-popup: #d25f00;
+			--c-popup-soft: #fff1e8;
+			--c-html: #1a9c4c;
+			--c-html-soft: #e6f7ea;
+			--c-switch-off: #c9cdd4;
+			--shadow: 0 8px 24px rgba(31, 35, 41, .14);
+			--radius: 6px;
+			--space-1: 4px;
+			--space-2: 8px;
+			--space-3: 12px;
+			--space-4: 16px;
+			--space-6: 24px;
+			--toolbar-h: 48px;
+			--font: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+			--font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+			/* 手机缩放比例，由脚本按视口计算 */
+			--s: 1;
+		}
+
+		* {
+			box-sizing: border-box;
+		}
+
+		html,
+		body {
+			margin: 0;
+			height: 100%;
+		}
+
+		body.console {
+			display: grid;
+			grid-template-rows: var(--toolbar-h) minmax(0, 1fr);
+			grid-template-columns: clamp(208px, 16vw, 248px) auto minmax(0, 1fr);
+			height: 100vh;
+			overflow: hidden;
+			background: var(--c-bg);
+			color: var(--c-text);
+			font: 13px/1.5 var(--font);
+		}
+
+		button,
+		input,
+		select {
+			font: inherit;
+			color: inherit;
+		}
+
+		:focus-visible {
+			outline: 2px solid var(--c-primary);
+			outline-offset: 1px;
+		}
+
+		/* 通用控件 */
+		.btn {
+			display: inline-flex;
+			flex: none;
+			align-items: center;
+			gap: var(--space-1);
+			height: 28px;
+			padding: 0 var(--space-3);
+			border: 1px solid var(--c-border);
+			border-radius: var(--radius);
+			background: var(--c-panel);
+			white-space: nowrap;
+			cursor: pointer;
+		}
+
+		.btn:hover {
+			border-color: var(--c-primary);
+			color: var(--c-primary);
+		}
+
+		.btn--primary,
+		.btn--primary:hover {
+			border-color: var(--c-primary);
+			background: var(--c-primary);
+			color: #fff;
+		}
+
+		.btn--danger,
+		.btn--danger:hover {
+			border-color: var(--c-danger);
+			background: var(--c-danger);
+			color: #fff;
+		}
+
+		.select,
+		.input {
+			height: 28px;
+			padding: 0 var(--space-2);
+			border: 1px solid var(--c-border);
+			border-radius: var(--radius);
+			background: var(--c-panel);
+		}
+
+		.input {
+			width: 140px;
+			font-variant-numeric: tabular-nums;
+		}
+
+		.input--hms {
+			width: 112px;
+			font-family: var(--font-mono);
+		}
+
+		.input:invalid {
+			border-color: var(--c-danger);
+		}
+
+		.switch {
+			position: relative;
+			flex: none;
+			width: 32px;
+			height: 18px;
+			margin: 0;
+			border-radius: 9px;
+			background: var(--c-switch-off);
+			appearance: none;
+			cursor: pointer;
+			transition: background .15s;
+		}
+
+		.switch::after {
+			content: "";
+			position: absolute;
+			top: 2px;
+			left: 2px;
+			width: 14px;
+			height: 14px;
+			border-radius: 50%;
+			background: #fff;
+			transition: transform .15s;
+		}
+
+		.switch:checked {
+			background: var(--c-primary);
+		}
+
+		.switch:checked::after {
+			transform: translateX(14px);
+		}
+
+		.tag {
+			padding: 0 6px;
+			border-radius: 4px;
+			background: var(--c-bg);
+			color: var(--c-muted);
+			font-size: 12px;
+			white-space: nowrap;
+		}
+
+		/* 顶部工具栏 */
+		.toolbar {
+			grid-column: 1 / -1;
+			display: flex;
+			align-items: center;
+			gap: var(--space-3);
+			min-width: 0;
+			padding: 0 var(--space-4);
+			background: var(--c-panel);
+			border-bottom: 1px solid var(--c-border);
+		}
+
+		.toolbar__drawer {
+			display: none;
+		}
+
+		.toolbar__brand {
+			display: flex;
+			flex: 1 1 auto;
+			align-items: baseline;
+			gap: var(--space-2);
+			min-width: 0;
+		}
+
+		.toolbar__title {
+			margin: 0;
+			font-size: 15px;
+			font-weight: 600;
+			white-space: nowrap;
+		}
+
+		.toolbar__version {
+			overflow: hidden;
+			color: var(--c-muted);
+			font-size: 12px;
+			font-variant-numeric: tabular-nums;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+		}
+
+		.toolbar__field {
+			display: flex;
+			flex: none;
+			align-items: center;
+			gap: 6px;
+			white-space: nowrap;
+		}
+
+		.toolbar__mock[inert] {
+			opacity: .4;
+		}
+
+		.toolbar__hint {
+			flex: none;
+			color: var(--c-muted);
+			font-size: 12px;
+		}
+
+		/* 左栏清单 */
+		.catalog {
+			min-height: 0;
+			overflow-y: auto;
+			padding: var(--space-2);
+			background: var(--c-panel);
+			border-right: 1px solid var(--c-border);
+		}
+
+		.catalog__heading {
+			display: flex;
+			justify-content: space-between;
+			margin: var(--space-3) var(--space-2) var(--space-1);
+			color: var(--c-muted);
+			font-size: 12px;
+			font-weight: 600;
+		}
+
+		.catalog__count {
+			font-weight: 400;
+			font-variant-numeric: tabular-nums;
+		}
+
+		.catalog__group:first-child .catalog__heading {
+			margin-top: var(--space-1);
+		}
+
+		.catalog__item {
+			display: flex;
+			align-items: center;
+			gap: 6px;
+			width: 100%;
+			height: 32px;
+			padding: 0 var(--space-2);
+			border: 0;
+			border-radius: var(--radius);
+			background: none;
+			text-align: left;
+			cursor: pointer;
+		}
+
+		.catalog__item:hover {
+			background: var(--c-bg);
+		}
+
+		.catalog__item--active,
+		.catalog__item--active:hover {
+			background: var(--c-primary-soft);
+			color: var(--c-primary);
+		}
+
+		.catalog__item--active .catalog__kind--route {
+			background: var(--c-panel);
+		}
+
+		.catalog__item--invalid {
+			opacity: .5;
+		}
+
+		.catalog__dot {
+			flex: none;
+			width: 6px;
+			height: 6px;
+			border-radius: 50%;
+			background: var(--c-primary);
+			visibility: hidden;
+		}
+
+		.catalog__dot--on {
+			visibility: visible;
+		}
+
+		.catalog__name {
+			flex: 1;
+			min-width: 0;
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+		}
+
+		.catalog__kind {
+			flex: none;
+			width: 18px;
+			height: 18px;
+			border-radius: 4px;
+			background: var(--c-bg);
+			color: var(--c-muted);
+			font-size: 11px;
+			line-height: 18px;
+			text-align: center;
+		}
+
+		/* 打开方式色块：清单单字标签与面板头部标签共用 */
+		.catalog__kind--route,
+		.tag--route {
+			background: var(--c-primary-soft);
+			color: var(--c-primary);
+		}
+
+		.catalog__kind--popup,
+		.tag--popup {
+			background: var(--c-popup-soft);
+			color: var(--c-popup);
+		}
+
+		.catalog__kind--html,
+		.tag--html {
+			background: var(--c-html-soft);
+			color: var(--c-html);
+		}
+
+		.catalog__error {
+			margin: var(--space-2);
+			color: var(--c-danger);
+		}
+
+		/* 中栏手机：外框 399×836，iframe 视口固定 375×812 */
+		.stage {
+			min-height: 0;
+			overflow: hidden;
+			padding: var(--space-4);
+		}
+
+		.stage__frame {
+			width: calc(399px * var(--s));
+			height: calc(836px * var(--s));
+		}
+
+		.stage__device {
+			box-sizing: content-box;
+			width: 375px;
+			height: 812px;
+			overflow: hidden;
+			border: 12px solid var(--c-text);
+			border-radius: 40px;
+			background: #000;
+			box-shadow: 0 20px 60px rgba(31, 35, 41, .2);
+			transform: scale(var(--s));
+			transform-origin: top left;
+		}
+
+		.stage__phone {
+			display: block;
+			width: 100%;
+			height: 100%;
+			border: 0;
+			background: #fff;
+		}
+
+		/* 右栏面板 */
+		.panel {
+			min-height: 0;
+			overflow-y: auto;
+			background: var(--c-panel);
+			border-left: 1px solid var(--c-border);
+		}
+
+		.panel__loading {
+			position: sticky;
+			top: 0;
+			z-index: 1;
+			margin: 0;
+			padding: var(--space-1) var(--space-6);
+			background: var(--c-primary-soft);
+			color: var(--c-primary);
+			font-size: 12px;
+		}
+
+		.panel__inner {
+			box-sizing: content-box;
+			max-width: 760px;
+			padding: var(--space-4) var(--space-6) 40px;
+		}
+
+		.panel__inner[inert] {
+			opacity: .5;
+		}
+
+		.panel__head {
+			display: flex;
+			align-items: flex-start;
+			justify-content: space-between;
+			gap: var(--space-4);
+			padding-bottom: var(--space-3);
+			border-bottom: 1px solid var(--c-border);
+		}
+
+		.panel__info {
+			min-width: 0;
+		}
+
+		.panel__title {
+			margin: 0 0 6px;
+			font-size: 16px;
+		}
+
+		.panel__meta {
+			display: flex;
+			flex-wrap: wrap;
+			align-items: center;
+			gap: 6px;
+		}
+
+		.panel__where {
+			color: var(--c-muted);
+			font: 12px var(--font-mono);
+			word-break: break-all;
+		}
+
+		.panel__note {
+			margin: 6px 0 0;
+			color: var(--c-muted);
+		}
+
+		.panel__ops {
+			display: flex;
+			flex: none;
+			align-items: center;
+			gap: var(--space-4);
+		}
+
+		.panel__desc,
+		.panel__empty {
+			margin: var(--space-3) 0 0;
+		}
+
+		.panel__empty {
+			color: var(--c-muted);
+		}
+
+		.panel__alert {
+			margin-top: var(--space-4);
+			padding: var(--space-2) var(--space-3);
+			border: 1px solid var(--c-danger);
+			border-radius: var(--radius);
+			background: var(--c-danger-soft);
+			color: var(--c-danger);
+		}
+
+		.panel__alert-title {
+			margin: 0;
+			font-weight: 600;
+		}
+
+		.panel__alert-list {
+			margin: var(--space-1) 0 0;
+			padding-left: 20px;
+		}
+
+		.panel__section-title {
+			margin: 20px 0 var(--space-2);
+			color: var(--c-muted);
+			font-size: 12px;
+			font-weight: 600;
+		}
+
+		.panel__presets {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+			gap: var(--space-2);
+		}
+
+		.panel__params {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+			gap: var(--space-3) var(--space-4);
+		}
+
+		.panel__actions {
+			display: flex;
+			flex-wrap: wrap;
+			gap: var(--space-2);
+		}
+
+		.preset {
+			display: flex;
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 2px;
+			padding: var(--space-2) 10px;
+			border: 1px solid var(--c-border);
+			border-radius: var(--radius);
+			background: var(--c-panel);
+			text-align: left;
+			cursor: pointer;
+		}
+
+		.preset:hover {
+			border-color: var(--c-primary);
+		}
+
+		.preset--active {
+			border-color: var(--c-primary);
+			background: var(--c-primary-soft);
+		}
+
+		.preset__label {
+			font-weight: 600;
+		}
+
+		.preset--active .preset__label {
+			color: var(--c-primary);
+		}
+
+		.preset__note {
+			color: var(--c-muted);
+			font-size: 12px;
+		}
+
+		.param {
+			min-width: 0;
+		}
+
+		.param__head {
+			display: flex;
+			align-items: baseline;
+			gap: 6px;
+			margin-bottom: var(--space-1);
+		}
+
+		.param__label {
+			font-weight: 600;
+		}
+
+		.param__name {
+			color: var(--c-muted);
+			font: 11px var(--font-mono);
+		}
+
+		.param__row {
+			display: flex;
+			align-items: center;
+			gap: var(--space-2);
+		}
+
+		.param__unit {
+			color: var(--c-muted);
+		}
+
+		.param__remain {
+			color: var(--c-primary);
+			font-variant-numeric: tabular-nums;
+			white-space: nowrap;
+		}
+
+		.param__drives {
+			margin-top: var(--space-1);
+			color: var(--c-muted);
+			font-size: 12px;
+			word-break: break-all;
+		}
+
+		.usage {
+			padding: var(--space-4);
+			border: 1px solid var(--c-border);
+			border-radius: var(--radius);
+			background: var(--c-bg);
+		}
+
+		.usage__title {
+			margin: 0 0 var(--space-2);
+			font-size: 15px;
+		}
+
+		.usage__list {
+			margin: 0;
+			padding-left: 18px;
+		}
+
+		.usage__list li+li {
+			margin-top: 6px;
+		}
+
+		/* 1024～1279px：清单收成抽屉；900～1023px 参数单列；<900px 由脚本跳转 index.html */
+		@media (max-width: 1279px) {
+			body.console {
+				grid-template-columns: auto minmax(0, 1fr);
+			}
+
+			.toolbar__drawer {
+				display: inline-flex;
+			}
+
+			.catalog {
+				position: fixed;
+				top: var(--toolbar-h);
+				bottom: 0;
+				left: 0;
+				z-index: 10;
+				width: 280px;
+				box-shadow: var(--shadow);
+				transform: translateX(-100%);
+				visibility: hidden;
+				transition: transform .2s, visibility .2s;
+			}
+
+			.console--drawer .catalog {
+				transform: none;
+				visibility: visible;
+			}
+		}
+
+		@media (max-width: 1023px) {
+			.panel__params {
+				grid-template-columns: minmax(0, 1fr);
+			}
+		}
+	</style>
+</head>
+
+<body class="console">
+	<header class="toolbar">
+		<button type="button" id="drawerToggle" class="btn toolbar__drawer" aria-controls="catalog" aria-expanded="false">清单</button>
+		<div class="toolbar__brand">
+			<h1 class="toolbar__title">活动原型</h1>
+			<span id="version" class="toolbar__version"></span>
+		</div>
+		<label class="toolbar__field toolbar__mock"><input type="checkbox" id="loggedIn" class="switch" role="switch" />已登录</label>
+		<label class="toolbar__field">语言
+			<select id="language" class="select">
+				<option value="zh">中文</option>
+				<option value="en">English</option>
+				<option value="hd">हिंदी</option>
+			</select>
+		</label>
+		<label class="toolbar__field toolbar__mock">接口延迟
+			<select id="latency" class="select">
+				<option value="0">0 毫秒</option>
+				<option value="200">200 毫秒</option>
+				<option value="1000">1000 毫秒</option>
+			</select>
+		</label>
+		<span id="htmlHint" class="toolbar__hint" hidden>HTML 原型不经过假数据层</span>
+		<button type="button" id="reset" class="btn btn--danger">重置数据</button>
+	</header>
+	<nav id="catalog" class="catalog" aria-label="活动清单"></nav>
+	<main class="stage">
+		<div class="stage__frame">
+			<div class="stage__device">
+				<iframe id="phone" class="stage__phone" title="H5 预览"></iframe>
+			</div>
+		</div>
+	</main>
+	<aside id="panel" class="panel" aria-label="当前活动控制面板"></aside>
+
+	<script>
+		const SCENARIO_KEY = 'proto:scenario'
+		const STATE_KEY = 'proto:state'
+		// 控制台自己的记录（本标签页）：每个 countdown 截止时刻当初按多少秒应用，用于回显输入框和判断边界场景是否高亮
+		const COUNTDOWN_KEY = 'proto:console:countdown'
+		const POPUPS = ['first-recharge', 'return-award', 'app-download-reward', 're-benefit', 'coupon-arrival', 'treasure-chest', 'register-gift']
+		const PARAM_TYPES = ['boolean', 'number', 'select', 'countdown']
+		const NAME_RE = /^[a-z][A-Za-z0-9]{0,31}$/
+		const MAX_VALUE = 999999999
+		const DEFAULT_SCENARIO = { loggedIn: true, popup: null, latencyMs: 200, activities: {}, focus: null }
+		const KINDS = new Map([
+			['route', { label: '页面', mark: '页' }],
+			['popup', { label: '弹窗', mark: '弹' }],
+			['html', { label: '原型', mark: '原' }],
+			['none', { label: '无页面', mark: '无' }],
+		])
+		// 入口页“推广”“我的”没有参数，入口显隐由这些活动控制（控制项设计 §3.1）
+		const ENTRY_SWITCHES = new Map([
+			['/promotion', ['teamPartner']],
+			['/main', ['strongBox', 'pointMall', 'championship', 'coupon']],
+		])
+		const USAGE = [
+			['左栏清单', '按分组列出活动与入口页。点击一项，手机按当前场景重新启动并打开对应页面或弹窗；标题前的蓝点表示该活动的参数已调整。'],
+			['中间手机', 'H5 预览，视口固定 375×812。'],
+			['右栏面板', '当前清单项的控制面板，自上而下是边界场景、参数、动作。'],
+			['边界场景', '一键把多个参数设成某个典型状态并打开页面；场景里没写的参数回到默认值，所以同一场景每次点出来画面都一样。当前参数与某个场景完全一致时，该按钮高亮。'],
+			['参数', '只改一项，其余参数保持当前值。开关和下拉立即生效，数字和倒计时在回车或失焦时生效；生效后手机原地重载。'],
+			['会话数据', '应用边界场景、改参数、恢复默认、弹出弹窗时，会先清掉该活动的会话数据（领取记录、倒计时起点等），钱包余额不动。'],
+			['重置数据', '清空本标签页的全部会话数据（余额、领取记录、各活动数据），所有活动参数恢复默认，手机回到首页。'],
+		]
+
+		const $ = (selector) => document.querySelector(selector)
+		const phone = $('#phone')
+		const panel = $('#panel')
+
+		/** catalog.json 的 activities：活动 ID → 控制项声明 */
+		let activities = {}
+		/** 活动 ID → 声明校验错误，空数组表示通过 */
+		let errors = new Map()
+		/** 已渲染的清单项 */
+		let entries = []
+		let current = null
+		let loading = false
+		let defaults = DEFAULT_SCENARIO
+		let countdowns = readJson(sessionStorage, COUNTDOWN_KEY)
+		if (!isObject(countdowns)) countdowns = {}
+		let renderedParams = ''
+		let queue = Promise.resolve()
+
+		if (innerWidth < 900) location.replace('index.html' + location.hash)
+
+		function el(tag, className, text) {
+			const node = document.createElement(tag)
+			if (className) node.className = className
+			if (text != null) node.textContent = text
+			return node
+		}
+
+		function button(className, text, onClick) {
+			const node = el('button', className, text)
+			node.type = 'button'
+			node.addEventListener('click', onClick)
+			return node
+		}
+
+		function box(className, children, tag = 'div') {
+			const node = el(tag, className)
+			node.append(...children)
+			return node
+		}
+
+		function isObject(value) {
+			return value !== null && typeof value === 'object' && !Array.isArray(value)
+		}
+
+		function has(object, key) {
+			return isObject(object) && Object.hasOwn(object, key)
+		}
+
+		function isName(value) {
+			return typeof value === 'string' && NAME_RE.test(value)
+		}
+
+		function isText(value) {
+			return typeof value === 'string' && value !== ''
+		}
+
+		function show(value) {
+			return JSON.stringify(value)
+		}
+
+		function readJson(storage, key) {
+			try {
+				return JSON.parse(storage.getItem(key))
+			} catch {
+				return null
+			}
+		}
+
+		// 手机里是已启动的 H5 时返回其 window；独立 HTML 原型、about:blank 返回 null
+		function h5() {
+			try {
+				const win = phone.contentWindow
+				return win && win.__protoMock ? win : null
+			} catch {
+				return null
+			}
+		}
+
+		function isBlank() {
+			try {
+				return phone.contentWindow.location.href === 'about:blank'
+			} catch {
+				return false
+			}
+		}
+
+		/* ---------- 场景（控制项设计 §1.2） ---------- */
+
+		function isParamValue(value) {
+			return typeof value === 'boolean' || typeof value === 'string' || Number.isFinite(value)
+		}
+
+		// 与 H5 的 readScenario() 校验一致（含旧结构的 switches/rewardState 判为不合法）；不合法时两边都按默认场景处理
+		function isScenario(value) {
+			return (
+				isObject(value) &&
+				!('switches' in value) &&
+				!('rewardState' in value) &&
+				typeof value.loggedIn === 'boolean' &&
+				(value.popup === null || POPUPS.includes(value.popup)) &&
+				typeof value.latencyMs === 'number' &&
+				value.latencyMs >= 0 &&
+				isObject(value.activities) &&
+				Object.values(value.activities).every((params) => isObject(params) && Object.values(params).every(isParamValue)) &&
+				(value.focus === null || typeof value.focus === 'string')
+			)
+		}
+
+		function readScenario() {
+			const value = readJson(localStorage, SCENARIO_KEY)
+			return isScenario(value) ? value : structuredClone(defaults)
+		}
+
+		/* ---------- 声明校验（控制项设计 §1.1） ---------- */
+
+		function valueError(param, value) {
+			if (param.type === 'boolean') return typeof value === 'boolean' ? '' : '应为 true 或 false'
+			if (param.type === 'select') {
+				const options = Array.isArray(param.options) ? param.options : []
+				return options.some((option) => option?.value === value) ? '' : '不在 options 内'
+			}
+			if (param.type === 'countdown' && !(Number.isInteger(value) && value >= 0)) return '应为非负整数秒数'
+			if (!Number.isFinite(value)) return '应为有限数'
+			const min = param.min ?? 0
+			const max = param.max ?? MAX_VALUE
+			return value >= min && value <= max ? '' : `超出范围 [${min}, ${max}]`
+		}
+
+		function paramError(param) {
+			if (!PARAM_TYPES.includes(param.type)) return `type ${show(param.type)} 不合法`
+			const options = param.options
+			if (param.type !== 'select' && options !== undefined) return '只有 select 可以写 options'
+			if (param.type === 'select') {
+				if (!Array.isArray(options) || options.length < 2) return 'select 至少要有 2 个 options'
+				if (!options.every((option) => isObject(option) && typeof option.value === 'string' && isText(option.label))) return 'options 每项要有字符串 value 和 label'
+				if (new Set(options.map((option) => option.value)).size !== options.length) return 'options 的 value 重复'
+			}
+			const badBound = ['min', 'max', 'step'].find((key) => param[key] !== undefined && !Number.isFinite(param[key]))
+			if (badBound) return `${badBound} 必须是数字`
+			const error = valueError(param, param.default)
+			return error && `默认值 ${show(param.default)} ${error}`
+		}
+
+		function targetError(def, required) {
+			const count = ['route', 'popup'].filter((key) => def[key] !== undefined).length
+			if (count > 1) return 'route 与 popup 只能写一个'
+			if (required && !count) return 'route 与 popup 必须写一个'
+			if (def.popup !== undefined && !POPUPS.includes(def.popup)) return `popup ${show(def.popup)} 不合法`
+			if (def.route !== undefined && !(typeof def.route === 'string' && def.route.startsWith('/'))) return `route ${show(def.route)} 必须以 / 开头`
+			return ''
+		}
+
+		/**
+		 * 按控制项设计 §1.1 的校验表检查一个活动的声明。
+		 *
+		 * @param {string} id - 活动 ID。
+		 * @param {unknown} decl - catalog.json 中该活动的声明。
+		 * @returns {string[]} “活动 ID · 参数/场景名 · 原因”格式的错误清单；空数组表示通过。
+		 */
+		function validateActivity(id, decl) {
+			const list = []
+			const add = (where, reason) => list.push(`${id} · ${where} · ${reason}`)
+			if (!isName(id)) add('活动 ID', '不符合 /^[a-z][A-Za-z0-9]{0,31}$/')
+			if (!isObject(decl)) {
+				add('声明', '必须是对象')
+				return list
+			}
+			const badShapes = ['params', 'presets', 'actions'].filter((key) => (key === 'params' || decl[key] !== undefined) && !Array.isArray(decl[key]))
+			badShapes.forEach((key) => add(key, '必须是数组'))
+			if (badShapes.length) return list
+
+			const declared = new Map()
+			decl.params.forEach((param, index) => {
+				const where = isName(param?.name) ? param.name : `参数 #${index + 1}`
+				if (!isObject(param)) {
+					add(where, '必须是对象')
+					return
+				}
+				if (!isName(param.name)) add(where, `参数名 ${show(param.name)} 不符合 /^[a-z][A-Za-z0-9]{0,31}$/`)
+				else if (declared.has(param.name)) add(where, '参数名重复')
+				else declared.set(param.name, param)
+				if (!isText(param.label)) add(where, '缺少 label')
+				const error = paramError(param)
+				if (error) add(where, error)
+			})
+
+			const labels = new Set()
+			;(decl.presets ?? []).forEach((preset, index) => {
+				const where = `场景「${isText(preset?.label) ? preset.label : '#' + (index + 1)}」`
+				if (!isObject(preset)) {
+					add(where, '必须是对象')
+					return
+				}
+				if (!isText(preset.label)) add(where, '缺少 label')
+				else if (labels.has(preset.label)) add(where, 'label 重复')
+				labels.add(preset.label)
+				const values = preset.values ?? {}
+				if (!isObject(values)) add(where, 'values 必须是对象')
+				for (const [name, value] of isObject(values) ? Object.entries(values) : []) {
+					const param = declared.get(name)
+					const error = param ? valueError(param, value) : '未声明的参数'
+					if (error) add(where, `${name} = ${show(value)} ${error}`)
+				}
+				const target = targetError(preset, false)
+				if (target) add(where, target)
+			})
+
+			;(decl.actions ?? []).forEach((action, index) => {
+				const where = `动作「${isText(action?.label) ? action.label : '#' + (index + 1)}」`
+				if (!isObject(action)) {
+					add(where, '必须是对象')
+					return
+				}
+				if (!isText(action.label)) add(where, '缺少 label')
+				const target = targetError(action, true)
+				if (target) add(where, target)
+			})
+			return list
+		}
+
+		function invalidReason(item) {
+			if (!isText(item.title) || !KINDS.has(item.kind)) return '缺少 title，或 kind 不合法'
+			if ((item.kind === 'route' || item.kind === 'html') && !isText(item.target)) return '缺少 target'
+			if (item.kind === 'popup' && !POPUPS.includes(item.popup)) return 'popup 不合法'
+			return ''
+		}
+
+		function activityOf(item) {
+			return typeof item?.activity === 'string' ? item.activity : null
+		}
+
+		// 声明存在且校验通过时返回声明，否则 null
+		function declOf(id) {
+			return id && has(activities, id) && !errors.get(id).length ? activities[id] : null
+		}
+
+		/* ---------- 参数取值（控制项设计 §1.4、§1.5 第 2 步） ---------- */
+
+		function formatHms(seconds) {
+			const pad = (value) => String(value).padStart(2, '0')
+			return `${pad(Math.floor(seconds / 3600))}:${pad(Math.floor((seconds % 3600) / 60))}:${pad(seconds % 60)}`
+		}
+
+		// 接受 HH:MM:SS、MM:SS 或纯秒数；格式不对返回 NaN
+		function parseHms(text) {
+			const parts = text.split(':')
+			if (parts.length > 3 || !parts.every((part) => /^\d+$/.test(part))) return NaN
+			return parts.reduce((total, part) => total * 60 + Number(part), 0)
+		}
+
+		function remainSeconds(deadline) {
+			return deadline ? Math.max(0, Math.ceil((deadline - Date.now()) / 1000)) : 0
+		}
+
+		function remainText(deadline) {
+			if (!deadline) return '未启用'
+			const seconds = remainSeconds(deadline)
+			return seconds ? '剩余 ' + formatHms(seconds) : '已到期'
+		}
+
+		// 写进场景的取值：countdown 的秒数换算成截止时刻，0 表示关闭
+		function toStored(param, value, now) {
+			return param.type === 'countdown' && value > 0 ? now + value * 1000 : value
+		}
+
+		/**
+		 * 活动参数的当前有效值：优先取 H5 解析结果（含倒计时截止时刻），手机没在跑 H5 时取场景值，再没有取默认值。
+		 */
+		function currentValues(id, decl) {
+			const sources = [h5()?.__protoMock.params?.[id], readScenario().activities[id]]
+			const now = Date.now()
+			return Object.fromEntries(
+				decl.params.map((param) => {
+					const source = sources.find((values) => has(values, param.name) && typeof values[param.name] === typeof param.default)
+					return [param.name, source ? source[param.name] : toStored(param, param.default, now)]
+				}),
+			)
+		}
+
+		// countdown 当初按多少秒应用；未知时返回 null
+		function appliedSeconds(id, param, deadline) {
+			if (!deadline) return 0
+			// 从未应用过的 countdown 由 H5 按默认秒数起算（anchors）
+			if (!has(readScenario().activities[id], param.name)) return param.default
+			const record = countdowns[id + '.' + param.name]
+			return Array.isArray(record) && record[0] === deadline ? record[1] : null
+		}
+
+		function appliedSecondsOf(id, decl, values) {
+			const params = decl.params.filter((param) => param.type === 'countdown')
+			return Object.fromEntries(params.map((param) => [param.name, appliedSeconds(id, param, values[param.name])]))
+		}
+
+		// 当前参数是否等于“默认值 ⊕ values”；countdown 按应用时的秒数比较
+		function matches(id, decl, values) {
+			const live = currentValues(id, decl)
+			return decl.params.every((param) => {
+				const want = has(values, param.name) ? values[param.name] : param.default
+				if (param.type === 'countdown') return appliedSeconds(id, param, live[param.name]) === want
+				return live[param.name] === want
+			})
+		}
+
+		function isAdjusted(id, decl) {
+			return has(readScenario().activities, id) && !matches(id, decl, {})
+		}
+
+		/* ---------- 写场景并重载手机（控制项设计 §1.5） ---------- */
+
+		function itemOpen(item) {
+			if (item.kind === 'popup') return { popup: item.popup }
+			if (item.kind === 'html') return { url: item.target }
+			if (item.kind === 'none') return inPlaceOpen()
+			return { route: item.target }
+		}
+
+		// 原地重载：H5 取当前 hash（含查询串），其他页面原样重新加载
+		function inPlaceRoute() {
+			const win = h5()
+			if (win) return { route: win.location.hash.slice(1) || '/' }
+			const src = phone.getAttribute('src')
+			return src && src !== 'about:blank' ? { url: src } : { route: '/' }
+		}
+
+		// 手机停在首页、且上次打开的是弹窗时，原地重载也重新弹出它
+		function inPlaceOpen() {
+			const open = inPlaceRoute()
+			const { popup } = readScenario()
+			return popup && open.route?.split('?')[0] === '/' ? { popup } : open
+		}
+
+		function applyParam(id, decl, param, value, seconds) {
+			const values = { ...currentValues(id, decl), [param.name]: value }
+			const applied = appliedSecondsOf(id, decl, values)
+			if (param.type === 'countdown') applied[param.name] = seconds
+			applyAndOpen({ id, values, seconds: applied }, inPlaceOpen())
+		}
+
+		// 边界场景与“恢复默认”：没写的参数回到默认值，countdown 从现在起算
+		function applyValues(id, decl, overrides, open) {
+			const now = Date.now()
+			const values = {}
+			const seconds = {}
+			for (const param of decl.params) {
+				const value = has(overrides, param.name) ? overrides[param.name] : param.default
+				values[param.name] = toStored(param, value, now)
+				if (param.type === 'countdown') seconds[param.name] = value
+			}
+			applyAndOpen({ id, values, seconds }, open)
+		}
+
+		function presetOpen(preset) {
+			if (preset.popup) return { popup: preset.popup }
+			if (preset.route) return { route: preset.route }
+			return itemOpen(current)
+		}
+
+		/**
+		 * 控制台唯一的写入口：卸载手机 → 写场景 → 清该活动会话数据 → 清 H5 弹窗标记 → 加载。多次调用按顺序执行。
+		 *
+		 * @param {object} change - 场景改动：`loggedIn`、`latencyMs`、`language` 为工具栏设置；`id` + `values`（该活动全部参数，countdown 为截止时刻）+ `seconds`（countdown 的应用秒数）为参数改动；`reset: true` 为重置数据。
+		 * @param {{ route?: string, popup?: string, url?: string }} open - 打开方式：H5 路由、首页弹窗键，或原样加载的地址（独立 HTML 原型）。
+		 */
+		function applyAndOpen(change, open) {
+			const item = current
+			setLoading(true)
+			queue = queue
+				.then(() => run(change, open, item))
+				.catch((error) => {
+					console.error('[console] 应用失败', error)
+					setLoading(false)
+				})
+		}
+
+		async function run(change, open, item) {
+			await unload()
+			const next = change.reset ? structuredClone(defaults) : readScenario()
+			if (change.reset) {
+				sessionStorage.removeItem(STATE_KEY)
+				countdowns = {}
+			}
+			if (change.loggedIn !== undefined) next.loggedIn = change.loggedIn
+			if (change.latencyMs !== undefined) next.latencyMs = change.latencyMs
+			if (change.language) localStorage.setItem('language', change.language)
+			if (change.id) {
+				next.activities = { ...next.activities, [change.id]: change.values }
+				rememberSeconds(change)
+			}
+			next.focus = change.reset ? null : activityOf(item)
+			next.popup = open.popup ?? null
+			if (open.popup) next.loggedIn = true
+			localStorage.setItem(SCENARIO_KEY, JSON.stringify(next))
+			sessionStorage.setItem(COUNTDOWN_KEY, JSON.stringify(countdowns))
+			// 打开弹窗也清：领过的弹窗每次都能再弹出来
+			const touched = change.id ?? (open.popup ? activityOf(item) : null)
+			if (touched) clearActivityState(touched)
+			// H5 自己的弹窗标记：首充“今日不再提示”、公告已弹、大奖提示已弹
+			localStorage.removeItem('dialog:firstSave')
+			sessionStorage.removeItem('pop_prompt')
+			sessionStorage.removeItem('pop_laundry')
+			renderToolbar()
+			renderDots()
+			phone.src = open.url ?? 'index.html#' + (open.popup ? '/' : open.route)
+		}
+
+		// 必须等 about:blank 加载完：旧 H5 卸载后才不会把旧会话写回存储；连续同步赋值两次 src 只会被当作同文档改 hash，H5 不重启
+		function unload() {
+			return new Promise((resolve) => {
+				const onLoad = () => {
+					if (!isBlank()) return
+					phone.removeEventListener('load', onLoad)
+					resolve()
+				}
+				phone.addEventListener('load', onLoad)
+				phone.src = 'about:blank'
+			})
+		}
+
+		function rememberSeconds({ id, values, seconds }) {
+			for (const [name, value] of Object.entries(seconds)) {
+				const key = id + '.' + name
+				if (value === null) delete countdowns[key]
+				else countdowns[key] = [values[name], value]
+			}
+		}
+
+		// 删除该活动的会话数据：features[id]、以“<id>:”开头的领取键、以“<id>.”开头的倒计时起点；钱包余额是全局的，不动
+		function clearActivityState(id) {
+			const state = readJson(sessionStorage, STATE_KEY)
+			if (!isObject(state)) return
+			if (isObject(state.features)) delete state.features[id]
+			dropKeys(state.claimed, id + ':')
+			dropKeys(state.anchors, id + '.')
+			sessionStorage.setItem(STATE_KEY, JSON.stringify(state))
+		}
+
+		function dropKeys(map, prefix) {
+			if (!isObject(map)) return
+			for (const key of Object.keys(map)) {
+				if (key.startsWith(prefix)) delete map[key]
+			}
+		}
+
+		/* ---------- 左栏清单 ---------- */
+
+		async function loadCatalog() {
+			const container = $('#catalog')
+			entries = []
+			try {
+				const res = await fetch('catalog.json', { cache: 'no-store' })
+				if (!res.ok) throw new Error('HTTP ' + res.status)
+				const catalog = await res.json()
+				if (!Array.isArray(catalog?.groups)) throw new Error('缺少 groups 数组')
+				activities = isObject(catalog.activities) ? catalog.activities : {}
+				errors = new Map(Object.keys(activities).map((id) => [id, validateActivity(id, activities[id])]))
+				container.replaceChildren(...catalog.groups.filter(isObject).map(renderGroup))
+			} catch (error) {
+				container.replaceChildren(el('p', 'catalog__error', `清单加载失败：${error.message}，请检查 catalog.json`))
+			}
+			renderDots()
+			renderPanel()
+		}
+
+		function renderGroup(group) {
+			const items = Array.isArray(group.items) ? group.items.filter(isObject) : []
+			const section = el('section', 'catalog__group')
+			const heading = el('h2', 'catalog__heading', group.title)
+			heading.append(el('span', 'catalog__count', String(items.length)))
+			section.append(heading, ...items.map(renderItem))
+			return section
+		}
+
+		function renderItem(item) {
+			const reason = invalidReason(item)
+			const node = button('catalog__item' + (reason ? ' catalog__item--invalid' : ''), null, () => onItemClick(item))
+			node.title = reason ? `不可打开：${reason}` : item.note || item.title
+			const dot = el('span', 'catalog__dot')
+			dot.title = '已调整'
+			node.append(dot, el('span', 'catalog__name', item.title))
+			const kind = KINDS.get(item.kind)
+			node.append(el('span', 'catalog__kind' + (kind ? ' catalog__kind--' + item.kind : ''), kind?.mark ?? '?'))
+			entries.push({ item, node, dot })
+			return node
+		}
+
+		function renderDots() {
+			for (const { item, dot } of entries) {
+				const id = activityOf(item)
+				const decl = declOf(id)
+				dot.classList.toggle('catalog__dot--on', Boolean(decl) && isAdjusted(id, decl))
+			}
+		}
+
+		function selectItem(item) {
+			current = item
+			for (const entry of entries) entry.node.classList.toggle('catalog__item--active', entry.item === item)
+			setDrawer(false)
+			renderPanel()
+			entries.find((entry) => entry.item === item)?.node.scrollIntoView({ block: 'nearest' })
+		}
+
+		// 清单点击也整页重载：每次打开都是按当前场景新启动的 H5，并写入 focus
+		function onItemClick(item) {
+			selectItem(item)
+			if (invalidReason(item) || item.kind === 'none') return
+			applyAndOpen({}, itemOpen(item))
+		}
+
+		function setDrawer(open) {
+			document.body.classList.toggle('console--drawer', open)
+			$('#drawerToggle').setAttribute('aria-expanded', String(open))
+		}
+
+		/* ---------- 右栏面板（控制项设计 §2.3） ---------- */
+
+		function setLoading(value) {
+			loading = value
+			renderPanel()
+		}
+
+		function paramsKey() {
+			return JSON.stringify(h5()?.__protoMock.params ?? null)
+		}
+
+		function renderPanel() {
+			const inner = el('div', 'panel__inner')
+			inner.inert = loading
+			inner.append(...panelContent())
+			panel.replaceChildren(...(loading ? [el('p', 'panel__loading', '加载中…'), inner] : [inner]))
+			renderedParams = paramsKey()
+			tickCountdowns()
+		}
+
+		function panelContent() {
+			const item = current
+			if (!item) return [usage()]
+			const reason = invalidReason(item)
+			if (reason) return [head(item), alertBox(`清单项不合法：${reason}，请检查 catalog.json`)]
+			if (item.kind === 'html') return [head(item), htmlNotice(item)]
+			if (item.activity === undefined) return [head(item), ...noParams(item)]
+			const id = activityOf(item)
+			if (!id || !has(activities, id)) return [head(item), alertBox(`控制项声明缺失：${item.activity}`)]
+			const list = errors.get(id)
+			if (list.length) return [head(item), alertBox('控制项声明有误，请按下列提示修改 catalog.json：', list)]
+			const decl = activities[id]
+			const onReset = decl.params.length ? () => applyValues(id, decl, {}, inPlaceOpen()) : null
+			return [head(item, { onReset }), ...controls(id, decl)]
+		}
+
+		function head(item, { onReset = null } = {}) {
+			const info = el('div', 'panel__info')
+			info.append(el('h2', 'panel__title', item.title))
+			const meta = el('div', 'panel__meta')
+			meta.append(el('span', 'tag tag--' + item.kind, KINDS.get(item.kind)?.label ?? String(item.kind)))
+			const where = item.kind === 'popup' ? item.popup : item.target
+			if (where != null) meta.append(el('code', 'panel__where', String(where)))
+			info.append(meta)
+			if (item.note) info.append(el('p', 'panel__note', item.note))
+			const ops = el('div', 'panel__ops')
+			if (onReset) ops.append(button('btn', '恢复默认', onReset))
+			return box('panel__head', [info, ops], 'header')
+		}
+
+		function section(title, body) {
+			return box('panel__section', [el('h3', 'panel__section-title', title), body], 'section')
+		}
+
+		function alertBox(title, lines = []) {
+			const node = box('panel__alert', [el('p', 'panel__alert-title', title)])
+			if (lines.length) node.append(box('panel__alert-list', lines.map((line) => el('li', '', line)), 'ul'))
+			return node
+		}
+
+		function usage() {
+			const list = USAGE.map(([term, text]) => box('', [el('b', '', term + '：'), text], 'li'))
+			return box('usage', [el('h2', 'usage__title', '使用说明'), box('usage__list', list, 'ul')], 'section')
+		}
+
+		function htmlNotice(item) {
+			const link = el('a', '', '在新标签页打开')
+			link.href = item.target
+			link.target = '_blank'
+			link.rel = 'noopener'
+			return box('panel__empty', ['独立 HTML 原型不经过假数据层，没有参数。', link], 'p')
+		}
+
+		function noParams(item) {
+			const out = [el('p', 'panel__empty', '此项没有可调参数。')]
+			const links = (ENTRY_SWITCHES.get(item.target) ?? []).map(entryLink).filter(Boolean)
+			if (links.length) out.push(section('影响入口显隐的活动（点击查看其面板）', box('panel__actions', links)))
+			return out
+		}
+
+		function entryLink(id) {
+			const decl = declOf(id)
+			const entry = entries.find((candidate) => activityOf(candidate.item) === id)
+			if (!decl || !entry) return null
+			const enabled = decl.params.find((param) => param.name === 'enabled')
+			const state = enabled ? ` · ${enabled.label}：${currentValues(id, decl).enabled ? '开启' : '关闭'}` : ''
+			return button('btn', entry.item.title + state, () => selectItem(entry.item))
+		}
+
+		function controls(id, decl) {
+			const out = []
+			if (decl.note) out.push(el('p', 'panel__desc', decl.note))
+			const presets = decl.presets ?? []
+			if (presets.length) out.push(section('边界场景', box('panel__presets', presets.map((preset) => presetButton(id, decl, preset)))))
+			const values = currentValues(id, decl)
+			if (decl.params.length) out.push(section('参数', box('panel__params', decl.params.map((param) => paramField(id, decl, param, values[param.name])))))
+			const actions = decl.actions ?? []
+			if (actions.length) out.push(section('动作', box('panel__actions', actions.map(actionButton))))
+			return out
+		}
+
+		function presetButton(id, decl, preset) {
+			const values = preset.values ?? {}
+			const active = matches(id, decl, values)
+			const node = button('preset' + (active ? ' preset--active' : ''), null, () => applyValues(id, decl, values, presetOpen(preset)))
+			node.setAttribute('aria-pressed', String(active))
+			node.append(el('span', 'preset__label', preset.label))
+			if (preset.note) node.append(el('span', 'preset__note', preset.note))
+			return node
+		}
+
+		function actionButton(action) {
+			return button('btn', action.label, () => applyAndOpen({}, action.popup ? { popup: action.popup } : { route: action.route }))
+		}
+
+		function paramField(id, decl, param, value) {
+			const inputId = `param-${id}-${param.name}`
+			const label = el('label', 'param__label', param.label)
+			label.htmlFor = inputId
+			const field = box('param', [
+				box('param__head', [label, el('code', 'param__name', param.name)]),
+				box('param__row', CONTROLS[param.type](id, decl, param, value, inputId)),
+			])
+			if (param.drives) field.append(el('div', 'param__drives', param.drives))
+			return field
+		}
+
+		// 开关和下拉立即应用；数字与倒计时在 change（回车或失焦）时应用
+		const CONTROLS = {
+			boolean(id, decl, param, value, inputId) {
+				const input = el('input', 'switch')
+				Object.assign(input, { id: inputId, type: 'checkbox', checked: value })
+				input.setAttribute('role', 'switch')
+				input.addEventListener('change', () => applyParam(id, decl, param, input.checked))
+				return [input, el('span', 'param__unit', value ? '开启' : '关闭')]
+			},
+			select(id, decl, param, value, inputId) {
+				const input = el('select', 'select')
+				input.id = inputId
+				input.append(...param.options.map((option) => new Option(option.label, option.value)))
+				input.value = value
+				input.addEventListener('change', () => applyParam(id, decl, param, input.value))
+				return [input]
+			},
+			number(id, decl, param, value, inputId) {
+				const input = el('input', 'input')
+				Object.assign(input, { id: inputId, type: 'number', required: true, min: param.min ?? 0, max: param.max ?? MAX_VALUE, step: param.step ?? 1, value })
+				input.addEventListener('change', () => {
+					if (input.reportValidity()) applyParam(id, decl, param, Number(input.value))
+				})
+				return param.unit ? [input, el('span', 'param__unit', param.unit)] : [input]
+			},
+			countdown(id, decl, param, value, inputId) {
+				const input = el('input', 'input input--hms')
+				Object.assign(input, { id: inputId, placeholder: 'HH:MM:SS', autocomplete: 'off', spellcheck: false })
+				input.value = formatHms(appliedSeconds(id, param, value) ?? remainSeconds(value))
+				input.addEventListener('input', () => input.setCustomValidity(''))
+				input.addEventListener('change', () => {
+					const seconds = parseHms(input.value)
+					const min = param.min ?? 0
+					const max = param.max ?? MAX_VALUE
+					if (!(seconds >= min && seconds <= max)) {
+						input.setCustomValidity(`请输入 HH:MM:SS，范围 ${formatHms(min)}～${formatHms(max)}`)
+						input.reportValidity()
+						return
+					}
+					applyParam(id, decl, param, toStored(param, seconds, Date.now()), seconds)
+				})
+				const remain = el('span', 'param__remain')
+				remain.dataset.param = param.name
+				return [input, remain]
+			},
+		}
+
+		// 倒计时实时剩余：每秒按 H5 解析出的截止时刻重算
+		function tickCountdowns() {
+			const nodes = panel.querySelectorAll('.param__remain')
+			const id = activityOf(current)
+			const decl = declOf(id)
+			if (!nodes.length || !decl) return
+			const values = currentValues(id, decl)
+			nodes.forEach((node) => {
+				node.textContent = remainText(values[node.dataset.param])
+			})
+		}
+
+		/* ---------- 工具栏与手机 ---------- */
+
+		function renderToolbar() {
+			const scenario = readScenario()
+			$('#loggedIn').checked = scenario.loggedIn
+			$('#latency').value = String(scenario.latencyMs)
+			const language = localStorage.getItem('language')
+			$('#language').value = language === 'en' || language === 'hd' ? language : 'zh'
+		}
+
+		// 中栏按高度缩放（48 工具栏 + 上下各 16 留白）；窄屏时再保证右栏至少 420px（控制项设计 §2.2、§2.4）
+		function fitDevice() {
+			const byHeight = (innerHeight - 80) / 836
+			const byWidth = innerWidth < 1280 ? (innerWidth - 420 - 32) / 399 : Infinity
+			document.documentElement.style.setProperty('--s', String(Math.min(1, byHeight, byWidth)))
+		}
+
+		function onFrameLoad() {
+			if (isBlank()) return
+			const win = h5()
+			if (win) {
+				const value = win.__protoMock.defaultScenario
+				if (isScenario(value)) defaults = structuredClone(value)
+				const info = win.getBuildInfo?.()
+				const version = $('#version')
+				version.textContent = info ? `${info.buildTime} · ${info.branch}` : '开发模式'
+				version.title = version.textContent
+			}
+			// 独立 HTML 原型不经过假数据层：登录、延迟置灰
+			document.querySelectorAll('.toolbar__mock').forEach((node) => {
+				node.inert = !win
+			})
+			$('#htmlHint').hidden = Boolean(win)
+			renderToolbar()
+			renderDots()
+			setLoading(false)
+		}
+
+		function tick() {
+			const win = h5()
+			// H5 在顶层 await 读完 catalog.json 后才写入 params，可能晚于 iframe 的 load 事件
+			if (!loading && paramsKey() !== renderedParams && !panel.contains(document.activeElement)) {
+				renderPanel()
+				renderDots()
+			}
+			tickCountdowns()
+		}
+
+		phone.addEventListener('load', onFrameLoad)
+		addEventListener('resize', fitDevice)
+		$('#drawerToggle').addEventListener('click', () => setDrawer(!document.body.classList.contains('console--drawer')))
+		$('#loggedIn').addEventListener('change', (event) => {
+			const loggedIn = event.target.checked
+			applyAndOpen({ loggedIn }, loggedIn ? inPlaceOpen() : inPlaceRoute())
+		})
+		$('#language').addEventListener('change', (event) => applyAndOpen({ language: event.target.value }, inPlaceOpen()))
+		$('#latency').addEventListener('change', (event) => applyAndOpen({ latencyMs: Number(event.target.value) }, inPlaceOpen()))
+		$('#reset').addEventListener('click', () => {
+			if (confirm('清空会话数据并恢复默认场景？')) applyAndOpen({ reset: true }, { route: '/' })
+		})
+
+		fitDevice()
+		renderToolbar()
+		void loadCatalog()
+		// 深链接：console.html#/vip 打开控制台时，手机直接定位到 /vip
+		applyAndOpen({}, { route: location.hash.slice(1) || '/' })
+		setInterval(tick, 1000)
+	</script>
+</body>
+
+</html>

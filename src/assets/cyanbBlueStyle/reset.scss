@@ -1,0 +1,166 @@
+#app {
+	.userInfo__container-setting-center {
+		background: var(--bg_color_L2);
+	}
+    .lotterySlotItem {
+        background: var(--main_gradient-color);
+        span,h4 {
+            color: #fff;
+        }
+    }
+	// 首充奖励
+	.firstSaveDialog {
+		.header {
+			background: var(--main-color);
+			color: var(--text_color_L4);
+		}
+	}
+
+	.gameList {
+		.box {
+			svg {
+				color: rgba(217, 217, 217, 0.2);
+			}
+		}
+	}
+	.championship {
+		.tabs {
+			background: var(--main-color);
+			& > div {
+				color: #fff !important;
+                &.active {
+                    &::after {
+                        border-bottom-color: #fff;
+                    }
+                }
+			}
+		}
+	}
+    .TeamReport__C-body .header-container {
+        &>div {
+            color:var(--text_color_L1);
+            &>div {
+                &:last-of-type{
+                    color:var(--text_color_L1);
+                }
+            }
+        }
+    }
+    .ruleHead {
+        position: relative;
+        svg {
+          position: absolute;
+          top: -2px;
+          left: 0;
+          right: 0;
+          margin-inline: auto;
+          width: 494px;
+          height: 60px;
+          z-index: 1;
+          color: var(--main-color);
+        }
+        .promotion-title {
+            color: var(--text_color_L4);
+        }
+    }
+    .promotion-grade-th {
+        color: var(--text_color_L4);
+    }
+    .wallet-container {
+        .imgD {
+            img {
+                position: relative;
+                width: calc(100% + 24px);
+            }
+        }
+    }
+    .GameList__C {
+        background: var(--bg_color_L2);
+    }
+    .empty__container svg{
+        opacity: .2;
+    }
+	.funtab_item{
+		.tab_active{
+			color: var(--text_color_L4);
+			background: var(--main_gradient-color2);
+		}
+	}
+	.aloneGame .header .title{
+		div{
+			background: var(--main-color);
+			.all, .len{
+				color: var(--text_color_L4);
+			}
+		}
+	}
+	.aloneGame .header .right_btn i{
+		color: var(--text_color_L4);
+		background: var(--main-color);
+	}
+	.noticeBar__container{
+		border-radius: 30px;
+		margin-top: 30px;
+		button{
+			background: var(--main_gradient-color2);
+			color: var(--text_color_L4);
+		}
+	}
+	.navbar__content-right{
+		.content__right:nth-child(1) svg{
+			color: var(--main-color);
+		}
+	}
+	.ChangLong{
+		border-radius: 20px;
+	}
+	.tabbar__container-item{
+		color:var(--text_color_L3);
+		&.active{
+			color: var(--main-color);
+		}
+	}
+	.aloneGame .header .title div{
+		border-radius: 8px;
+		background: #001B51;
+		.all{
+			color: #329C9A;
+		}
+		.len{
+			color:#00ECBE;
+		}
+	}
+	 .win-odds{
+		color:var(--text_color_L4);
+		background: rgba(0, 236, 190, .5);
+	}
+	.win-odds span{
+		color:var(--text_color_L4);
+	}
+	.tab_item{
+		color:#5B8BB5;
+		&.tab_active{
+			background: #00ECBE;
+		}
+	}
+	.balanceAssets{
+		height: 260px;
+	}
+}
+body{
+	.van-hairline--top-bottom:after, .van-hairline-unset--top-bottom:after{
+		border: none !important;
+	}
+	.van-calendar__popup .van-calendar{
+		color: var(--text_color_L3);
+	}
+}
+
+:root{
+	--van-picker-mask-color:var(--bg_color_L2);
+	--van-popover-light-background: var(--bg_color_L2);
+	--van-dialog-has-title-message-text-color: var(--text_color_L2);
+	--van-button-default-background: var(--bg_color_L3);
+	--van-dialog-confirm-button-text-color: var(--main-color);
+	--van-calendar-background: var(--bg_color_L2);
+}

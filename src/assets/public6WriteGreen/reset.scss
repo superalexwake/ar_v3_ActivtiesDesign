@@ -1,0 +1,213 @@
+#app {
+	.userInfo__container-setting-center {
+		background: var(--bg_color_L2);
+	}
+    .lotterySlotItem {
+        background: var(--main_gradient-color);
+        span,h4 {
+            color: #fff;
+        }
+    }
+	// 首充奖励
+	.firstSaveDialog {
+		.header {
+			background: var(--main-color);
+			color: var(--text_color_L4);
+		}
+	}
+	.progress {
+		background: #d8d8d8 !important;
+	}
+	.gameList {
+		.whiteColor{
+			//color:var(--main-color);
+		}
+		.box {
+			svg {
+				color: rgba(217, 217, 217, 0.2);
+			}
+		}
+	}
+	.championship {
+		.tabs {
+			background: var(--main-color);
+			& > div {
+				color: #fff !important;
+                &.active {
+                    &::after {
+                        border-bottom-color: #fff;
+                    }
+                }
+			}
+		}
+	}
+    .TeamReport__C-body .header-container {
+        background: var(--main-color);
+        &>div {
+            color: #fff;
+            &>div {
+                &:last-of-type{
+                    color: #fff;
+                }
+            }
+        }
+    }
+    .ruleHead {
+        position: relative;
+        svg {
+          position: absolute;
+          top: -2px;
+          left: 0;
+          right: 0;
+          margin-inline: auto;
+          width: 494px;
+          height: 60px;
+          z-index: 1;
+          color: var(--main-color);
+        }
+        .promotion-title {
+            color: var(--text_color_L4);
+        }
+    }
+    .promotion-grade-th {
+        color: var(--text_color_L4);
+    }
+    .wallet-container {
+        .imgD {
+            img {
+                position: relative;
+                width: calc(100% + 24px);
+            }
+        }
+    }
+    .GameList__C {
+        background: var(--bg_color_L2);
+    }
+    .empty__container svg{
+        opacity: .2;
+    }
+	.tabbar__container-item{
+		color: rgba(0, 107, 35, 0.45);
+		&.active{
+			color: var(--text_color_L2);
+		}
+	}
+	.content__right{
+		.right .img{
+			width: 36px;
+			height: 36px;
+		}
+		.languageName{
+			color: var(--text_color_L1);
+			font-family: 'Poppins';
+			font-size: 28px;
+			font-style: normal;
+			font-weight: 500;
+		}
+	}
+	.package-item-btn.apply{
+		background: var(--main_gradient-color);
+	}
+	.hotIcon:before{
+		margin-bottom: 5px;
+	}
+}
+body{
+	.van-hairline--top-bottom:after, .van-hairline-unset--top-bottom:after{
+		border: none !important;
+	}
+	.hangBar{
+		height:180px;
+		.hang{
+			position: fixed;
+			z-index: 120;
+			left: 50%;
+			transform: translateX(-50%);
+			max-width: 750px;
+			width: 100%;
+			padding: 0 24px;
+			height:88px;
+			background:var(--light-bg_white);
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			.content__right{
+				.message{
+					display: flex;
+					align-items: center;
+					gap: 16px;
+				}
+				svg{
+					width:48px;
+					height:48px;
+				}
+			}
+		}
+	}
+	.navbar {
+		&.downBar{
+			.navbar-fixed{
+				background: linear-gradient(95deg, #02BBEE 3.2%, #3FDBB1 49.77%, #47DA64 97.54%);
+				.navbar__content{
+					.navbar__content-left{
+						.leftInfo{
+							display: flex;
+							align-items: center;
+							gap: 16px;
+							.logo{
+								border-radius: 14px;
+								border: 1px solid #FFF;
+								height: 60px;
+								width:60px;
+								background: linear-gradient(180deg, #4DF082 0%, #009330 100%);
+								img{
+									width: 100%;
+									height: 100%;
+								}
+							}
+							.destion{
+								color: var(--text_color_L4);
+								font-family: 'Poppins';
+								font-size: 22px;
+								font-style: normal;
+								font-weight: 700;
+								line-height: normal;
+							}
+						}
+					}
+					.navbar__content-right{
+						.rightInfo{
+							display: flex;
+							align-items: center;
+							gap: 6px;
+							.town{
+								padding: 0 16px;
+								height: 50px;
+								line-height:45px;
+								//text-align: center;
+								border-radius: 24px;
+								border: 1px solid #FFF;
+								background: linear-gradient(0deg, #006B23 0%, #0DDA50 100%);
+								box-shadow: 0 4px 4px 0 #13CA69;
+								color: #FFF;
+								font-family: 'Poppins';
+								font-size: 24px;
+								font-style: normal;
+								font-weight: 500;
+							}
+							.icon1{
+								width: 80px;
+								height:80px;
+							}
+							.icon2{
+								width: 48px;
+								height: 48px;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+

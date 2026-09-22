@@ -1,0 +1,23 @@
+:deep(.red) {
+	color: var(--norm_red-color);
+}
+
+:deep(.yellow) {
+	color: var(--norm_secondary-color);
+}
+@mixin bg {
+	margin-top: 30px;
+	background: var(--bg_color_L2);
+	
+	border-radius: 10px;
+}
+
+@mixin fc {
+	display: flex;
+	flex-direction: column;
+}
+
+@mixin fr {
+	display: flex;
+	flex-direction: row;
+}

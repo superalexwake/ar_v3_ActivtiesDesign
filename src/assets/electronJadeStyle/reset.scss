@@ -1,0 +1,163 @@
+#app {
+	#home {
+		.swiper_box {
+			padding: 0;
+			margin: 20px 0;
+		}
+		.noticeBar__container {
+			border-radius: 78px;
+			.hotIcon{
+				color:var(--text_color_L4)
+			}
+		}
+		.tabs {
+			background: var(--bg_color_L2);
+			border-radius: 12px;
+		}
+        .home_down {
+            color: var(--main-color)
+        }
+		.fun-tab-item__label {
+			.tab_item{
+				color: var(--text_color_L2);
+			}
+			.tab_active{
+				background: var(--main-color);
+				color: var(--text_color_L4);
+			}
+		}
+	}
+	.userInfo__container-setting-center {
+		background: var(--bg_color_L2);
+	}
+    .lotterySlotItem {
+        background: var(--main_gradient-color);
+        span,h4 {
+            color: #fff;
+        }
+    }
+	// 首充奖励
+	.firstSaveDialog {
+		.header {
+			background: var(--main-color);
+			color: var(--text_color_L4);
+		}
+	}
+	.progress {
+		background: #d8d8d8 !important;
+	}
+	.gameList {
+		.box {
+			svg {
+				color: rgba(217, 217, 217, 0.2);
+			}
+		}
+	}
+	.championship {
+		.tabs {
+			background: var(--main-color);
+			& > div {
+				color: #fff !important;
+                &.active {
+                    &::after {
+                        border-bottom-color: #fff;
+                    }
+                }
+			}
+		}
+	}
+    .TeamReport__C-body .header-container {
+        background: var(--main-color);
+        &>div {
+            color: #fff;
+            &>div {
+                &:last-of-type{
+                    color: #fff;
+                }
+            }
+        }
+    }
+    .ruleHead {
+        position: relative;
+        svg {
+          position: absolute;
+          top: -2px;
+          left: 0;
+          right: 0;
+          margin-inline: auto;
+          width: 494px;
+          height: 60px;
+          z-index: 1;
+          color: var(--main-color);
+        }
+        .promotion-title {
+            color: var(--text_color_L4);
+        }
+    }
+    .promotion-grade-th {
+        color: var(--text_color_L4);
+    }
+    .wallet-container {
+        .imgD {
+            img {
+                position: relative;
+                width: calc(100% + 24px);
+            }
+        }
+    }
+    .GameList__C {
+        background: var(--bg_color_L2);
+    }
+    .empty__container svg{
+        opacity: .2;
+    }
+	.package-item-btn.apply{
+		background: var(--main_gradient-color2);
+	}
+	.aloneGame .header{
+		.title .len{
+			color:var(--main-color);
+		}
+		.right_btn i{
+			background: var(--main-color);
+			color: var(--text_color_L4);
+		}
+	}
+	.gameItem1 .win-odds{
+		background: rgba(var(--main-color-rgb), 0.5);
+	}
+	.noticeBar__container button{
+		background: var(--main-color);
+		color: var(--text_color_L4);
+	}
+	.sysMessage__container-msgWrapper{
+		margin-top: 24px;
+	}
+	.allGames__container .tab_active{
+		background: var(--main-color);
+	}
+	.aloneGame .flash_desc{
+		margin-top: 18px;
+	}
+	.balanceAssets{
+		margin-top: 24px;
+	}
+	.onlineGames__container-list__item{
+		border-radius: 0;
+		img{
+			border-radius: 8px;
+		}
+	}
+	.onlineGames__container-tabBar .van-tabs__nav--card .van-tab--card{
+		padding: 0 8px;
+		box-sizing: content-box;
+	}
+	.onlineGames__container-list__item div{
+		margin: 0;
+	}
+}
+body{
+	.van-hairline--top-bottom:after, .van-hairline-unset--top-bottom:after{
+		border: none !important;
+	}
+}

@@ -1,0 +1,19 @@
+{
+	"manifest_version": 2,
+	"name": "POP",
+	"version": "1.2",
+	"display": "standalone",
+	"background_color": "#fff",
+	"description": "pop",
+	"icons": [
+		{
+			"src": "/pop@192.png",
+			"sizes": "192x192"
+		},
+		{
+			"src": "/pop@512.png",
+			"sizes": "512x512"
+		}
+	],
+	"start_url": "/#/"
+}

@@ -1,0 +1,110 @@
+html,
+body {
+	height: 100%;
+	width: 100%;
+	padding: 0;
+	margin: 0;
+	display: flex;
+	justify-content: center;
+	background-color: #9195a3;
+}
+
+* {
+	scrollbar-width: none;
+	-ms-overflow-style: none;
+}
+
+*::-webkit-scrollbar {
+	width: 0;
+	height: 0;
+	background: transparent;
+	display: none;
+}
+
+#app {
+	width: 750px;
+	height: fit-content;
+	min-height: 100vh;
+	.dailySignIn__container .task-panel .task-item-header .hearder-status.new{
+		background:var(--main-color) !important;
+	}
+	.homeNav .tip, .video .tip, .game-content .tip{
+		font-size: 24px;
+		color:var(--main-color);
+	}
+	.homeNav .more{
+		color: #896646 !important;
+		background-image: url('@/assets/icons/home/p3morewg.png') !important;
+		background-color: #E5E8F5 !important;
+	}
+	.homeNav .more-l2{
+		background:linear-gradient(180deg, rgba(208, 168, 127, 0.05) 0%, rgba(208, 168, 127, 0.50) 99.58%) !important;
+		color: #896646 !important;
+	}
+	.ruleHead{
+		position: relative;
+		svg{
+			position: absolute;
+			left: 0;
+			right: 0;
+			top: 0;
+			margin-inline: auto;
+			width: 6.58667rem;
+			height: .8rem;
+			z-index: 1;
+			color: var(--main-color);
+		}
+	}
+	.package-rule .package-rule-titlebox{
+		display: flex;
+		-webkit-box-pack: center;
+		justify-content: center;
+		-webkit-box-align: center;
+		align-items: center;
+		-webkit-box-flex: 1;
+		flex: 1;
+		width: 100%;
+		color: #fff;
+		background: var(--main-color);
+	}
+}
+
+.norem-app {
+	width: 375px;
+}
+
+@media screen and (max-width: 500px) {
+	#app {
+		width: 100%;
+		min-height: 100vh;
+	}
+
+	/* 滚动条展示 */
+	#app::-webkit-scrollbar {
+		width: 0;
+		/* Remove scrollbar space */
+		background: transparent;
+		/* Optional: just make scrollbar invisible */
+	}
+
+	.van-popup.van-popup--bottom {
+		max-width: none;
+	}
+}
+
+@media (min-width: 501px) {
+	.van-popup.van-popup--bottom {
+		max-width: 750px;
+		left: 50%;
+		transform: translateX(-50%);
+	}
+	.van-popup.van-popup--center {
+		max-width: 750px;
+	}
+}
+
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}

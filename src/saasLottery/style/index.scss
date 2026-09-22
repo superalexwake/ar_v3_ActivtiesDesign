@@ -1,0 +1,39 @@
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body .van-toast{
+  background: rgba(0, 0, 0, .7);
+}
+.van-popup.van-popup--bottom{
+  background: transparent;
+}
+html body{
+  max-width: 10rem;
+  margin: 0 auto;
+  background: rgb(145, 149, 163);
+}
+#app {
+  width: 100%;
+  background-color: var(--bg_color_L1);
+}
+
+//:root {
+//  --text_color_L1: #04060a;
+//  --text_color_L2: #646c7b;
+//  --text_color_L4: #fff;
+//  --bg_color_L3: #f6f6f6;
+//  --bg_color_L2: #fff;
+//  --norm_red-color: #fb5b5b;
+//  --norm_green-color: #18b660;
+//  --norm_Purple-color: #d65df8;
+//  --norm_secondary-color: #f5a036;
+//  --dividing-line_color: #e1e1e1;
+//}
+@media screen and (min-width: 800px) {
+  html {
+    font-size: 2.5rem !important;
+  }
+}

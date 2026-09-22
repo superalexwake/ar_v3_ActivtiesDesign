@@ -1,0 +1,203 @@
+#app {
+	.package{
+		.navbar {
+			background: var(--LoginGradient);
+			.navbar__content-left {
+				.van-icon {
+					color: #fff;
+				}
+			}
+			.navbar__content-title {
+				color: var(--bg_color_L2);
+			}
+		}
+	}
+	.pointMall__container {
+		.navbar-fixed{
+			color: var(--textW);
+		 .navbar__content {
+				background: var(--bgColor-5);
+				.van-icon{
+					color: var(--textW);
+				}
+			}
+		}
+		
+	}
+	.pointMall__container-info {
+		color: #1E2637;
+		div {
+			background: var(--linearGradien-52);
+			box-shadow: none;
+		}
+	}
+	.pointMall__container-products__content-item__header {
+		background: var(--linearGradien-52);
+	}
+	.package-time, .package-tips {
+		color: var(--Red2);
+	}
+	.package-rule {
+		span {
+			color: var(--Red2);
+		}
+	}
+	.package-item-top {
+		background: var(--main-color);
+	}
+	.package-item-bottom {
+		background: var(--linerGradient-86);
+		border-radius: 0 0 16px 16px;
+	}
+	.first-list-item {
+		.title, .number {
+			color: var(--colorText-27);
+		}
+	}
+	.member-package-rule-bonus-title {
+		color: var(--colorText-27);
+	}
+	.Xg-page, .jackpot-star {
+		// background: #f7f8ff;
+		.receive-all {
+			//border-color: var(--bgColor-10) !important;
+			.no-receive {
+				border-color: var(--bgColor-10) !important;
+			}
+		}
+		.rowcontent {
+			background: var(--k3NavBg);
+		}
+	}
+	.pointMall-rule__container {
+		.van-icon-upgrade {
+			color: var(--main-color);
+		}
+	}
+
+	.redeem__container {
+		.van-icon {
+			color: var(--main-color);
+		}
+	}
+
+	.lotteryActivity__container, .myLottery__container {
+		.van-tabs__nav {
+			background: var(--bgColor-10);
+			.van-tab--active {
+				color: var(--textW);
+			}
+		}
+	}
+
+	/*main*/
+	.financialServices__container-footer > div > div > div h4{
+		background:linear-gradient(90deg, #E2BEFF 0%, #F0CFFF 100%);
+		color: var(--main-color);
+	}
+	.financialServices__container-footer{
+		color: #fff;
+	}
+	.userInfo__container{
+		&-content{
+			&-uid{
+				background: transparent;
+			}
+		}
+	}
+	.FD__C{
+		.Betting__Popup-body{
+			&-line {
+				color: var(--text1);
+				.Betting__Popup-input{
+					background: transparent;
+				}
+				
+				.Betting__Popup-preSaleShow{
+					color: var(--Red3);
+				}
+				.Betting__Popup-agree{
+					color: var(--text2);
+				}
+				&-item {
+					background: var(--bgGray5);
+					color: var(--colorText-3);
+					border-radius: 40px;
+					&.bgcolor{
+						background: var(--promotionbtnText1);
+
+					}
+					&.setBorder{
+						border-radius: 0;
+						background:var(--bgGray6);
+						color: var(--text1);
+						&.bgcolor{
+							background: var(--promotionbtnText1);
+							color: var(--colorText-3);
+	
+						}
+					}
+				}
+			}
+			
+		}
+	}
+	.WinGo__C{
+		.Betting__Popup-body{
+			&-line {
+				color: var(--text1);
+				.Betting__Popup-input{
+					background: transparent;
+				}
+				.Betting__Popup-preSaleShow{
+					color: var(--Red3);
+				}
+				.Betting__Popup-agree{
+					color: var(--text2);
+				}
+				
+			}
+		}
+		.TimeLeft__C{
+			&-time{
+				& > div{
+					color: var(--norm_red-color)
+				}
+			}
+		}
+	}
+	.WinTrx__C{
+		.Betting__Popup-body{
+			&-line {
+				color: var(--text1);
+				.Betting__Popup-input{
+					background: transparent;
+				}
+				.Betting__Popup-preSaleShow{
+					color: var(--Red3);
+				}
+				.Betting__Popup-agree{
+					color: var(--text2);
+				}
+				
+			}
+			
+		}
+	}
+	.BettingRecordWinTrx__C{
+		&-nav{
+			.van-tab--active{
+				color: var(--text1);
+			} 
+		}
+	}
+    .empty__container svg{
+        opacity: .2;
+    }
+	.financialServices__container-footer > div{
+		background: linear-gradient(90deg, #FD8AFF 0.14%, #BFA1FF 99.92%);
+	}
+	.sysMessage__container-msgWrapper__item-title .svg{
+		color: var(--main-color);
+	}
+}

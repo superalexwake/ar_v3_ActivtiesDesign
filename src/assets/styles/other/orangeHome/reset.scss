@@ -1,0 +1,90 @@
+.noticeBar__container {
+	--theme-color: v-bind('getStyle');
+	display: flex;
+	align-items: center;
+	width: 100%;
+	height: 74px;
+	padding-inline: 20px;
+	color: #ed6a0c;
+	font-size: 22px;
+	background: #fffbe8;
+	border-radius: 16px;
+	padding-left: 75px;
+	background-image: url('@icon/home/noticeBarSpeaker.svg');
+	background-repeat: no-repeat;
+	background-position: 26px center;
+	background-size: 32px;
+
+	&-body {
+		width: 700px;
+		overflow: hidden;
+		position: relative;
+		height: 60px;
+		line-height: 74px;
+		display: flex;
+		align-items: center;
+
+		&-text {
+			width: 100%;
+			height: fit-content;
+			max-height: 74px;
+			line-height: 37px;
+			animation: marquee 7s linear infinite;
+			display: flex;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			word-wrap: break-word;
+			word-break: break-all;
+		}
+
+		@keyframes marquee {
+			0% {
+				transform: translateY(100%);
+				/* 初始位置：向上平移0 */
+			}
+
+			10% {
+				transform: translateY(0);
+				/* 中间停顿5秒，保持位置不变 */
+			}
+
+			90% {
+				transform: translateY(0);
+				/* 中间停顿5秒，保持位置不变 */
+			}
+
+			100% {
+				transform: translateY(-100%);
+				/* 终止位置：向上平移100% */
+			}
+		}
+	}
+
+	& > svg {
+		width: 32px;
+		flex-shrink: 0;
+		height: auto;
+		margin-right: 17px;
+	}
+
+	button {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-shrink: 0;
+		gap: 5px;
+		width: 150px;
+		height: 50px;
+		margin-left: auto;
+		color: #fff;
+		border: none;
+		border-radius: 40px;
+		background: #eb8a1f;
+
+		svg {
+			width: 24px;
+			height: auto;
+		}
+	}
+}
+

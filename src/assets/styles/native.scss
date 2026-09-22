@@ -1,0 +1,28 @@
+.van-toast {
+	word-break: break-word !important;
+}
+
+.cg-default {
+	&.van-button {
+		font-weight: 700;
+		font-size: 30px;
+
+		.van-button__icon {
+			height: 100%;
+			display: flex;
+			align-items: center;
+
+			& > img {
+				height: 80%;
+			}
+		}
+	}
+}
+
+
+/* 仅在横屏模式下设置 font-size 为 36px */
+@media (orientation: landscape) {
+	html.landscape {
+		font-size: 9vh!important;
+	}
+}

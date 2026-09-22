@@ -1,0 +1,211 @@
+#app {
+
+	.userInfo__container-setting-center {
+		background: var(--bg_color_L2);
+	}
+	.content__right{
+		.rajaCustomer{
+			background: url("./icons/home/cursor.png") no-repeat;
+			background-size: cover;
+			width: 48px;
+			height: 48px;
+			display: block;
+		}
+	}
+	.navbar-fixed{
+		background: var(--bg_color_L2);
+		.navbar__content-right{
+			.right{
+				color: var(--text_color_L1);
+			}
+		}
+	}
+	.changlongEnter{
+		background-image: url("./icons/public/changlong.svg");
+	}
+	.Betting__Popup-head-selectName{
+		background: #fff;
+		color: #CA893D;
+	}
+	.Betting__Popup-14{
+		.Betting__Popup-head-selectName{
+			color: #4570C3;
+		}
+	}
+	.Betting__Popup-12{
+		.Betting__Popup-head-selectName{
+			color: #8045AD;
+		}
+	}
+	.Betting__Popup-10{
+		.Betting__Popup-head-selectName{
+			color: #D45656;
+		}
+	}
+	.Betting__Popup-11{
+		.Betting__Popup-head-selectName{
+			color: #40AD72;
+		}
+	}
+	.changLong__C-tab{
+		.van-tab{
+			color: var(--text_color_L2);
+			&.van-tab--active{
+				color: var(--text_color_L1);
+			}
+		}
+	}
+	.info-dialog{
+		.info-dialog-header-left{
+			background: linear-gradient(90deg, #E6EBF0 -2.73%, rgba(230, 235, 240, 0.00) 91.36%);
+		}
+		.van-dialog{
+			background: var(--bg_color_L3);
+		}
+	}
+	.promptHeader{
+		background: var(--bg_color_L3);
+	}
+	.promptContent{
+		background: var(--bg_color_L2);
+		color: var(--text_color_L2);
+		padding: 10px 16px;
+		a{
+			color: var(--norm_bule-color);
+		}
+	}
+	.login__container-form, .resgister__C-form{
+		.van-checkbox__icon--checked .van-icon{
+			color: #424242;
+		}
+	}
+	.phoneInput__container-input input::placeholder, .register__container-invitation__input input::placeholder{
+		color: var(--text_color_L3);
+	}
+	.gameList {
+		.box {
+			svg {
+				color: rgba(217, 217, 217, 0.2);
+			}
+		}
+	}
+	.championship {
+		.tabs {
+			background: var(--main-color);
+			& > div {
+				color: #fff !important;
+                &.active {
+                    &::after {
+                        border-bottom-color: #fff;
+                    }
+                }
+			}
+		}
+	}
+    .ruleHead {
+        position: relative;
+        svg {
+          position: absolute;
+          top: -2px;
+          left: 0;
+          right: 0;
+          margin-inline: auto;
+          width: 494px;
+          height: 60px;
+          z-index: 1;
+          color: var(--main-color);
+        }
+        .promotion-title {
+            color: var(--text_color_L4);
+        }
+    }
+    .promotion-grade-th {
+        color: var(--text_color_L4);
+    }
+    .wallet-container {
+        .imgD {
+            img {
+                position: relative;
+                width: calc(100% + 24px);
+            }
+        }
+    }
+    .login__container {
+        .signIn__container-button>button:nth-child(1) {
+            color: var(--text_white)
+        }
+    }
+    .content_home {
+        .my-swipe {
+            width: 100%;
+            height: 320px;
+            box-sizing: border-box;
+        
+            img {
+                border-radius: 0;
+            }
+        }
+    }
+    .empty__container svg{
+        opacity: .2;
+    }
+    .content__right {
+        svg {
+           color: #fff;
+        }
+    }
+    .swiper_box {
+        padding: 0;
+		.swiper-button{
+			position: absolute;
+			width: 100%;
+			text-align: center;
+			z-index: 99;
+			bottom: 20px;
+			span{
+				width: 10px;
+				height: 10px;
+				margin: 0 4px;
+				border-radius: 10px;
+				background: #fff;
+				opacity: .45;
+				&.active{
+					opacity: 1;
+					background: #FBC511;
+				}
+			}
+		}
+    }
+	.strategy-content .betting-details{
+		background: var(--bg_color_L3);
+	}
+
+}
+#app .allGames__container-list .lotterySlotItem {
+	background: var(--main_gradient-color);
+}
+.van-calendar__popup{
+	.van-calendar__header{
+		background: var(--bg_color_L3);
+		color: var(--text_color_L1);
+	}
+	.van-calendar__body{
+		color:var(--text_color_L2);
+		.van-calendar__day--middle{
+			background: rgba(70 ,25, 24, .2);
+			color:var(--text_color_L2);
+		}
+	}
+}
+
+.van-collapse-item__wrapper{
+	.van-collapse-item__content{
+		background:var(--bg_color_L2);
+	}
+}
+.van-cell{
+	background: none;
+}
+.van-hairline--top-bottom:after, .van-hairline-unset--top-bottom:after{
+	border: none !important;
+}

@@ -1,0 +1,11 @@
+body {
+    .bet-rule {
+        &-head {
+            background: var(--main_gradient-color)!important;
+        }
+        &-foot-btn {
+            background: var(--main_gradient-color)!important;
+            color: var(--text_color_L4)!important;
+        }
+    }
+}

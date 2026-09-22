@@ -1,0 +1,573 @@
+#app {
+	.userInfo__container-setting-center {
+		background: var(--bg_color_L2);
+	}
+	.lotterySlotItem {
+		background: var(--main_gradient-color);
+		span, h4 {
+			color: #fff;
+		}
+	}
+	// 首充奖励
+	.firstSaveDialog {
+		.header {
+			background: var(--main-color);
+			color: var(--text_color_L4);
+		}
+	}
+	.progress {
+		background: #d8d8d8 !important;
+	}
+	.gameList {
+		.box {
+			svg {
+				color: rgba(217, 217, 217, 0.2);
+			}
+		}
+	}
+	.championship {
+		.tabs {
+			background: var(--main-color);
+			& > div {
+				color: #fff !important;
+				&.active {
+					&::after {
+						border-bottom-color: #fff;
+					}
+				}
+			}
+		}
+	}
+	.TeamReport__C-body .header-container {
+		background: var(--main-color);
+		& > div {
+			color: #fff;
+			& > div {
+				&:last-of-type {
+					color: #fff;
+				}
+			}
+		}
+	}
+	.wallet-container {
+		.imgD {
+			img {
+				position: relative;
+				width: calc(100% + 24px);
+			}
+		}
+	}
+	// 彩票游戏钱包区域
+	.Wallet__C::before {
+		background: var(--main_gradient-color);
+	}
+	.Wallet__C-balance {
+		background-color: var(--bg_color_L3);
+		background-image: none !important;
+		overflow: hidden;
+		&::after {
+			content: '';
+			position: absolute;
+			inset: 0;
+			background-image: url('@icon/home/walletbg.png');
+			background-repeat: no-repeat;
+			background-size: contain;
+			opacity: 0.3;
+			z-index: -1;
+		}
+	}
+	.Wallet__C-balance-l2 {
+		align-items: center;
+	}
+	// 彩票游戏列表
+	.GameList__C {
+		background: var(--bg_color_L3);
+	}
+	// 彩票投注记录头部
+	.BettingRecordWin__C {
+		&-head {
+			background: var(--main_gradient-color);
+			color: #fff;
+		}
+	}
+	// 导航栏背景
+	.navbar.main .navbar-fixed {
+		background: var(--bg_color_L2) !important;
+	}
+	.navbar-fixed {
+		background-color: var(--bg_color_L1);
+	}
+	// 通知栏
+	.noticeBar__container {
+		background: #272036;
+		border: 2px solid #3E2F60;
+		box-shadow: 0 2px 0 0 #2E384A inset;
+		filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25));
+		margin-bottom: 6px;
+		margin-top: 20px;
+	}
+	.noticeBar__container.lottery-notice {
+		background-color: var(--bg_color_L2);
+	}
+	// 输入框
+	input::placeholder {
+		color: var(--text_color_L3);
+	}
+	.explain .input input {
+		color: var(--text_color_L2);
+	}
+	// 对话框
+	.safebox-dialog .content {
+		background: var(--bg_color_L3);
+		color: var(--text_color_L1);
+	}
+	.safebox-dialog .question {
+		border: none;
+	}
+	// 折叠面板
+	.van-collapse-item__content {
+		background: var(--bg_color_L2);
+	}
+	// 通知中心
+	.notification-container {
+		.navbar-fixed {
+			background: var(--bg_color_L2);
+			.van-icon,
+			.navbar__content {
+				color: #fff;
+			}
+		}
+	}
+	.sysMessage__container-msgWrapper {
+		margin-top: 24px;
+	}
+	// 充值页面
+	.rechargeh__container-content {
+		padding-top: 0;
+	}
+	// 活动页
+	.bonus-header .nav {
+		background: var(--bg_color_L2);
+	}
+	.vip-content-empirical > div {
+		background: var(--bg_color_L2);
+	}
+	.totalSavings__container {
+		background: var(--bg_color_L2);
+	}
+	// 游戏Tab
+	.gameTypeHome .van-tabs__wrap .van-tabs__nav .van-tab.van-tab--active {
+		color: var(--main-color);
+	}
+	// sass 彩票样式
+	.lottery-container .content .amount-buttons .default {
+		background: var(--bg_color_L3);
+		color: var(--text_color_L1);
+	}
+	.lottery-container .content .multiplier-section .multiplier-buttons .default {
+		background: var(--bg_color_L3);
+		color: var(--text_color_L1);
+	}
+	.lottery-container .content .section-header .label {
+		color: var(--text_color_L1);
+	}
+	.van-stepper__minus, .van-stepper__plus, .van-stepper__input {
+		background: var(--bg_color_L3);
+		color: var(--text_color_L1);
+	}
+	// 分页按钮
+	.t-foot-previous.disabled, .t-foot-next.disabled {
+		background: var(--bg_color_L3);
+		pointer-events: none;
+		color: var(--text_color_L3);
+	}
+	.t-foot-previous, .t-foot-next {
+		background: var(--main-color);
+	}
+	.t-foot {
+		background: var(--darkBg, var(--bg_color_L2));
+		color: var(--text_color_L2);
+	}
+	// 游戏记录
+	.my_r-body .list-item-m-top,
+	.my_r-body .list-detail-text {
+		color: var(--text_color_L1);
+	}
+	.my_r-foot-previous.disabled, .my_r-foot-next.disabled{
+		background: var(--bg_color_L3);
+		pointer-events: none;
+		color: var(--text_color_L3);
+	}
+	.FDTL__C-l3 .box .slot-column .slot-transform .slot-num{
+		color: var(--text_color_L3);
+	}
+	// FDB 投注
+	.FDB__C-H {
+		color: var(--text_color_L1);
+	}
+	.FDB__C-nav > div {
+		background: var(--button_dis_color);
+		color: #fff;
+	}
+	.FDB__C-nav > div.active {
+		background: var(--main-color);
+		color: var(--text_color_L4);
+	}
+	.FDB__C-nav > div.active::after {
+		background: radial-gradient(circle at 100% 0, var(--bg_color_L2) 0.26667rem, var(--main-color) 0.26667rem);
+	}
+	.bet_p-input {
+		background: var(--bg_color_L3);
+	}
+	.empty__container p {
+		color: var(--text_color_L3);
+	}
+	.moto-note-result .lottery_reslut {
+		color: var(--text_color_L1);
+	}
+	.empty__container svg {
+		opacity: .2;
+	}
+	.tabbar__container-item,
+	.tabbar__items-tab {
+		color: #ffffff;
+		&.active {
+			color: #F8BF61;
+		}
+	}
+	.content__right {
+		.right .img {
+			width: 30px;
+			height: 30px;
+		}
+		.languageName {
+			color: #F6DFFF;
+			font-family: 'Poppins';
+			font-size: 28px;
+			font-style: normal;
+			font-weight: 500;
+		}
+	}
+	// 语言选择器文字颜色
+	.purple-home__nav-right .right {
+		color: var(--text_color_L1);
+	}
+	.package-item-btn.apply {
+		background: var(--main_gradient-color);
+	}
+	.hotIcon:before {
+		display: none;
+	}
+	// sass投注弹窗
+	.van-popup--bottom {
+		.bet {
+			background: var(--bg_color_L1);
+			.bet-body {
+				background: var(--bg_color_L1);
+				.title {
+					font-size: 32px;
+					color: var(--text_color_L1);
+				}
+			}
+			.bet-body .l2 {
+				color: var(--text_color_L1);
+			}
+			.bet-body .active {
+				background: var(--main-color) !important;
+			}
+			.bet-body .l2 .true {
+				border: none;
+			}
+			.bet-body .l1 .m .Betting__Popup-input {
+				background: var(--bg_color_L2);
+				color: var(--text_color_L1);
+			}
+			.bet-title {
+				color: var(--text_color_L1);
+			}
+			.bet-body .l1 .m > div {
+				background: var(--main-color);
+			}
+			.bet-foot {
+				.bet-foot-c {
+					background: var(--bg_color_L3);
+					color: var(--text_color_L2);
+				}
+				.bet-foot-s {
+					color: var(--text_color_L1);
+					background: var(--main-color);
+				}
+				.bet-foot-s span {
+					color: var(--text_color_L1);
+				}
+			}
+		}
+		.lottery-container {
+			background: var(--bg_color_L1);
+		}
+		.bet_p-body {
+			background: var(--bg_color_L1);
+		}
+		.Betting__Popup-body {
+			background: var(--bg_color_L1);
+		}
+		.betting-container {
+			.header-left .select-text {
+				color: var(--text_color_L1);
+			}
+			background: var(--bg_color_L1);
+		}
+	}
+	// 投注规则弹窗
+	.van-popup--center .bet-rule-foot .bet-rule-foot-btn {
+		background: var(--main-color);
+	}
+	.van-popup--center {
+		.bet_p-PreSale-body {
+			color: var(--text_color_L1) !important;
+		}
+		.bet-rule-body {
+			color: var(--text_color_L1) !important;
+		}
+		.bet-rule-body > div {
+			p {
+				color: var(--text_color_L1) !important;
+				span {
+					color: var(--text_color_L1) !important;
+				}
+			}
+		}
+	}
+}
+
+body {
+	// 日历组件
+	.van-calendar {
+		&__header {
+			background: var(--bg_color_L2);
+			color: var(--text_color_L1);
+			&-title {
+				color: var(--text_color_L1);
+			}
+		}
+		&__header-subtitle {
+			color: var(--text_color_L1);
+		}
+		&__confirm {
+			background: var(--main_gradient-color);
+			border: 0;
+		}
+		&__day--start {
+			background: var(--main-color);
+			color: var(--text_color_L4) !important;
+		}
+		&__day--end {
+			background: var(--main-color);
+			color: var(--text_color_L4) !important;
+		}
+		&__day {
+			color: var(--text_color_L1);
+		}
+		&__weekday {
+			color: var(--text_color_L1);
+		}
+		&__month-mark {
+			color: var(--van-calendar-month-mark-color);
+			opacity: 0.5;
+		}
+	}
+	.van-cell:after {
+		content: none;
+	}
+
+	// 活动规则头部
+	.ruleHead {
+		position: relative;
+		svg {
+			position: absolute;
+			top: -2px;
+			left: 0;
+			right: 0;
+			margin-inline: auto;
+			width: 494px;
+			height: 60px;
+			z-index: 0;
+			color: var(--sheet_detail_bg_color);
+		}
+		.promotion-title {
+			color: var(--text_color_L4);
+		}
+	}
+	.promotion-grade-th {
+		color: var(--text_color_L4);
+	}
+
+	// 对话框
+	.van-dialog__header {
+		color: var(--text_color_L1);
+	}
+	.van-dialog__cancel {
+		color: var(--text_color_L1);
+		background: var(--button_dis_color);
+	}
+	.van-dialog__confirm {
+		color: var(--text_color_L4);
+		background: var(--main_gradient-color);
+	}
+
+	// 钱包 SVG
+	.wallet-container-header-belly {
+		svg {
+			path:nth-child(1) {
+				fill: var(--bg_color_L3);
+			}
+			path:nth-child(2) {
+				fill: var(--main-color);
+			}
+			path:nth-child(3) {
+				fill: var(--bg_color_L3);
+			}
+		}
+	}
+
+	// tabbar 第三项图标
+	.tabbar__container-item:nth-of-type(3) {
+		.svg-icon {
+			color: var(--text_color_L4);
+		}
+	}
+
+	.promptContent {
+		color: var(--text_color_L1);
+		padding: 10px 0;
+	}
+
+	// 安全按钮
+	.security-btns {
+		.van-button--default {
+			background: var(--text_color_L4);
+			color: var(--main-color);
+		}
+		.van-button--disabled {
+			background: var(--bg_color_L3) !important;
+			color: var(--text_color_L2);
+		}
+	}
+
+	// 游戏列表选中
+	.GameList__C-item.active {
+		background: linear-gradient(180deg, var(--tab2) 0%, var(--tab1) 100%) !important;
+	}
+
+	// 通知栏背景
+	// #app {
+	// 	.noticeBar__container {
+	// 		background-color: var(--bg_color_L3);
+	// 	}
+	// }
+
+	// saas彩票钱包背景
+	.lottery-info .bg {
+		background: none !important;
+	}
+	// saas彩票通知栏按钮
+	.lottery-info .noticeBar__container button.hotIcon {
+		background: var(--main_gradient-color2) !important;
+		border: none !important;
+		color: var(--bg_color_L2) !important;
+		-webkit-text-fill-color: var(--bg_color_L2) !important;
+		border-radius: 50px !important;
+	}
+	.van-hairline--top-bottom:after, .van-hairline-unset--top-bottom:after {
+		border: none !important;
+	}
+
+	// 顶部挂栏
+	.hangBar {
+		height: 180px;
+		.hang {
+			position: fixed;
+			z-index: 120;
+			left: 50%;
+			transform: translateX(-50%);
+			max-width: 750px;
+			width: 100%;
+			padding: 0 24px;
+			height: 88px;
+			background: var(--light-bg_white);
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			.content__right {
+				.message {
+					display: flex;
+					align-items: center;
+					gap: 16px;
+				}
+				svg {
+					width: 48px;
+					height: 48px;
+				}
+			}
+		}
+	}
+
+	// 下载页导航栏
+	.navbar.downBar .navbar-fixed {
+		background: var(--main_gradient-color);
+	}
+	.navbar.downBar .leftInfo {
+		display: flex;
+		align-items: center;
+		gap: 16px;
+	}
+	.navbar.downBar .leftInfo .logo {
+		border-radius: 14px;
+		border: 1px solid #FFF;
+		height: 60px;
+		width: 60px;
+		background: var(--main_gradient-color);
+		img {
+			width: 100%;
+			height: 100%;
+		}
+	}
+	.navbar.downBar .leftInfo .destion {
+		color: var(--text_color_L4);
+		font-family: 'Poppins';
+		font-size: 22px;
+		font-weight: 700;
+	}
+	.navbar.downBar .rightInfo {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+	}
+	.navbar.downBar .rightInfo .town {
+		padding: 0 16px;
+		height: 50px;
+		line-height: 45px;
+		border-radius: 24px;
+		border: 1px solid #FFF;
+		background: var(--main_gradient-color);
+		box-shadow: 0 4px 4px 0 rgba(160, 143, 255, 0.5);
+		color: #FFF;
+		font-family: 'Poppins';
+		font-size: 24px;
+		font-weight: 500;
+	}
+	.navbar.downBar .rightInfo .icon1 {
+		width: 80px;
+		height: 80px;
+	}
+	.navbar.downBar .rightInfo .icon2 {
+		width: 48px;
+		height: 48px;
+	}
+	.navbar__content-right .right .languageName{
+		color: var(--text_color_L1);
+	}
+	.signIn__container-button button:first-child{
+		background: var(--text_color_L3);
+	}
+}

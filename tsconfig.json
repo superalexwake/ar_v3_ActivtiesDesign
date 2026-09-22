@@ -1,0 +1,39 @@
+{
+	"compilerOptions": {
+		"target": "ES2020",
+		// "allowJs": true,
+		"useDefineForClassFields": true,
+		"module": "ESNext",
+		"moduleResolution": "bundler",
+		"strict": true /* Enable all strict type-checking options. */,
+		"jsx": "preserve",
+		"sourceMap": true,
+
+		"resolveJsonModule": true,
+		"isolatedModules": true,
+		"esModuleInterop": true,
+		"noUnusedLocals": true,
+		//"allowImportingTsExtensions": true,
+		// 跳过第三方库检查，解决打包失败
+		"skipLibCheck": true,
+		"lib": ["esnext", "dom", "DOM.Iterable"],
+		"types": ["vite/client"],
+		// 解析非相对模块名的基准目录
+		"baseUrl": "./",
+		// 模块名到基于 baseUrl 的路径映射的列表。
+		"paths": {
+			"@": ["src"],
+			"@/*": ["src/*"],
+			"@icon/*": ["src/assets/${VITE_MAINCOLOR}/icons/*"]
+		}
+	},
+	"include": [
+		"src/**/*.ts",
+		"src/**/*.d.ts",
+		"src/**/*.tsx",
+		"src/**/*.vue",
+		"entrance/prototype/**/*.ts"
+	],
+	"exclude": ["node_modules", "dist", "**/*.js"],
+	"references": [{ "path": "./tsconfig.node.json" }]
+}

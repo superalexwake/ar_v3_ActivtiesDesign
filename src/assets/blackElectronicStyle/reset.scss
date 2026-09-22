@@ -1,0 +1,249 @@
+body{
+	.van-popup--center {
+		background: var(--bg_color_L2);
+		.bet_p-PreSale-body{
+			color: var(--text_color_L1) !important;
+		}
+		.bet-rule-body{
+			color: var(--text_color_L1) !important;
+		}
+		.bet-rule-body > div{
+			p{
+				color: var(--text_color_L1) !important;
+				span{
+					color: var(--text_color_L1) !important;
+				}
+			}
+		}
+	}
+	.content12{
+		background: var(--bg_color_L1) !important;
+	}
+	.van-collapse-item__content{
+		background: none;
+	}
+	.van-cell{
+		background: none;
+	}
+	.van-hairline--top-bottom:after, .van-hairline-unset--top-bottom:after{
+		border: none !important;
+	}
+	.empty__container p{
+		color: var(--text_color_L3) !important;
+	}
+	.bonus-header .nav{
+		background-color:var(--bg_color_L1) !important;
+	}
+	.van-picker__mask{
+		background-image: var(--van-picker-mask-color) !important;
+	}
+	.van-calendar__popup{
+		.van-calendar__header{
+			background: var(--bg_color_L3);
+			color: #fff;
+		}
+		.van-calendar__body{
+			color: var(--text_color_L3);
+			.van-calendar__day--middle{
+				background: rgba(70 ,25, 24, .2);
+				color:var(--text_color_L2);
+			}
+		}
+	}
+	.van-dialog__content .promptContent{
+		color: var(--text_color_L4);
+	}
+
+	.task-record-container .head > button{
+		background: var(--bg_color_L3) !important;
+		&.active{
+			background: var(--main_gradient-color) !important;
+			border-radius:0 !important;
+		}
+	}
+	.van-circle__layer{
+		stroke: var(--text_color_L3) !important;
+	}
+
+	.van-dialog__header {
+		color: var(--text_color_L1);
+	}
+	.van-dialog__message--has-title {
+		color: var(--text_color_L1);
+	}
+	.van-dialog__cancel {
+		color: var(--text_color_L3);
+		background: var(--bg_color_L1);
+	}
+	.van-dialog__confirm {
+		color: var(--text_color_L4);
+		background: var(--main_gradient-color);
+	}
+	.van-popup--bottom{
+		background: var(--bg_color_L2);
+	}
+
+	#app {
+		.userInfo__container-setting-center {
+			background: var(--bg_color_L2);
+		}
+		.lotterySlotItem {
+			background: var(--main_gradient-color);
+			span,h4 {
+				color: #fff;
+			}
+		}
+		// 首充奖励
+		.firstSaveDialog {
+			.header {
+				background: var(--main-color);
+				color: var(--text_color_L4);
+			}
+		}
+		.progress {
+			background: #d8d8d8 !important;
+		}
+		.gameList {
+			.box {
+				svg {
+					color: rgba(217, 217, 217, 0.2);
+				}
+			}
+		}
+		.championship {
+			.tabs {
+				background: var(--main-color);
+				& > div {
+					color: #fff !important;
+					&.active {
+						&::after {
+							border-bottom-color: #fff;
+						}
+					}
+				}
+			}
+		}
+		.TeamReport__C-body .header-container {
+			background: var(--main-color);
+			&>div {
+				color: #fff;
+				&>div {
+					&:last-of-type{
+						color: #fff;
+					}
+				}
+			}
+		}
+		.ruleHead {
+			position: relative;
+			svg {
+				position: absolute;
+				top: -2px;
+				left: 0;
+				right: 0;
+				margin-inline: auto;
+				width: 494px;
+				height: 60px;
+				z-index: 1;
+				color: var(--main-color);
+			}
+			.promotion-title {
+				color: var(--text_color_L4);
+			}
+		}
+		.promotion-grade-th {
+			color: var(--text_color_L4);
+		}
+		.wallet-container {
+			.imgD {
+				img {
+					position: relative;
+					width: calc(100% + 24px);
+				}
+			}
+		}
+		.GameList__C {
+			background: var(--bg_color_L2);
+		}
+		//.empty__container svg{
+		//	opacity: .2;
+		//}
+		.tabbar__container-item {
+			&.active {
+				background: linear-gradient(180deg, rgba(250, 35, 103, 0.5) 0%, rgba(250, 35, 103, 0) 100%);
+				border-color: #fa2367;
+			}
+			&.noShowBgC {
+				background: none !important;
+			}
+			.promotionBg {
+				svg {
+					fill: #fff !important;
+					path {
+						fill: #fff !important;
+					}
+				}
+			}
+
+		}
+		.tabs {
+			.tab_item {
+				color: var(text_color_L2);
+			}
+			.tab_active {
+				color: #fff;
+				background: linear-gradient(131deg, #fecc21 0%, #fc5d02 18%, #fa2367 51%, #ee3625 76%, #9b25c9 100%) !important;
+			}
+		}
+		.aloneGame {
+			.right_btn {
+				display: none;
+			}
+			.all {
+				color: var(--text_color_L2);
+			}
+			.len {
+				color: var(--main-color);
+			}
+		}
+		.profit {
+			.name {
+				color: #fff;
+			}
+		}
+		.pwa-btn {
+			border-radius: 12px;
+		}
+		.totalSavings__container{
+			background: var(--bg_color_L3);
+		}
+		.video_list .video_item .video_title{
+			color: var(--text_color_L4);
+		}
+		.vip-content-empirical > div{
+			background: var(--bg_color_L3);
+		}
+		button {
+			&.hotIcon {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				flex-shrink: 0;
+				gap: 5px;
+				width: 150px;
+				height: 50px;
+				margin-left: auto;
+				color: var(--text_color_L1);
+				border-radius: 40px;
+				background: var(--main-color);
+				border: 0;
+				&::before {
+					display: none;
+				}
+			}
+		}
+		.promotion-page .promotion-mian .promotion-grade-tr:nth-child(odd){
+			background:none;
+		}
+	}
+}

@@ -1,0 +1,17 @@
+.okwin {
+    .nav-enter {
+        height: 98px;
+        display: flex;
+        gap: 24px;
+        align-items: center;
+        justify-content: center;
+        .left {
+            width: 347px;
+            flex: none;
+        }
+        .right {
+            width: 347px;
+            flex: none;
+        }
+    }
+}

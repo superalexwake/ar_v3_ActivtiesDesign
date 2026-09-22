@@ -1,0 +1,22 @@
+body {
+    .bet-rule {
+        &-head {
+            background: var(--main_gradient-color)!important;
+        }
+        &-foot-btn {
+            background: var(--main_gradient-color)!important;
+            color: var(--text_color_L4)!important;
+        }
+    }
+}
+
+@media (min-width: 501px) {
+    .van-popup.van-popup--bottom {
+        max-width: 750px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    .van-popup.van-popup--center {
+        max-width: 750px;
+    }
+}

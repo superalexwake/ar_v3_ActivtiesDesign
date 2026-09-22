@@ -1,0 +1,10 @@
+allowBuilds:
+  # 需要执行构建脚本（原生二进制 / 入口切换）
+  '@parcel/watcher': true
+  esbuild: true
+  sharp: true
+  vue-demi: true
+  # 无需执行：firebase 仅在 FIREBASE_WEBAPP_CONFIG 下生效，protobufjs 只打印告警，swiper 只打印捐赠横幅
+  '@firebase/util': false
+  protobufjs: false
+  swiper: false

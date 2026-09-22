@@ -1,0 +1,19 @@
+{
+	"manifest_version": 2,
+	"name": "DmWin",
+	"version": "1.2",
+	"display": "standalone",
+	"background_color": "#fff",
+	"description": "DmWin GAME",
+	"icons": [
+		{
+			"src": "/ar065@192.png",
+			"sizes": "192x192"
+		},
+		{
+			"src": "/ar065@512.png",
+			"sizes": "512x512"
+		}
+	],
+	"start_url": "/#/"
+}

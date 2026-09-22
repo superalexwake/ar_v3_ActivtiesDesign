@@ -1,0 +1,228 @@
+@import "@/views/home/AllLotteryGames/BinguoCount/style.scss";
+@mixin svg-logo {
+	width: 20px;
+	height: 20px;
+	flex-shrink: 0;
+}
+
+@mixin heading-title {
+	color: var(--LotteryBingoBg-3);
+	font-size: 24px;
+	font-style: normal;
+	font-weight: 400;
+	line-height: 28px; /* 116.667% */
+	margin-left: 30px;
+	white-space: nowrap;
+}
+
+.body-container {
+	width: 100%;
+	padding: 20px 24px 0;
+}
+.MyGameRecordList__C-item-l-big {
+	color: var(--colorText-2);
+}
+.MyGameRecordList__C-item-l-small {
+	color: #fff;
+}
+.MyGameRecordList__C {
+	padding-bottom: 20px;
+	.MyGameRecordList__C-item {
+		height: 108px;
+		flex-shrink: 0;
+		border-radius: 10px;
+		background-color: #0a603e;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		cursor: pointer;
+		margin-bottom: 20px;
+		padding-left: 24px;
+		.MyGameRecordList__C_left {
+			width: calc(100% - 78px);
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+		.MyGameRecordList__C-item-l {
+			height: 72px;
+			width: 72px;
+			flex-shrink: 0;
+			border-radius: 20px;
+			display: flex;
+			font-family: Inter;
+			font-size: 30px;
+			font-style: normal;
+			font-weight: 400;
+			line-height: 30px; /* 100% */
+			text-align: center;
+			justify-content: center;
+			padding: 20px;
+		}
+
+		.MyGameRecordList__C-item-m {
+			.MyGameRecordList__C-item-m-top {
+				width: 268px;
+				text-align: left;
+				font-size: 28px;
+				font-style: normal;
+				font-weight: 500px;
+				line-height: 28px;
+				color: white;
+				display: block;
+				padding-left: 28px;
+			}
+			.MyGameRecordList__C-item-m-bottom {
+				width: 259px;
+				color: var(--norm_red-color);
+				font-family: Inter;
+				font-size: 22px;
+				font-style: normal;
+				font-weight: 400;
+				line-height: normal;
+				margin-left: 28px;
+			}
+		}
+
+		.MyGameRecordList__C-item-r {
+			color: var(--colorText-25);
+			text-align: right;
+			font-size: 28px;
+			font-style: normal;
+			font-weight: 400;
+			line-height: normal;
+			padding-right: 10px;
+		}
+	}
+	.MyGameRecordList__C-item:last-child {
+		margin-bottom: 0;
+	}
+
+	.MyGameRecordList__C-detail {
+		color: white;
+		background-color: #0a603e;
+		border-radius: 10px;
+		padding: 24px;
+		margin-bottom: 10px;
+		margin-top: -18px;
+		.detail_title {
+			font-size: 30px;
+			font-style: normal;
+			font-weight: 700;
+			line-height: 45px;
+			border-bottom: 1px solid var(--LotteryBingoTextColor);
+			padding-bottom: 10px;
+			margin-bottom: 24px;
+		}
+		.detail_item {
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
+			align-items: center;
+			margin-bottom: 20px;
+			.item_title {
+				color: var(--LotteryBingoBg-3);
+				font-size: 24px;
+				font-style: normal;
+				font-weight: 400;
+				line-height: 28px; /* 116.667% */
+				background: url("@/assets/icons/home/AllLotteryGames/binguo/record_icon.png") no-repeat left center;
+				background-size: 20px 20px;
+				padding-left: 46px;
+				position: relative;
+			}
+			.item_title::after {
+				content: "";
+				display: block;
+				position: absolute;
+				bottom: -20px;
+				left: 10px;
+				width: 0px;
+				height: 20px;
+				border-left: 1px dashed var(--norm_red-color);
+				html:lang(ar) & {
+					right: 10px;
+					left: unset;
+				}
+			}
+			.item_result {
+				color: #fff;
+				font-size: 24px;
+				font-style: normal;
+				font-weight: 400;
+				line-height: 28px; /* 116.667% */
+				display: flex;
+				flex-direction: row;
+				align-items: center;
+				svg {
+					width: 24px;
+					height: 24px;
+					margin-left: 16px;
+				}
+				.draw_num {
+					width: 32px;
+					height: 32px;
+					border-radius: 10px;
+					text-align: center;
+					line-height: 32px;
+					font-size: 22px;
+					margin-right: 10px;
+				}
+				.draw_result {
+					width: 32px;
+					height: 32px;
+					border-radius: 50%;
+					text-align: center;
+					line-height: 32px;
+					font-size: 22px;
+					background-color: var(--norm_red-color);
+					color: var(--LotteryBingoTextColor);
+					margin: 0 2px;
+				}
+			}
+		}
+		.detail_item:last-child {
+			.item_title::after {
+				height: 0;
+			}
+			.item_result {
+				color: var(--norm_red-color);
+				font-size: 24px;
+				font-style: normal;
+				font-weight: 400;
+				line-height: 28px; /* 116.667% */
+			}
+		}
+	}
+	.item_bet {
+		min-width: 36px;
+		height: 36px;
+		padding: 0 4px;
+		border-radius: 10px;
+		background: var(--LotteryBingoTextColor);
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		text-align: center;
+		font-size: 22px;
+		font-style: normal;
+		font-weight: 400;
+		line-height: normal;
+	}
+	.item_alike {
+		border-radius: 50%;
+		margin-left: 4px;
+	}
+}
+.success {
+	color: #39eb8b !important;
+}
+.fail {
+	color: var(--main-color) !important;
+}
+.wait {
+	color: var(--colorText-25) !important;
+}
+.ing {
+	color: var(--bgcolor-27) !important;
+}

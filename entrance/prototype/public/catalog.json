@@ -1,0 +1,599 @@
+{
+	"groups": [
+		{
+			"title": "活动类型",
+			"items": [
+				{ "title": "VIP会员升级礼包", "type": 29, "kind": "route", "target": "/vip", "note": "VIP 页「我的福利」", "activity": "vip" },
+				{ "title": "每日签到", "type": 7, "kind": "route", "target": "/activity/DailySignIn", "activity": "signIn" },
+				{ "title": "VIP会员每月奖励", "type": 30, "kind": "route", "target": "/vip", "note": "VIP 页「我的福利」", "activity": "vip" },
+				{ "title": "洗码返水", "type": 102, "kind": "route", "target": "/main/Laundry", "activity": "laundry" },
+				{ "title": "电子大奖", "type": 103, "kind": "route", "target": "/main/SuperJackpot", "activity": "jackpot" },
+				{ "title": "代理红包充值", "type": 8, "kind": "none", "note": "H5 无对应页面，只出现在账变记录中" },
+				{ "title": "大转盘", "type": 119, "kind": "route", "target": "/activity/Turntable", "activity": "turntable" },
+				{ "title": "首充奖励", "type": 14, "kind": "route", "target": "/activity/FirstRecharge", "activity": "firstRecharge" },
+				{ "title": "每日奖励", "type": 118, "kind": "route", "target": "/activity/DailyTasks", "activity": "dailyTask" },
+				{ "title": "合伙人奖励", "type": 122, "kind": "route", "target": "/promotion/TeamPartner", "activity": "teamPartner" },
+				{ "title": "邀请奖励", "type": 20, "kind": "route", "target": "/main/InvitationBonus", "activity": "invitationBonus" },
+				{ "title": "邀请转盘奖励", "type": 130, "kind": "route", "target": "/turntable", "activity": "inviteWheel" },
+				{ "title": "新会员首充负盈利送彩金", "type": 116, "kind": "route", "target": "/activity/MemberPackage", "activity": "memberPackage" },
+				{ "title": "每周奖励", "type": 107, "kind": "route", "target": "/activity/DailyTasks", "note": "落在每日任务页的「每周任务」Tab", "activity": "weeklyTask" },
+				{ "title": "回归奖励", "type": 115, "kind": "popup", "popup": "return-award", "note": "首页弹窗", "activity": "returnAward" },
+				{ "title": "下载APP并充值", "type": 131, "kind": "popup", "popup": "app-download-reward", "note": "首页弹窗", "activity": "appDownload" },
+				{ "title": "保险箱收益", "type": 17, "kind": "route", "target": "/main/StrongBox", "activity": "strongBox" },
+				{ "title": "回归新充值奖励", "type": 134, "kind": "popup", "popup": "re-benefit", "note": "首页弹窗", "activity": "reBenefit" },
+				{ "title": "新手礼包", "type": 113, "kind": "route", "target": "/activity/DailyTasks", "note": "落在每日任务页的「新手礼包」Tab", "activity": "newbieGift" },
+				{ "title": "锦标赛奖励", "type": 114, "kind": "route", "target": "/activity/Championship", "activity": "championship" },
+				{ "title": "新会员玩游戏送彩金", "type": 117, "kind": "route", "target": "/activity/MemberPackage", "activity": "memberPackage" },
+				{ "title": "首充赠送", "type": 10, "kind": "route", "target": "/wallet/Recharge", "note": "充值页各通道展示首充赠送比例", "activity": "rechargeGift" }
+			]
+		},
+		{
+			"title": "入口页",
+			"items": [
+				{ "title": "首页", "kind": "route", "target": "/", "activity": "home" },
+				{ "title": "活动", "kind": "route", "target": "/activity", "activity": "activityCenter" },
+				{ "title": "推广", "kind": "route", "target": "/promotion", "note": "合伙人入口" },
+				{ "title": "我的", "kind": "route", "target": "/main", "note": "保险箱入口（洗码、电子大奖、邀请奖励的入口在“活动”页）" },
+				{ "title": "奖励中心", "kind": "route", "target": "/activity/Bonus", "activity": "rewardCenter" },
+				{ "title": "首充弹窗", "kind": "popup", "popup": "first-recharge", "activity": "firstRecharge" }
+			]
+		},
+		{
+			"title": "其他活动",
+			"items": [
+				{ "title": "周卡月卡", "kind": "route", "target": "/activity/DailyTasks", "note": "落在每日任务页的「周卡」Tab（周卡不返回时落在「月卡」）", "activity": "periodCard" },
+				{ "title": "积分商城", "kind": "route", "target": "/activity/PointMall", "activity": "pointMall" },
+				{ "title": "积分抽奖", "kind": "route", "target": "/activity/PointMall/LotteryActivity", "activity": "pointLottery" },
+				{ "title": "充值优惠券", "kind": "route", "target": "/main/RechargeCoupon", "activity": "coupon" },
+				{ "title": "优惠券到账弹窗", "kind": "popup", "popup": "coupon-arrival", "note": "首页弹窗", "activity": "couponArrival" },
+				{ "title": "宝箱", "kind": "popup", "popup": "treasure-chest", "note": "首页弹窗", "activity": "treasureChest" },
+				{ "title": "注册彩金", "kind": "popup", "popup": "register-gift", "note": "首页弹窗", "activity": "registerGift" },
+				{ "title": "红包兑换", "kind": "route", "target": "/main/RedeemGift", "activity": "redeemGift" }
+			]
+		}
+	],
+	"activities": {
+		"vip": {
+			"note": "Type 29、30 共用这块面板；等级与经验同时驱动我的页 VIP 信息条和 VIP 页等级卡。",
+			"params": [
+				{ "name": "level", "label": "当前等级", "type": "number", "default": 3, "min": 0, "max": 10, "drives": "GetVipUsers.vipLevel；GetVipUserLevelDetail[].status/upgradeStatus（≤ 当前为已达成）；GetListVipUserRewards 可领等级" },
+				{ "name": "exp", "label": "经验值", "type": "number", "default": 1200, "min": 0, "max": 99999, "drives": "GetVipUsers.exp、GetVipUserLevelDetail[].currentExp" },
+				{ "name": "upgradeReward", "label": "升级礼包", "type": "select", "default": "claimable", "options": [{ "value": "claimable", "label": "可领取" }, { "value": "claimed", "label": "已领取" }], "drives": "当前等级 rewardType 1 的 status（1 可领、2 已领）" },
+				{ "name": "monthlyReward", "label": "每月奖励", "type": "select", "default": "claimable", "options": [{ "value": "claimable", "label": "可领取" }, { "value": "claimed", "label": "已领取" }], "drives": "当前等级 rewardType 2 的 status" },
+				{ "name": "settleDays", "label": "距结算天数", "type": "number", "default": 9, "min": 0, "max": 31, "unit": "天", "drives": "GetVipUsers.settlementDate（天数，非时间戳）" }
+			],
+			"presets": [
+				{ "label": "新用户 VIP0", "values": { "level": 0, "exp": 0 }, "note": "我的福利区隐藏，所有等级卡为未解锁" },
+				{ "label": "升级礼包可领（默认）", "values": {}, "note": "VIP3 卡为当前等级，升级礼包、每月奖励两个“领取”按钮可点" },
+				{ "label": "每月奖励可领", "values": { "upgradeReward": "claimed" }, "note": "只有每月奖励可领" },
+				{ "label": "全部已领", "values": { "upgradeReward": "claimed", "monthlyReward": "claimed" }, "note": "两个按钮置灰“已领取”" },
+				{ "label": "满级 VIP10", "values": { "level": 10, "exp": 99999 }, "note": "全部等级卡已达成，当前卡显示保级进度" }
+			],
+			"actions": [
+				{ "label": "打开 VIP 页", "route": "/vip" }
+			]
+		},
+		"signIn": {
+			"note": "签到按钮只在本页签到成功后置灰；“今日已签”同时去掉活动页签到入口的红点。",
+			"params": [
+				{ "name": "signedDays", "label": "已签天数", "type": "number", "default": 3, "min": 0, "max": 7, "unit": "天", "drives": "GetContinuousSignInRecharges.signInRechargesList[].isReceive、signIn.signCount/signInSum" },
+				{ "name": "todaySigned", "label": "今日已签", "type": "boolean", "default": false, "drives": "SetContinuousSinIn 返回失败“今日已签到”；GetLoadedSetting.activityRedDot.attendanceBonusCount 为 0" },
+				{ "name": "scheme", "label": "奖励档位", "type": "select", "default": "normal", "options": [{ "value": "normal", "label": "普通 ₹5/8/10/15/20/30/88" }, { "value": "big", "label": "大额 ₹10/20/30/50/80/120/888" }], "drives": "7 天 amount/bouns" }
+			],
+			"presets": [
+				{ "label": "新用户", "values": { "signedDays": 0 }, "note": "7 格都未签，连续 0 天，累计 ₹0.00" },
+				{ "label": "已签 3 天（默认）", "values": {}, "note": "前 3 格点亮，点“签到”第 4 格点亮、余额增加" },
+				{ "label": "差最后一天", "values": { "signedDays": 6 }, "note": "第 7 天大奖格未点亮" },
+				{ "label": "本周期已签满", "values": { "signedDays": 7 }, "note": "7 格全亮，点签到提示“本周期已签满”" },
+				{ "label": "今日已签到", "values": { "todaySigned": true }, "note": "点签到提示“今日已签到”，活动页签到入口无红点" }
+			],
+			"actions": [
+				{ "label": "打开签到页", "route": "/activity/DailySignIn" },
+				{ "label": "打开签到记录", "route": "/activity/DailySignIn/Record" }
+			]
+		},
+		"laundry": {
+			"note": "活动开关控制活动页的洗码入口；一键洗码按钮在可洗码量 ≥ 100 时高亮。",
+			"params": [
+				{ "name": "enabled", "label": "活动开关", "type": "boolean", "default": true, "drives": "isOpenWashCode" },
+				{ "name": "washable", "label": "可洗码量（全部）", "type": "number", "default": 136.8, "min": 0, "max": 99999.99, "step": 0.01, "unit": "₹", "drives": "GetCodeWashAmount.codeWashAmount；彩票/视讯/电子按 58 : 32.8 : 46 比例拆分" },
+				{ "name": "manualButton", "label": "手动洗码按钮", "type": "boolean", "default": true, "drives": "GetHomeSettings.isShowAppHandCodeWashingSwitch" },
+				{ "name": "hasRecords", "label": "有洗码记录", "type": "boolean", "default": true, "drives": "GetCodeWashAmount.washList、GetCodeWashRecordList；false 时同时把 dayRebate、totalRebate 置 0" }
+			],
+			"presets": [
+				{ "label": "可洗码（默认）", "values": {}, "note": "136.80，按钮高亮，点击弹“洗码成功”，可洗码量归零" },
+				{ "label": "未达门槛", "values": { "washable": 58 }, "note": "按钮置灰（门槛 100）" },
+				{ "label": "今日已洗", "values": { "washable": 0 }, "note": "0.00，按钮置灰" },
+				{ "label": "自动洗码站点", "values": { "manualButton": false }, "note": "不显示洗码按钮" },
+				{ "label": "新用户", "values": { "washable": 0, "hasRecords": false }, "note": "全部为 0，记录区为空" }
+			],
+			"actions": [
+				{ "label": "打开洗码页", "route": "/main/Laundry" },
+				{ "label": "打开洗码记录", "route": "/main/Laundry/LaundryRecord" }
+			]
+		},
+		"jackpot": {
+			"note": "活动开关同时控制活动页入口和首页大奖模块；首页中奖提示每个会话只弹一次。",
+			"params": [
+				{ "name": "enabled", "label": "活动开关", "type": "boolean", "default": true, "drives": "isOpenJackpotReward" },
+				{ "name": "records", "label": "中奖记录", "type": "select", "default": "mixed", "options": [{ "value": "mixed", "label": "2 未领 + 2 已领 + 1 过期" }, { "value": "unclaimed", "label": "全部未领" }, { "value": "claimed", "label": "全部已领" }, { "value": "empty", "label": "无记录" }], "drives": "GetThirdGameRewardsRecordPageList[].isReceive（0/1/2）" },
+				{ "name": "validDays", "label": "奖励有效期（天）", "type": "number", "default": 2, "min": 1, "max": 30, "drives": "GetHomeSettings.rewardValidityTime；未领记录的 expirationFormatTime = 中奖时间 + 天数" },
+				{ "name": "homePrompt", "label": "首页中奖提示", "type": "boolean", "default": false, "drives": "GetLoadedSetting.isExistGrandAward" },
+				{ "name": "maxAmount", "label": "首页最高奖金", "type": "number", "default": 5000, "min": 0, "max": 9999999, "unit": "₹", "drives": "GetHomeSettings.jackportMaxReswadAmount" }
+			],
+			"presets": [
+				{ "label": "混合记录（默认）", "values": {}, "note": "未领取/已领取/已过期三种卡片，“一键领取”可点" },
+				{ "label": "全部未领", "values": { "records": "unclaimed" }, "note": "每张卡都有“领取”，一键领取弹出“共 N 笔、合计 ₹X”" },
+				{ "label": "全部已领", "values": { "records": "claimed" }, "note": "一键领取置灰" },
+				{ "label": "无中奖记录", "values": { "records": "empty" }, "note": "空态“暂无超级大奖”" },
+				{ "label": "首页中奖提示", "values": { "homePrompt": true }, "note": "首页弹出“恭喜获得超级大奖”，点 OK 进入大奖页（每个会话只弹一次，控制台会先清 pop_laundry）", "route": "/" },
+				{ "label": "关闭活动", "values": { "enabled": false }, "note": "活动页入口和首页大奖模块消失", "route": "/" }
+			],
+			"actions": [
+				{ "label": "打开大奖页", "route": "/main/SuperJackpot" },
+				{ "label": "回首页看大奖轮播", "route": "/" }
+			]
+		},
+		"turntable": {
+			"note": "活动开关控制首页悬浮转盘入口；“下次抽奖结果”选“按权重”时按奖品权重随机。",
+			"params": [
+				{ "name": "enabled", "label": "活动开关", "type": "boolean", "default": true, "drives": "GetHomeSettings.isOpenTurntable、homeBigTurntableSwitch" },
+				{ "name": "spins", "label": "剩余次数", "type": "number", "default": 3, "min": 0, "max": 10, "unit": "次", "drives": "GetTurnTableUserRotateNum.surplusRotateNum；sumRotateNum = max(3, spins)" },
+				{ "name": "deposit", "label": "今日充值", "type": "number", "default": 500, "min": 0, "max": 999999.99, "step": 0.01, "unit": "₹", "drives": "GetNowdayRechargeAmount" },
+				{ "name": "result", "label": "下次抽奖结果", "type": "select", "default": "random", "options": [{ "value": "random", "label": "按权重" }, { "value": "cash100", "label": "₹100" }, { "value": "iphone", "label": "iPhone 16" }, { "value": "thanks", "label": "谢谢参与" }, { "value": "unbound", "label": "未绑定提现方式" }], "drives": "GetTurnTableDraw；unbound 返回 fail(msg, { code: 1, msgCode: 904, data: { bindingType: 2 } })" },
+				{ "name": "hasRecords", "label": "有抽奖记录", "type": "boolean", "default": true, "drives": "GetTurnTableRecord 初始 6 条或空" }
+			],
+			"presets": [
+				{ "label": "有 3 次机会（默认）", "values": {}, "note": "次数 3/3，抽奖后弹“恭喜获得 …”" },
+				{ "label": "次数用完", "values": { "spins": 0 }, "note": "次数 0/3，点抽奖提示“抽奖次数不足”" },
+				{ "label": "必中 iPhone", "values": { "result": "iphone" }, "note": "指针停在 iPhone 格，弹窗显示实物奖" },
+				{ "label": "必中 ₹100", "values": { "result": "cash100" }, "note": "停在 ₹100，余额 +100，记录新增一条" },
+				{ "label": "未绑定提现方式", "values": { "result": "unbound" }, "note": "提示“绑定 UPI 后可抽奖”" },
+				{ "label": "新用户", "values": { "spins": 0, "deposit": 0, "hasRecords": false }, "note": "充值 ₹0.00，记录为空" }
+			],
+			"actions": [
+				{ "label": "打开大转盘页", "route": "/activity/Turntable" },
+				{ "label": "回首页看悬浮入口", "route": "/" },
+				{ "label": "打开活动详情", "route": "/activity/Turntable/Detail" }
+			]
+		},
+		"firstRecharge": {
+			"note": "首充奖励页与首页首充弹窗共用这块面板；页面只放行第一个可领档，首充 ₹5000 时后几档仍显示“去充值”（现网行为）。",
+			"params": [
+				{ "name": "enabled", "label": "活动开启", "type": "boolean", "default": true, "drives": "false 时 GetFirstRechargeList 返回 []" },
+				{ "name": "deposit", "label": "首充金额", "type": "select", "default": "500", "options": [{ "value": "0", "label": "未首充" }, { "value": "100", "label": "₹100" }, { "value": "500", "label": "₹500" }, { "value": "1000", "label": "₹1000" }, { "value": "5000", "label": "₹5000" }], "drives": "充值额 ≥ 档位门槛的档位 canReceive: true" },
+				{ "name": "claimed", "label": "已领取", "type": "boolean", "default": false, "drives": "已达档位 isFinshed: true；同时让首页首充弹窗不再弹" }
+			],
+			"presets": [
+				{ "label": "未首充", "values": { "deposit": "0" }, "note": "4 档都显示“去充值”，进度条为空" },
+				{ "label": "首充 ₹500 可领（默认）", "values": {}, "note": "第 1 档“领取”，其余“去充值”（页面只放行第一个可领档）" },
+				{ "label": "已领取", "values": { "claimed": true }, "note": "第 1 档“已领取”" },
+				{ "label": "首页首充弹窗", "values": {}, "note": "首页弹出首充弹窗（控制台先清 dialog:firstSave）", "popup": "first-recharge" },
+				{ "label": "活动关闭", "values": { "enabled": false }, "note": "首充页只剩规则区，首页不弹" }
+			],
+			"actions": [
+				{ "label": "打开首充页", "route": "/activity/FirstRecharge" },
+				{ "label": "弹出首充弹窗", "popup": "first-recharge" }
+			]
+		},
+		"dailyTask": {
+			"note": "“活动奖励开关”同时控制活动页“活动奖励”入口和每日任务页每日、每周列表的加载；从清单打开时落在“每日任务”Tab。",
+			"params": [
+				{ "name": "enabled", "label": "活动奖励开关", "type": "boolean", "default": true, "drives": "isOpenActivityAward（同时决定每日、每周列表是否加载）" },
+				{ "name": "mix", "label": "任务状态", "type": "select", "default": "mixed", "options": [{ "value": "mixed", "label": "混合" }, { "value": "claimable", "label": "全部可领" }, { "value": "claimed", "label": "全部已领" }, { "value": "progress", "label": "全部未完成" }, { "value": "empty", "label": "无任务" }], "drives": "GetDailyAwardList[].status（1 未完成、2 可领、3 已领）、GetDailyAwardCount" }
+			],
+			"presets": [
+				{ "label": "混合（默认）", "values": {}, "note": "每日任务 Tab 按“可领 > 未完成 > 已领”排序" },
+				{ "label": "全部可领", "values": { "mix": "claimable" }, "note": "5 个“领取”按钮，领取弹成功弹窗、余额增加" },
+				{ "label": "全部已领", "values": { "mix": "claimed" }, "note": "全部置灰“已领取”" },
+				{ "label": "无任务", "values": { "mix": "empty" }, "note": "“每日任务”Tab 消失" },
+				{ "label": "入口关闭", "values": { "enabled": false }, "note": "活动页“活动奖励”入口消失；每日任务页不再拉每日、每周列表" }
+			],
+			"actions": [
+				{ "label": "打开每日任务页", "route": "/activity/DailyTasks" },
+				{ "label": "打开领取记录", "route": "/activity/DailyTasks/Record" }
+			]
+		},
+		"teamPartner": {
+			"note": "合伙人入口开关控制推广页的合伙人入口；有效邀请人数按邀请人数 × 0.77 取整。",
+			"params": [
+				{ "name": "enabled", "label": "合伙人入口", "type": "boolean", "default": true, "drives": "GetHomeSettings.isPartnerReward" },
+				{ "name": "invited", "label": "邀请人数", "type": "number", "default": 26, "min": 0, "max": 9999, "unit": "人", "drives": "GetPartnerRewards.numberOfInvitations；有效人数 = round(invited × 0.77)" },
+				{ "name": "totalAmount", "label": "累计奖金", "type": "number", "default": 1260, "min": 0, "max": 9999999, "step": 0.01, "unit": "₹", "drives": "GetPartnerRewards.totalAmount" },
+				{ "name": "tiers", "label": "返佣档位", "type": "select", "default": "three", "options": [{ "value": "three", "label": "首存/二存/三存" }, { "value": "first", "label": "仅首存" }, { "value": "noBet", "label": "无流水条件" }], "drives": "items[]（noBet 时 betAmount: -1）" },
+				{ "name": "detail", "label": "邀请明细", "type": "select", "default": "mixed", "options": [{ "value": "mixed", "label": "8 条三种状态" }, { "value": "empty", "label": "无" }], "drives": "GetPartnerRewardsDeatilList" }
+			],
+			"presets": [
+				{ "label": "默认", "values": {} },
+				{ "label": "新合伙人", "values": { "invited": 0, "totalAmount": 0, "detail": "empty" } },
+				{ "label": "高业绩", "values": { "invited": 120, "totalAmount": 58800 } },
+				{ "label": "仅首存返佣", "values": { "tiers": "first" }, "note": "只剩“首存”一行" },
+				{ "label": "入口关闭", "values": { "enabled": false }, "note": "推广页不显示合伙人入口", "route": "/promotion" }
+			]
+		},
+		"invitationBonus": {
+			"note": "活动开关控制活动页“邀请奖励”入口；档位列表不能为空，没有进度时用 0 人表达。",
+			"params": [
+				{ "name": "enabled", "label": "活动开关", "type": "boolean", "default": true, "drives": "isTaskState" },
+				{ "name": "invited", "label": "有效邀请人数", "type": "number", "default": 4, "min": 0, "max": 15, "unit": "人", "drives": "GetTaskList.taskList[].efficientPeople/rechargePeople；达到 taskPeople 的档位可领" },
+				{ "name": "claimedTiers", "label": "已领档数", "type": "number", "default": 0, "min": 0, "max": 4, "unit": "档", "drives": "前 N 个已达档位 isReceive: 1" },
+				{ "name": "hasRecords", "label": "有邀请明细", "type": "boolean", "default": true, "drives": "GetCurrentActivityLevel1People" }
+			],
+			"presets": [
+				{ "label": "新用户", "values": { "invited": 0, "hasRecords": false }, "note": "4 档“未完成”" },
+				{ "label": "已邀 4 人（默认）", "values": {}, "note": "前 2 档“领取”" },
+				{ "label": "已邀 10 人", "values": { "invited": 10 }, "note": "4 档都可领" },
+				{ "label": "全部已领", "values": { "invited": 10, "claimedTiers": 4 } },
+				{ "label": "入口关闭", "values": { "enabled": false }, "route": "/activity" }
+			]
+		},
+		"inviteWheel": {
+			"note": "活动开关控制活动页入口和首页悬浮入口；剩余时间从应用时刻起算，刷新不重置，到 0 后金额清零。",
+			"params": [
+				{ "name": "enabled", "label": "活动开关", "type": "boolean", "default": true, "drives": "GetHomeSettings.isOpenInvitedWheel" },
+				{ "name": "spins", "label": "剩余次数", "type": "number", "default": 2, "min": 0, "max": 10, "unit": "次", "drives": "GetInvitedWheelInfo.userInvitedWheelCount" },
+				{ "name": "amount", "label": "已攒金额", "type": "number", "default": 86.5, "min": 0, "max": 9999, "step": 0.01, "unit": "₹", "drives": "userInvitedWheelAmount" },
+				{ "name": "target", "label": "提现门槛", "type": "number", "default": 100, "min": 1, "max": 9999, "unit": "₹", "drives": "invitedWheelTotalPrizeAmount" },
+				{ "name": "remain", "label": "剩余时间", "type": "countdown", "default": 86400, "min": 0, "max": 604800, "drives": "expiredTime（毫秒）+ 信封 serviceNowTime（YYYY/MM/DD HH:mm:ss）；0 表示不倒计时（expiredTime: 0）" },
+				{ "name": "firstGift", "label": "首次进入礼包", "type": "boolean", "default": false, "drives": "isFirstInvitedWheel" }
+			],
+			"presets": [
+				{ "label": "进行中（默认）", "values": {}, "note": "₹86.50，倒计时 24:00:00 起走" },
+				{ "label": "差 ₹1 可提现", "values": { "amount": 99, "spins": 1 }, "note": "转一次后金额达到门槛" },
+				{ "label": "已满可提现", "values": { "amount": 100 }, "note": "点转盘或“提现”弹出提现弹窗" },
+				{ "label": "次数用完", "values": { "spins": 0 }, "note": "点转盘弹“还差 ₹13.50”提示" },
+				{ "label": "首次进入每日礼包", "values": { "firstGift": true }, "note": "进页弹出 4 个礼盒" },
+				{ "label": "即将过期", "values": { "remain": 30 }, "note": "30 秒后倒计时到 0，重拉后金额清零、停在 00:00:00" }
+			],
+			"actions": [
+				{ "label": "打开邀请转盘", "route": "/turntable" },
+				{ "label": "打开提现记录", "route": "/turntable/withdrawHistory" },
+				{ "label": "回首页看悬浮入口", "route": "/" }
+			]
+		},
+		"memberPackage": {
+			"note": "Type 116、117 共用这块面板：申请状态作用于首充负盈利（116），返利记录作用于玩游戏送彩金（117）。",
+			"params": [
+				{ "name": "enabled", "label": "活动开关", "type": "boolean", "default": true, "drives": "newMemberGiftPackageSwitch" },
+				{ "name": "applyState", "label": "首充负盈利申请（116）", "type": "select", "default": "apply", "options": [{ "value": "none", "label": "未满足" }, { "value": "apply", "label": "可申请" }, { "value": "pending", "label": "申请中" }, { "value": "approved", "label": "申请成功" }, { "value": "rejected", "label": "已驳回" }], "drives": "firstDepositConfig.rewardState（0/4/1/2/3）" },
+				{ "name": "autoDistribute", "label": "自动发放", "type": "boolean", "default": false, "drives": "firstDepositConfig.isAutomaticDistribution（仅 none 时显示的提示文案）" },
+				{ "name": "records", "label": "返利记录（117）", "type": "select", "default": "mixed", "options": [{ "value": "mixed", "label": "已领/待领/未达标" }, { "value": "claimable", "label": "全部待领取" }, { "value": "apply", "label": "待申请" }, { "value": "review", "label": "审核中 + 已驳回" }, { "value": "empty", "label": "无" }], "drives": "newUserRewardRecordList[].state/operateState" },
+				{ "name": "started", "label": "活动已开始", "type": "boolean", "default": true, "drives": "firstDepositConfig.activityStartDate（false 时为空串）" }
+			],
+			"presets": [
+				{ "label": "默认", "values": {} },
+				{ "label": "申请中", "values": { "applyState": "pending" } },
+				{ "label": "已驳回", "values": { "applyState": "rejected" } },
+				{ "label": "返利待领取", "values": { "records": "claimable" } },
+				{ "label": "新会员无记录", "values": { "applyState": "none", "records": "empty" } },
+				{ "label": "活动未开始", "values": { "started": false }, "note": "活动时间显示“活动未开始”" }
+			]
+		},
+		"weeklyTask": {
+			"note": "活动页入口与每周列表是否加载由“每日奖励”面板的活动奖励开关控制；从清单打开时落在“每周任务”Tab。",
+			"params": [
+				{ "name": "mix", "label": "任务状态", "type": "select", "default": "mixed", "options": [{ "value": "mixed", "label": "混合" }, { "value": "claimable", "label": "全部可领" }, { "value": "claimed", "label": "全部已领" }, { "value": "progress", "label": "全部未完成" }, { "value": "empty", "label": "无任务" }], "drives": "GetWeeklyAwardList[].status" }
+			],
+			"presets": [
+				{ "label": "混合（默认）", "values": {} },
+				{ "label": "全部可领", "values": { "mix": "claimable" } },
+				{ "label": "全部已领", "values": { "mix": "claimed" } },
+				{ "label": "无任务", "values": { "mix": "empty" }, "note": "“每周任务”Tab 消失" }
+			]
+		},
+		"returnAward": {
+			"note": "首页弹窗：奖励金额大于 0 时入队；领取失败时弹窗保持打开。",
+			"params": [
+				{ "name": "amount", "label": "奖励金额", "type": "number", "default": 188, "min": 0.01, "max": 9999999, "step": 0.01, "unit": "₹", "drives": "GetLoadedSetting.returnAwards" },
+				{ "name": "claimResult", "label": "领取结果", "type": "select", "default": "ok", "options": [{ "value": "ok", "label": "成功" }, { "value": "fail", "label": "失败（“活动已结束”）" }], "drives": "ReceiveReturnAwards" }
+			],
+			"presets": [
+				{ "label": "回归奖励 ₹188（默认）", "values": {}, "popup": "return-award" },
+				{ "label": "大额 ₹88,888.88", "values": { "amount": 88888.88 }, "note": "看长数字排版" },
+				{ "label": "领取失败", "values": { "claimResult": "fail" }, "note": "提示后弹窗保持打开" }
+			],
+			"actions": [
+				{ "label": "弹出弹窗", "popup": "return-award" }
+			]
+		},
+		"appDownload": {
+			"note": "首页弹窗：站点开启下载奖励且奖励金额大于 0 时才弹出。",
+			"params": [
+				{ "name": "amount", "label": "奖励金额", "type": "number", "default": 58, "min": 0.01, "max": 999999, "step": 0.01, "unit": "₹", "drives": "GetLoadedSetting.downAppRewardBonusAmount" },
+				{ "name": "siteSwitch", "label": "站点开启下载奖励", "type": "boolean", "default": true, "drives": "GetHomeSettings.isOpenDownAppRewardSwitch" },
+				{ "name": "claimResult", "label": "领取结果", "type": "select", "default": "ok", "options": [{ "value": "ok", "label": "成功" }, { "value": "fail", "label": "失败" }], "drives": "ReceiveDownAppReward" }
+			],
+			"presets": [
+				{ "label": "下载奖励 ₹58（默认）", "values": {}, "popup": "app-download-reward" },
+				{ "label": "站点关闭", "values": { "siteSwitch": false }, "note": "弹窗不出现" },
+				{ "label": "领取失败", "values": { "claimResult": "fail" } }
+			],
+			"actions": [
+				{ "label": "弹出弹窗", "popup": "app-download-reward" }
+			]
+		},
+		"strongBox": {
+			"note": "入口开关控制我的页的保险箱入口；保险箱余额是会话初始值，转入转出后按会话变化。",
+			"params": [
+				{ "name": "enabled", "label": "保险箱入口", "type": "boolean", "default": true, "drives": "GetWealthState.state（'1'/'0'）" },
+				{ "name": "balance", "label": "保险箱余额", "type": "number", "default": 5000, "min": 0, "max": 9999999, "step": 0.01, "unit": "₹", "drives": "会话初始 safeBalance → GetSafeInfo.safeAmount、GetSafeAmount.balance" },
+				{ "name": "earnings", "label": "已产生收益", "type": "number", "default": 3.2, "min": 0, "max": 99999, "step": 0.01, "unit": "₹", "drives": "GetSafeInfo.safeEarnings、GetSafeAmount.safeEarnings" },
+				{ "name": "codeLock", "label": "转入需打码", "type": "number", "default": 0, "min": 0, "max": 999999, "unit": "₹", "drives": "GetSafeUserAmount.amountOfCode" },
+				{ "name": "newMode", "label": "新版收益模式", "type": "boolean", "default": false, "drives": "GetSafeInfo.isOpenNewSetting、GetWealthState.isOpenNewSetting（'1'/'0'）" }
+			],
+			"presets": [
+				{ "label": "默认", "values": {} },
+				{ "label": "暂无收益", "values": { "earnings": 0 }, "note": "点“转出”先弹“暂无收益，是否转出”" },
+				{ "label": "需完成打码才能转入", "values": { "codeLock": 500 }, "note": "转入按钮置灰并提示" },
+				{ "label": "新版收益模式", "values": { "newMode": true }, "note": "日利率按 /48 显示，转出份数不可编辑" },
+				{ "label": "空保险箱", "values": { "balance": 0, "earnings": 0 } },
+				{ "label": "入口关闭", "values": { "enabled": false }, "note": "我的页不显示保险箱", "route": "/main" }
+			]
+		},
+		"reBenefit": {
+			"note": "首页弹窗 + 悬浮球：关闭弹窗后首页悬浮球同步倒计时；剩余时间从应用时刻起算，刷新不重置，到 0 后活动结束。",
+			"params": [
+				{ "name": "rate", "label": "赠送比例", "type": "number", "default": 20, "min": 1, "max": 500, "unit": "%", "drives": "bonusAmountRate（%）" },
+				{ "name": "limit", "label": "封顶金额", "type": "number", "default": 500, "min": 1, "max": 9999999, "unit": "₹", "drives": "bonusAmountLimit" },
+				{ "name": "finished", "label": "已充值得奖", "type": "boolean", "default": false, "drives": "isFinish" },
+				{ "name": "reward", "label": "已得奖金", "type": "number", "default": 100, "min": 0, "max": 9999999, "step": 0.01, "unit": "₹", "drives": "rewardAmount（finished 为 true 时显示）" },
+				{ "name": "remain", "label": "剩余时间", "type": "countdown", "default": 86340, "min": 0, "max": 604800, "drives": "activeStartTime = 截止 − 24 小时、activeEndTime = 截止（YYYY-MM-DD HH:mm:ss）+ 信封 serviceNowTime；0 表示活动已结束，returnNewRechargeAwards 返回 null" }
+			],
+			"presets": [
+				{ "label": "刚回归（默认）", "values": {}, "note": "20% / ₹500 / 23:59:00 起走，关闭后首页悬浮球同步倒计时", "popup": "re-benefit" },
+				{ "label": "即将结束", "values": { "remain": 30 }, "note": "30 秒后悬浮球消失" },
+				{ "label": "已充值得奖", "values": { "finished": true }, "note": "显示“已获得 ₹100”与“我知道了”" },
+				{ "label": "高比例", "values": { "rate": 50, "limit": 2000 } }
+			],
+			"actions": [
+				{ "label": "弹出弹窗", "popup": "re-benefit" }
+			]
+		},
+		"newbieGift": {
+			"note": "每日任务页顶部的新手礼包卡；从清单打开时落在“新手礼包”Tab。",
+			"params": [
+				{ "name": "state", "label": "礼包状态", "type": "select", "default": "claimable", "options": [{ "value": "progress", "label": "未完成" }, { "value": "claimable", "label": "待领取" }, { "value": "claimed", "label": "已领取" }, { "value": "none", "label": "无礼包" }], "drives": "GetNewbieGiftPackage.status（0/1/2）；none 返回 null" },
+				{ "name": "amount", "label": "礼包金额", "type": "number", "default": 88, "min": 0, "max": 99999, "step": 0.01, "unit": "₹", "drives": "amount（领取弹窗显示 amount / totalNumber）" }
+			],
+			"presets": [
+				{ "label": "待领取（默认）", "values": {}, "note": "“领取”，成功弹窗 ₹88.00" },
+				{ "label": "未完成", "values": { "state": "progress" }, "note": "“去完成”，点击跳充值" },
+				{ "label": "已领取", "values": { "state": "claimed" }, "note": "置灰" },
+				{ "label": "无礼包", "values": { "state": "none" }, "note": "“新手礼包”Tab 消失，默认落到每日任务" }
+			]
+		},
+		"championship": {
+			"note": "活动开关控制活动页赛事卡和我的页“我的锦标赛”；进行中剩余时间从应用时刻起算，归零后该赛事移到“已结束”。",
+			"params": [
+				{ "name": "enabled", "label": "活动开关", "type": "boolean", "default": true, "drives": "isOpenChampion（开关字段与 userInfo）" },
+				{ "name": "entrance", "label": "活动页入口卡", "type": "select", "default": "signup", "options": [{ "value": "signup", "label": "报名中" }, { "value": "running", "label": "进行中" }, { "value": "ended", "label": "已结束" }], "drives": "ChampionEntrance 返回对应赛事" },
+				{ "name": "remain", "label": "进行中剩余时间", "type": "countdown", "default": 518400, "min": 0, "max": 2592000, "drives": "进行中赛事 endTime + 信封 serviceNowTime" },
+				{ "name": "joined", "label": "已报名进行中赛事", "type": "boolean", "default": false, "drives": "isJoin、GetChampionTaskDetail.userJoinInfo" },
+				{ "name": "joinResult", "label": "报名结果", "type": "select", "default": "ok", "options": [{ "value": "ok", "label": "成功" }, { "value": "803", "label": "打码不足" }, { "value": "804", "label": "充值不足" }, { "value": "805", "label": "绑定不足" }, { "value": "807", "label": "指定游戏投注" }], "drives": "JoinChampionTask：fail(msg, { msgCode, data })，data 依次为 ₹100、₹500、2（UPI）、{ a: 'Win Go', b: 'K3', c: '₹100' }" }
+			],
+			"presets": [
+				{ "label": "默认", "values": {}, "note": "报名中入口、未报名" },
+				{ "label": "入口进行中", "values": { "entrance": "running" }, "note": "活动页卡片显示倒计时", "route": "/activity" },
+				{ "label": "即将结束", "values": { "remain": 30 }, "note": "归零后列表刷新，该赛事移到“已结束”" },
+				{ "label": "已报名", "values": { "joined": true }, "note": "按钮“已报名”，详情显示我的排名、投注额" },
+				{ "label": "报名失败·充值不足", "values": { "joinResult": "804" } },
+				{ "label": "报名失败·指定游戏", "values": { "joinResult": "807" } }
+			],
+			"actions": [
+				{ "label": "打开赛事列表", "route": "/activity/Championship" },
+				{ "label": "打开我的锦标赛", "route": "/main/MyCps" }
+			]
+		},
+		"rechargeGift": {
+			"note": "充值页各通道展示首充赠送比例；第 4 个通道固定无赠送，用来对照。",
+			"params": [
+				{ "name": "giftRate", "label": "首充赠送比例", "type": "number", "default": 8, "min": 0, "max": 500, "step": 0.1, "unit": "%", "drives": "前 3 个渠道的 maxRechargeRifts、rechargeRifts、newRechargeRiftRate（÷100）；第 4 个渠道固定 0，用来对照“无赠送”渠道" },
+				{ "name": "vipRate", "label": "VIP 加赠比例", "type": "number", "default": 0, "min": 0, "max": 100, "step": 0.1, "unit": "%", "drives": "GetPayTypeName.typelist[].vipRechargeRate（÷100）" },
+				{ "name": "delayDays", "label": "延迟到账天数", "type": "number", "default": 0, "min": 0, "max": 30, "unit": "天", "drives": "rechargetypelist[].delayedRewardDays" },
+				{ "name": "quickGift", "label": "快捷金额赠送", "type": "boolean", "default": true, "drives": "quickConfigList[].giftAmount（false 时为 0）" },
+				{ "name": "records", "label": "有充值记录", "type": "boolean", "default": true, "drives": "GetRechargeRecord：4 条（处理中、成功、失败、已取消，即 state 0/1/2/6）或空列表" }
+			],
+			"presets": [
+				{ "label": "首充 +8%（默认）", "values": {} },
+				{ "label": "首充 + VIP 叠加", "values": { "vipRate": 2 }, "note": "角标“8%+2%”" },
+				{ "label": "延迟 3 天到账", "values": { "delayDays": 3 } },
+				{ "label": "已首充无赠送", "values": { "giftRate": 0, "quickGift": false }, "note": "角标消失" },
+				{ "label": "高比例 +188%", "values": { "giftRate": 188 } },
+				{ "label": "无充值记录", "values": { "records": false }, "note": "充值记录区显示空态" }
+			]
+		},
+		"home": {
+			"note": "首页的悬浮入口与大奖模块由各自活动控制：回归新充值奖励、奖励中心、邀请转盘奖励、大转盘、电子大奖。",
+			"params": [
+				{ "name": "announcement", "label": "公告弹窗", "type": "boolean", "default": false, "drives": "GetSitePopMsgList（路由常量 api.GetSiteMessage）返回 2 条公告 / []" },
+				{ "name": "noticeBar", "label": "滚动公告", "type": "boolean", "default": true, "drives": "GetSiteMessageList 有数据 / 空列表" }
+			],
+			"presets": [
+				{ "label": "默认", "values": {}, "note": "无公告弹窗" },
+				{ "label": "公告弹窗", "values": { "announcement": true }, "note": "首页先弹公告，关闭后才轮到其他奖励弹窗" },
+				{ "label": "无滚动公告", "values": { "noticeBar": false }, "note": "滚动条不显示文字" }
+			]
+		},
+		"activityCenter": {
+			"note": "活动页顶部的今日/累计奖励、入口红点、引导气泡与未领提醒；各入口的显隐由对应活动的开关控制。",
+			"params": [
+				{ "name": "todayRewards", "label": "今日奖励", "type": "number", "default": 128.5, "min": 0, "max": 9999999, "step": 0.01, "unit": "₹", "drives": "todayRewards（GetLoadedSetting/GetActiveSetting）" },
+				{ "name": "totalRewards", "label": "累计奖励", "type": "number", "default": 3560.8, "min": 0, "max": 9999999, "step": 0.01, "unit": "₹", "drives": "totalRewards" },
+				{ "name": "redDot", "label": "入口红点", "type": "select", "default": "count", "options": [{ "value": "count", "label": "数字（活动奖励 2、其余 1）" }, { "value": "dot", "label": "全部圆点" }, { "value": "none", "label": "无" }], "drives": "activityRedDot.*、unJackpotCount、unWeeklyAwardCount、newbieGiftPackCount" },
+				{ "name": "guide", "label": "新手引导气泡", "type": "boolean", "default": false, "drives": "isFinishUserGuidelines（接口 false = 显示气泡，前端取反）" },
+				{ "name": "reminder", "label": "未领奖励提醒", "type": "boolean", "default": false, "drives": "isFirstUserDayRequest: true（需同时有未领数量）" },
+				{ "name": "banners", "label": "活动 Banner", "type": "select", "default": "six", "options": [{ "value": "six", "label": "6 张" }, { "value": "empty", "label": "无" }], "drives": "GetActivityList" }
+			],
+			"presets": [
+				{ "label": "默认", "values": {}, "note": "数字红点" },
+				{ "label": "无红点", "values": { "redDot": "none" } },
+				{ "label": "新手引导气泡", "values": { "guide": true }, "note": "“活动奖励”入口上方出现引导气泡，点击进每日任务" },
+				{ "label": "未领奖励提醒弹窗", "values": { "reminder": true }, "note": "进活动页弹“还有 N 笔奖励未领取”" },
+				{ "label": "无 Banner", "values": { "banners": "empty" }, "note": "空态" }
+			]
+		},
+		"rewardCenter": {
+			"note": "每行状态跟随对应活动的领取记录（如新手礼包、回归奖励、下载奖励），不另设参数。",
+			"params": [
+				{ "name": "enabled", "label": "奖励中心入口", "type": "boolean", "default": true, "drives": "GetHomeSettings.isShowRewardCenter" },
+				{ "name": "records", "label": "奖励记录", "type": "select", "default": "all", "options": [{ "value": "all", "label": "9 条" }, { "value": "empty", "label": "无" }], "drives": "GetRewardCenterList" }
+			],
+			"presets": [
+				{ "label": "默认", "values": {} },
+				{ "label": "无记录", "values": { "records": "empty" }, "note": "三个状态 Tab 都为空" },
+				{ "label": "入口关闭", "values": { "enabled": false }, "note": "首页“奖励中心”悬浮入口和活动页“奖金详情”按钮消失", "route": "/" }
+			]
+		},
+		"periodCard": {
+			"note": "从清单打开时落在“周卡”Tab（周卡不返回时落在“月卡”）；当前第几天、漏领天数同时作用于两张卡。",
+			"params": [
+				{ "name": "weekCard", "label": "周卡状态", "type": "select", "default": "today", "options": [{ "value": "hidden", "label": "不返回（无资格）" }, { "value": "buyable", "label": "可购买" }, { "value": "realtime", "label": "持卡·实时返现待领" }, { "value": "today", "label": "持卡·今日可领" }, { "value": "taken", "label": "持卡·今日已领" }, { "value": "finished", "label": "已完成" }, { "value": "expired", "label": "已过期" }], "drives": "GetPeriodCardInfo 中 cardType 1 是否返回及其 holdingOrders" },
+				{ "name": "monthCard", "label": "月卡状态", "type": "select", "default": "buyable", "options": [{ "value": "hidden", "label": "不返回（无资格）" }, { "value": "buyable", "label": "可购买" }, { "value": "realtime", "label": "持卡·实时返现待领" }, { "value": "today", "label": "持卡·今日可领" }, { "value": "taken", "label": "持卡·今日已领" }, { "value": "finished", "label": "已完成" }, { "value": "expired", "label": "已过期" }], "drives": "cardType 2" },
+				{ "name": "day", "label": "当前第几天", "type": "number", "default": 5, "min": 1, "max": 30, "unit": "天", "drives": "持卡 days[]：之前的格为已领或漏领，当天为 3（今日可领）或 1（今日已领），之后为 4；周卡按 7 截断" },
+				{ "name": "missedDays", "label": "漏领天数", "type": "number", "default": 1, "min": 0, "max": 5, "unit": "天", "drives": "紧挨当天之前的 N 格为 2（已过作废）；takeDayCount = 当天之前的格数 − N" },
+				{ "name": "stock", "label": "档位库存", "type": "select", "default": "mixed", "options": [{ "value": "normal", "label": "全部可买" }, { "value": "mixed", "label": "周卡第 2 档今日售罄、第 3 档已售完" }, { "value": "none", "label": "无档位" }], "drives": "tiers[].todaySoldOut/soldOut；none 时 tiers: []" },
+				{ "name": "buyResult", "label": "购买结果", "type": "select", "default": "ok", "options": [{ "value": "ok", "label": "成功" }, { "value": "1031", "label": "未达充值门槛" }, { "value": "142", "label": "余额不足" }, { "value": "1032", "label": "今日售罄" }, { "value": "15", "label": "条件不满足" }], "drives": "BuyPeriodCard：fail(msg, { msgCode, data })，1031 带 { rechargeGapAmount: 500 }；已持卡的卡型恒返回 15（页面本已禁用按钮）" }
+			],
+			"presets": [
+				{ "label": "周卡今日可领（默认）", "values": {}, "note": "第 5 天高亮可领，第 4 天作废，统计 3/7" },
+				{ "label": "刚购买·领实时返现", "values": { "weekCard": "realtime" }, "note": "按钮“立即领取 +₹300”，领完进入等待" },
+				{ "label": "今日已领·等待次日", "values": { "weekCard": "taken" }, "note": "按钮显示到 0 点的倒计时" },
+				{ "label": "月卡最后一天", "values": { "weekCard": "buyable", "monthCard": "today", "day": 30, "missedDays": 0 }, "note": "30 格横滑并定位到第 30 天" },
+				{ "label": "已完成与已过期", "values": { "weekCard": "finished", "monthCard": "expired" }, "note": "按钮“已完成”“已过期”，剩余应领 0" },
+				{ "label": "购买失败·未达充值门槛", "values": { "weekCard": "buyable", "buyResult": "1031" }, "note": "门槛弹窗“还差 ₹500”" },
+				{ "label": "无资格", "values": { "weekCard": "hidden", "monthCard": "hidden" }, "note": "两个卡 Tab 都不出现" }
+			],
+			"actions": [
+				{ "label": "打开每日任务页", "route": "/activity/DailyTasks" },
+				{ "label": "打开购买记录", "route": "/activity/DailyTasks/Record" }
+			]
+		},
+		"pointMall": {
+			"note": "入口开关控制我的页积分卡片、商品订单与我的抽奖入口；初始积分即 userInfo 的积分。",
+			"params": [
+				{ "name": "enabled", "label": "积分商城入口", "type": "boolean", "default": true, "drives": "userInfo isOpenPointMall（'1'/'0'，session.ts 的 userInfoOf）" },
+				{ "name": "points", "label": "初始积分", "type": "number", "default": 1200, "min": 0, "max": 999999, "unit": "积分", "drives": "pointMallState.points → userInfo integral（启动种子与 GetUserInfo）" },
+				{ "name": "stock", "label": "商品库存", "type": "select", "default": "normal", "options": [{ "value": "normal", "label": "正常" }, { "value": "partial", "label": "拉杆行李箱库存 0" }, { "value": "all", "label": "全部售罄" }], "drives": "GetProductList[].stock" },
+				{ "name": "orders", "label": "商品订单", "type": "select", "default": "default", "options": [{ "value": "default", "label": "待发货 + 已完成" }, { "value": "empty", "label": "无" }], "drives": "GetProductOrderList、GetIntegralLogList" },
+				{ "name": "address", "label": "已有收货地址", "type": "boolean", "default": false, "drives": "GetUserAddress（null 或一条地址）" }
+			],
+			"presets": [
+				{ "label": "默认", "values": {} },
+				{ "label": "积分不足", "values": { "points": 0 }, "note": "兑换页提示可用积分 0 且按钮置灰" },
+				{ "label": "商品售罄", "values": { "stock": "partial" }, "note": "行李箱“剩余 0”，兑换页提示“库存不足”" },
+				{ "label": "已有收货地址", "values": { "address": true }, "note": "兑换弹层直接显示地址" },
+				{ "label": "新用户", "values": { "points": 0, "orders": "empty" } },
+				{ "label": "入口关闭", "values": { "enabled": false }, "note": "我的页积分卡片、商品订单、我的抽奖入口消失", "route": "/main" }
+			],
+			"actions": [
+				{ "label": "打开积分商城", "route": "/activity/PointMall" },
+				{ "label": "打开商品订单", "route": "/activity/PointMall/MyOrders" },
+				{ "label": "打开积分明细", "route": "/activity/PointMall/Record" }
+			]
+		},
+		"pointLottery": {
+			"note": "场次 5001 进行中、5002 已开奖、5003 即将开始；参与抽奖扣的是积分商城的积分。",
+			"params": [
+				{ "name": "current", "label": "进行中场次", "type": "select", "default": "few", "options": [{ "value": "few", "label": "已售 6/50" }, { "value": "almost", "label": "已售 49/50" }, { "value": "none", "label": "无进行中" }], "drives": "场次 5001 的其他人参与份数，none 时不返回该场" },
+				{ "name": "drawn", "label": "已开奖场次我的结果", "type": "select", "default": "won", "options": [{ "value": "won", "label": "中奖待领奖" }, { "value": "shipped", "label": "中奖已领" }, { "value": "lost", "label": "未中奖" }, { "value": "absent", "label": "不返回（无已开奖场次）" }], "drives": "场次 5002 中“我”的彩票与 shippingStatus；absent 时不返回该场" },
+				{ "name": "upcoming", "label": "即将开始场次", "type": "boolean", "default": true, "drives": "场次 5003 是否返回" }
+			],
+			"presets": [
+				{ "label": "默认", "values": {} },
+				{ "label": "差 1 份满员", "values": { "current": "almost" }, "note": "买 2 份提示“剩余份数不足”" },
+				{ "label": "我中奖待领奖", "values": { "drawn": "won" }, "note": "我的抽奖出现“领取”，进入填写地址", "route": "/activity/PointMall/MyLottery" },
+				{ "label": "未中奖", "values": { "drawn": "lost" } },
+				{ "label": "无抽奖活动", "values": { "current": "none", "drawn": "absent", "upcoming": false }, "note": "列表为空" }
+			],
+			"actions": [
+				{ "label": "打开积分抽奖", "route": "/activity/PointMall/LotteryActivity" },
+				{ "label": "打开我的抽奖", "route": "/activity/PointMall/MyLottery" }
+			]
+		},
+		"coupon": {
+			"note": "第 3 张未使用券为今天到期的券；我的页角标取未使用张数，领取到账券后角标不变。",
+			"params": [
+				{ "name": "unused", "label": "未使用张数", "type": "number", "default": 2, "min": 0, "max": 3, "unit": "张", "drives": "GetCurrentCoupon（状态 1）、GetRechargeCategoryUsableCoupon、GetUserMaxGiftRate；userInfo unUsedRechargeCouponCount" },
+				{ "name": "history", "label": "有历史券", "type": "boolean", "default": true, "drives": "GetCurrentCoupon 状态 2/3（已使用）与 4（已过期）" }
+			],
+			"presets": [
+				{ "label": "默认券包", "values": {}, "note": "2 张未使用 + 1 已使用 + 1 已过期" },
+				{ "label": "3 张未使用", "values": { "unused": 3 } },
+				{ "label": "无券", "values": { "unused": 0, "history": false }, "note": "三个 Tab 都为空、我的页无角标" },
+				{ "label": "只有历史券", "values": { "unused": 0 } }
+			],
+			"actions": [
+				{ "label": "打开优惠券页", "route": "/main/RechargeCoupon" },
+				{ "label": "打开充值页看可用券", "route": "/wallet/Recharge" }
+			]
+		},
+		"couponArrival": {
+			"note": "首页弹窗，入队顺序在最后；领取后券写入充值优惠券的券包。",
+			"params": [
+				{ "name": "count", "label": "待领张数", "type": "number", "default": 2, "min": 1, "max": 3, "unit": "张", "drives": "GetCurrentUnReceivedCoupon（仅 popup === 'coupon-arrival' 时非空）" },
+				{ "name": "claimResult", "label": "领取结果", "type": "select", "default": "ok", "options": [{ "value": "ok", "label": "成功（跳我的页）" }, { "value": "fail", "label": "失败（关闭，下次仍弹）" }], "drives": "ReceiveCoupon 返回领取张数或 0" }
+			],
+			"presets": [
+				{ "label": "单张", "values": { "count": 1 }, "note": "单卡布局" },
+				{ "label": "两张（默认）", "values": {} },
+				{ "label": "三张", "values": { "count": 3 } },
+				{ "label": "领取失败", "values": { "claimResult": "fail" } }
+			],
+			"actions": [
+				{ "label": "弹出弹窗", "popup": "coupon-arrival" }
+			]
+		},
+		"treasureChest": {
+			"note": "首页弹窗：每个宝箱入队一个弹窗，依次弹出。",
+			"params": [
+				{ "name": "count", "label": "宝箱个数", "type": "number", "default": 1, "min": 1, "max": 3, "unit": "个", "drives": "GetTreasureChestPopupItems 条数（rewardConfigId 各不相同）" },
+				{ "name": "task", "label": "任务名", "type": "select", "default": "signIn", "options": [{ "value": "signIn", "label": "签到" }, { "value": "recharge", "label": "充值" }, { "value": "bet", "label": "投注" }], "drives": "taskTitle" },
+				{ "name": "range", "label": "金额按区间展示", "type": "boolean", "default": false, "drives": "minRewardAmount/maxRewardAmount（₹1～₹100）" },
+				{ "name": "amount", "label": "开出金额", "type": "number", "default": 6.66, "min": 0.01, "max": 99999, "step": 0.01, "unit": "₹", "drives": "rewardAmount、OpenTreasureChest 返回金额" },
+				{ "name": "openResult", "label": "开箱结果", "type": "select", "default": "ok", "options": [{ "value": "ok", "label": "成功" }, { "value": "fail", "label": "失败" }], "drives": "OpenTreasureChest" }
+			],
+			"presets": [
+				{ "label": "签到宝箱 ₹6.66（默认）", "values": {} },
+				{ "label": "区间宝箱", "values": { "range": true, "amount": 38 }, "note": "标题“₹1~₹100”，开出 ₹38" },
+				{ "label": "连续 3 个宝箱", "values": { "count": 3 }, "note": "依次弹出 3 个" },
+				{ "label": "开箱失败", "values": { "openResult": "fail" }, "note": "弹窗关闭并提示" }
+			],
+			"actions": [
+				{ "label": "弹出弹窗", "popup": "treasure-chest" }
+			]
+		},
+		"registerGift": {
+			"note": "首页弹窗：流水倍数写入 userInfo，弹窗文案“N 倍流水即可出款”读取它。",
+			"params": [
+				{ "name": "amount", "label": "彩金金额", "type": "number", "default": 58, "min": 0.01, "max": 999999, "step": 0.01, "unit": "₹", "drives": "GetLoadedSetting.registerGiftAmount" },
+				{ "name": "turnover", "label": "流水倍数", "type": "number", "default": 3, "min": 0, "max": 100, "unit": "倍", "drives": "userInfo channelAmountofCode（启动种子与 GetUserInfo）" },
+				{ "name": "claimResult", "label": "领取结果", "type": "select", "default": "ok", "options": [{ "value": "ok", "label": "成功" }, { "value": "fail", "label": "失败" }], "drives": "ReceiveRegisterGift" }
+			],
+			"presets": [
+				{ "label": "默认", "values": {}, "note": "₹58，“3 倍流水即可出款”" },
+				{ "label": "大额", "values": { "amount": 888, "turnover": 20 } },
+				{ "label": "领取失败", "values": { "claimResult": "fail" } }
+			],
+			"actions": [
+				{ "label": "弹出弹窗", "popup": "register-gift" }
+			]
+		},
+		"redeemGift": {
+			"note": "任意非空兑换码都按“兑换结果”返回；兑换记录在初始记录之上按会话追加。",
+			"params": [
+				{ "name": "result", "label": "兑换结果", "type": "select", "default": "cash", "options": [{ "value": "cash", "label": "现金到账" }, { "value": "coupon", "label": "充值券到账" }, { "value": "230", "label": "兑换码错误" }, { "value": "231", "label": "已领取过" }, { "value": "235", "label": "红包已领完" }, { "value": "246", "label": "今日已达上限" }], "drives": "ConversionRedpage：任意非空兑换码按此结果返回；失败为 fail(msg, { code: 1, msgCode })" },
+				{ "name": "amount", "label": "到账金额", "type": "number", "default": 18.88, "min": 0.01, "max": 99999, "step": 0.01, "unit": "₹", "drives": "现金记录 amount、余额增加" },
+				{ "name": "hasRecords", "label": "有兑换记录", "type": "boolean", "default": true, "drives": "GetRedpagePageList 初始 2 条（1 条现金、1 条充值券）或空列表" }
+			],
+			"presets": [
+				{ "label": "兑换成功·现金（默认）", "values": {} },
+				{ "label": "兑换得充值券", "values": { "result": "coupon" }, "note": "记录里出现券卡片" },
+				{ "label": "兑换码错误", "values": { "result": "230" } },
+				{ "label": "已领取过", "values": { "result": "231" } },
+				{ "label": "红包已领完", "values": { "result": "235" } },
+				{ "label": "今日已达上限", "values": { "result": "246" } },
+				{ "label": "无兑换记录", "values": { "hasRecords": false }, "note": "记录区显示空态" }
+			]
+		}
+	}
+}

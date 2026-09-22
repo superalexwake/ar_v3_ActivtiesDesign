@@ -1,0 +1,95 @@
+html,
+body {
+	height: 100%;
+	width: 100%;
+	padding: 0;
+	margin: 0;
+	display: flex;
+	justify-content: center;
+	background-color: #9195a3;
+}
+
+#app {
+	width: 750px;
+	height: fit-content;
+	min-height: 100vh;
+}
+
+.norem-app {
+	width: 375px;
+}
+#app .tabbar__container{
+	background: #fff;
+}
+#app .tabbar__container .tabbar__container-item:nth-of-type(3) .svg-icon{
+	color: #fff;
+}
+#app .game-content .homeNav .more{
+	background-color: #FFE6E5;
+	background-image: url('@/assets/green1Style/icons/home/p3morebg.png');
+}
+#app .homeNav .more-l1, #app .homeNav .more-l1 svg{
+	color: #F74747;
+}
+#app .game-content .homeNav .more-l2{
+	background: linear-gradient(0deg, #FE6868 0%, #FF8E8A 100%);
+	color: #fff;
+}
+#app .homeNav .van-tabs__wrap .van-tabs__nav .tabs-btn{
+	color: #989898;
+}
+#app .homeNav .van-tabs__wrap .van-tabs__nav .van-tab.van-tab--active .tabs-btn{
+	color: #fff;
+}
+.van-calendar .van-calendar__body .van-calendar__day--middle{
+	background: rgba(255 ,142, 138, .2);
+	color:#ff8e8a;
+}
+#app #bigaward .btn{
+	background: #fff;
+}
+/* 
+.van-popup.van-popup--bottom {
+	max-width: 750px;
+	left: 50%;
+	transform: translateX(-50%);
+} */
+
+/* @media screen and (min-width: 500px) {
+	
+} */
+@media screen and (max-width: 500px) {
+	#app {
+		width: 100%;
+		min-height: 100vh;
+	}
+
+	/* 滚动条展示 */
+	#app::-webkit-scrollbar {
+		width: 0;
+		/* Remove scrollbar space */
+		background: transparent;
+		/* Optional: just make scrollbar invisible */
+	}
+
+	.van-popup.van-popup--bottom {
+		max-width: none;
+	}
+}
+
+@media (min-width: 501px) {
+	.van-popup.van-popup--bottom {
+		max-width: 750px;
+		left: 50%;
+		transform: translateX(-50%);
+	}
+	.van-popup.van-popup--center {
+		max-width: 750px;
+	}
+}
+
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}

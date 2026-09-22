@@ -1,0 +1,1 @@
+export {default as BetSound} from './BetSound.vue'

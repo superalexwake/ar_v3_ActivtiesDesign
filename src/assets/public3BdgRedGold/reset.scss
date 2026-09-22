@@ -1,0 +1,844 @@
+body {
+	#app {
+		.userInfo__container-setting-center {
+			background: var(--bg_color_L2);
+		}
+		.tabbar__container{
+			background: #fff;
+			.tabbar__container-item:nth-of-type(3){
+				.svg-icon{
+					color: #fff;
+				}
+			}
+		}
+		.right{
+			color: var(--text_color_L1);
+		}
+		.lotterySlotItem {
+			background: var(--main_gradient-color);
+			span,
+			h4 {
+				color: #fff;
+			}
+		}
+		.firstSaveDialog {
+			.header {
+				background: var(--main-color);
+				color: var(--text_color_L4);
+			}
+		}
+		.progress {
+			background: #d8d8d8 !important;
+		}
+		.gameList {
+			.box {
+				svg {
+					color: rgba(217, 217, 217, 0.2);
+				}
+			}
+		}
+		.championship {
+			.tabs {
+				background: var(--main-color);
+				& > div {
+					color: #fff !important;
+					&.active {
+						&::after {
+							border-bottom-color: #fff;
+						}
+					}
+				}
+			}
+		}
+		.TeamReport__C-body .header-container {
+			background: var(--main-color);
+			& > div {
+				color: #fff;
+				& > div {
+					&:last-of-type {
+						color: #fff;
+					}
+				}
+			}
+		}
+		.ruleHead {
+			position: relative;
+			svg {
+				position: absolute;
+				top: -2px;
+				left: 0;
+				right: 0;
+				margin-inline: auto;
+				width: 494px;
+				height: 60px;
+				z-index: 1;
+				color: var(--main-color);
+			}
+			.promotion-title {
+				color: var(--text_color_L4);
+			}
+		}
+		.promotion-grade-th {
+			color: var(--text_color_L4);
+		}
+		.wallet-container {
+			.imgD {
+				img {
+					position: relative;
+					width: calc(100% + 24px);
+				}
+			}
+		}
+		.GameList__C {
+			background: var(--bg_color_L3);
+		}
+		.Wallet__C::before {
+			background: var(--bg_color_L2);
+		}
+		.BettingRecordWin__C {
+			&-head {
+				background: var(--main_gradient-color);
+				color: #fff;
+			}
+		}
+		.notification-container {
+			.navbar-fixed {
+				background: var(--bg_color_L2);
+				.van-icon,
+				.navbar__content {
+					color: #fff;
+				}
+			}
+		}
+		.van-dialog__confirm{
+			background:var(--main_gradient-color);
+			color: var(--text_white);
+		}
+		.tabbar__container {
+			background: var(--bg_color_L2);
+		}
+		// background-color 分写保留 scoped walletbg.png
+		.Wallet__C-balance {
+			background-color: var(--wallet-balance-bg);
+		}
+		.homeNav{
+			.btn{
+				margin:40px auto 0 auto;
+			}
+			.more {
+				background-color: #221F2E;
+				border-radius: 16px;
+				background-image: url(./icons/home/p3morebg.png);
+				&-l1 {
+					color: #B7B6C8;
+				}
+				&-l2 {
+					color: #fff;
+					background: linear-gradient(180deg, rgba(46, 41, 31, 0.50) -25.19%, #4B4437 57.97%);
+				}
+			}
+		}
+		.totalSavings__container{
+			background: var(--bg_color_L2);
+		}
+		.navbar.main .navbar-fixed{
+			background: var(--bg_color_L2) !important;
+		}
+		.noticeBar__container{
+			background-color: var(--noticeBar-bg-color);
+			color: var(--text_color_L1);
+			button.hotIcon{
+				background: var(--noticeBar-btn-bg-color);
+				color: var(--noticeBar-btn-text-color);
+			}
+		}
+		.noticeBar__container.lottery-notice{
+			background-color: var(--bg_color_L2);
+		}
+		// 喇叭 sprite 共用不可改，data-URI 注入金米黄版
+		.svg-icon.icon-noticeBarSpeaker {
+			background: none;
+			background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='42' height='42' viewBox='0 0 42 42' fill='none'><path d='M22.6876 2.17895C22.374 2.02612 22.0227 1.96935 21.6772 2.01571C21.3318 2.06206 21.0075 2.20949 20.7448 2.43965L10.2433 11.5339L1.86405 11.499C1.62344 11.4993 1.38536 11.5484 1.16411 11.6434C0.942857 11.7385 0.743006 11.8775 0.576559 12.0521C0.229784 12.4124 0.0365091 12.8945 0.037828 13.3958L2.312e-05 28.595C-0.00241989 29.0965 0.18883 29.5793 0.533502 29.9418C0.700021 30.1183 0.900481 30.2588 1.12271 30.355C1.34494 30.4512 1.5843 30.5009 1.82625 30.5013H10.2979L20.749 39.5617C21.012 39.7915 21.3363 39.9386 21.6817 39.9845C22.0272 40.0305 22.3784 39.9734 22.6918 39.8203C23.0098 39.6617 23.277 39.4164 23.4627 39.1123C23.6485 38.8082 23.7452 38.4577 23.742 38.1009V3.90258C23.7445 3.54594 23.6474 3.19574 23.4618 2.89179C23.2761 2.58784 23.0094 2.34233 22.6918 2.18317L22.6876 2.17895ZM29.7688 11.6785C29.5528 11.5748 29.3184 11.5157 29.0793 11.5046C28.8402 11.4935 28.6013 11.5306 28.3768 11.6139C28.1522 11.6971 27.9465 11.8247 27.7718 11.9892C27.5972 12.1537 27.457 12.3516 27.3598 12.5714C27.1511 13.021 27.1213 13.5338 27.2765 14.0047C27.4317 14.4757 27.7602 14.8692 28.1946 15.1046C28.3102 15.1669 31.0458 16.6457 31.0458 20.8582C31.0458 25.3578 28.4876 26.8492 28.4026 26.8978C27.9649 27.1344 27.6354 27.532 27.4831 28.0074C27.3308 28.4829 27.3675 28.9991 27.5855 29.4479C27.7314 29.7613 27.9625 30.0268 28.2523 30.2136C28.542 30.4004 28.8785 30.5009 29.2227 30.5034C29.506 30.5033 29.7851 30.4349 30.0366 30.3039C30.2267 30.1983 34.6972 27.7971 34.6972 20.8624C34.6972 14.1726 29.9715 11.7851 29.7678 11.6795L29.7688 11.6785ZM35.4554 6.09908C35.2549 5.96614 35.0298 5.87523 34.7935 5.8318C34.5572 5.78837 34.3146 5.79332 34.0803 5.84634C33.8459 5.89936 33.6247 5.99936 33.4297 6.14036C33.2347 6.28137 33.07 6.46047 32.9455 6.66695C32.6822 7.08909 32.5899 7.59664 32.6875 8.08513C32.7852 8.57363 33.0655 9.00592 33.4706 9.29304C33.6681 9.42814 38.3465 12.7445 38.3465 20.9996C38.3465 29.2727 33.8581 32.5922 33.6796 32.7157C33.2728 33.005 32.9931 33.441 32.8987 33.9328C32.8044 34.4246 32.9028 34.9339 33.1734 35.3545C33.3362 35.6123 33.5608 35.8248 33.8268 35.9723C34.0927 36.1199 34.3913 36.1978 34.6951 36.1989C35.0567 36.1988 35.4097 36.0884 35.7075 35.8822C35.9637 35.706 42 31.4005 42 20.9996C42 10.5807 35.719 6.27852 35.4512 6.10014L35.4554 6.09908Z' fill='%23F6E3A3'/></svg>");
+			background-repeat: no-repeat;
+			background-size: contain;
+			background-position: center;
+			use { display: none; }
+		}
+		.nav-right .nav-btn:not(.login) {
+			border-color: var(--text_color_L1);
+			color: var(--text_color_L1);
+		}
+		.nav-right .nav-btn.login {
+			border-color: transparent;
+		}
+		.picContainer .popular {
+			height: auto;
+			.item {
+				background: var(--bg_color_L2);
+				border-radius: 16px;
+				overflow: hidden;
+				display: flex;
+				flex-direction: column;
+				img {
+					width: 100%;
+					height: auto;
+					aspect-ratio: 1 / 1;
+					object-fit: cover;
+					flex-shrink: 0;
+				}
+				.game-name {
+					display: block;
+					padding: 12px 6px;
+					color: var(--text_color_L1);
+					font-size: 22px;
+					font-weight: 700;
+					text-align: center;
+					text-transform: uppercase;
+					white-space: nowrap;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					line-height: 1.2;
+				}
+			}
+			.win-odds {
+				height: 44px;
+				color: var(--text_color_L4);
+				border-radius: 99rem;
+				align-items: center;
+				span {
+					color: var(--text_color_L4);
+					font-weight: 600;
+					line-height: 44px;
+					&:first-child { padding-left: 14px; }
+					&:last-child  { padding-right: 14px; }
+				}
+			}
+		}
+		.sysMessage__container-msgWrapper{
+			margin-top: 24px;
+		}
+		.bonus-header .nav{
+			background: var(--bg_color_L2);
+		}
+		.vip-content-empirical > div{
+			background: var(--bg_color_L2);
+		}
+		.rechargeh__container-content{
+			padding-top: 0;
+		}
+		.gameTypeHome .van-tabs__wrap .van-tabs__nav .van-tab.van-tab--active{
+			color: var(--main-color);
+		}
+		.ruleHead .promotion-title{
+			color: var(--text_color_L1);
+		}
+		.explain .input input{
+			color: var(--text_color_L2);
+		}
+		.promptContent{
+			color: var(--text_color_L1);
+			padding: 24px;
+			text-align: center;
+		}
+		.safebox-dialog .content{
+			background: var(--bg_color_L3);
+			color: var(--text_color_L1);
+		}
+		.safebox-dialog .question{
+			border: none;
+		}
+		.history .nav > .nav-container > div.active {
+			background: var(--wingo3-tab-active-bg);
+			border-radius: 10px;
+		}
+
+
+		/*sass样式*/
+		.lottery-container .content .amount-buttons .default{
+			background: var(--bg_color_L3);
+			color: var(--text_color_L1);
+		}
+		.lottery-container .content .multiplier-section .multiplier-buttons .default{
+			background: var(--bg_color_L3);
+			color: var(--text_color_L1);
+		}
+		.lottery-container .content .section-header .label{
+			color: var(--text_color_L1);
+		}
+		.van-stepper__minus, .van-stepper__plus{
+			background: var(--bg_color_L3);
+			color: var(--text_color_L1);
+		}
+		.van-stepper__input{
+			background: var(--bg_color_L3);
+			color: var(--text_color_L1);
+		}
+		.t-foot-previous.disabled, .t-foot-next.disabled{
+			background: var(--button_dis_color);
+			pointer-events: none;
+		}
+		.t-foot-previous, .t-foot-next{
+			background: var(--wingo3-tab-default-bg);
+		}
+		.t-foot{
+			background: var(--darkBg, var(--bg_color_L2));
+			color: var(--text_color_L2);
+		}
+		.my_r-body .list-item-m-top{
+			color: var(--text_color_L1);
+		}
+
+		.FDB__C-H{
+			color: var(--text_color_L1);
+		}
+		.FDB__C-nav > div{
+			background: var(--button_dis_color);
+			color: #fff;
+		}
+		.FDB__C-nav > div.active{
+			background: var(--main-color);
+			color: var(--text_color_L4);
+		}
+		.FDB__C-nav > div.active::after{
+			background: radial-gradient(circle at 100% 0,var(--bg_color_L2) 0.26667rem, var(--main-color) 0.26667rem);
+		}
+		.bet_p-input{
+			background: var(--bg_color_L3);
+		}
+		.my_r-body .list-detail-text{
+			color: var(--text_color_L1);
+		}
+		.empty__container p{
+			color: var(--text_color_L3);
+		}
+		.moto-note-result .lottery_reslut{
+			color: var(--text_color_L1);
+		}
+	}
+	.van-calendar__day{
+		color: var(--text_color_L2);
+	}
+	.van-calendar__day--disabled{
+		color: var(--text_color_L1);
+	}
+	.van-calendar__month-mark{
+		color: rgb(168,165,161,0.8);
+	}
+	.van-calendar__day--start,.van-calendar__day--end{
+		color: var(--text_color_L1);
+	}
+	.van-dialog__cancel{
+		color: var(--text_color_L1);
+		background: var(--button_dis_color);
+	}
+	.van-dialog__confirm{
+		background: var(--main_gradient-color);
+		color: var(--text_color_L4);
+	}
+
+	/*sass新样式*/
+	.van-popup--bottom{
+		.bet{
+			background: var(--bg_color_L1);
+			.bet-body{
+				background: var(--bg_color_L1);
+				.title{
+					font-size: 32px;
+					color: var(--text_color_L1);
+				}
+			}
+			.bet-body .l2{
+				color: var(--text_color_L1);
+			}
+			.bet-body .active{
+				background: var(--main-color) !important;
+			}
+			.bet-body .l2 .true{
+				border:none;
+			}
+			.bet-body .l1 .m .Betting__Popup-input{
+				background: var(--bg_color_L2);
+				color: var(--text_color_L1);
+			}
+			.bet-title{
+				color: var(--text_color_L1);
+			}
+			.bet-body .l1 .m > div{
+				background: var(--main-color);
+			}
+			.bet-foot{
+				.bet-foot-c{
+					background: var(--bg_color_L3);
+					color: var(--text_color_L2);
+				}
+				.bet-foot-s{
+					color: var(--text_color_L1);
+					background: var(--main-color);
+				}
+				.bet-foot-s span{
+					color: var(--text_color_L1);
+				}
+			}
+		}
+		.lottery-container{
+			background: var(--bg_color_L1);
+		}
+		.bet_p-body{
+			background: var(--bg_color_L1);
+		}
+		.Betting__Popup-body{
+			background: var(--bg_color_L1);
+		}
+		.betting-container{
+			.header-left .select-text{
+				color: var(--text_color_L1);
+			}
+			background: var(--bg_color_L1);
+		}
+	}
+
+	.van-popup--center .bet-rule-foot .bet-rule-foot-btn{
+		background: var(--main-color);
+	}
+	.van-popup--center {
+		.bet_p-PreSale-body{
+			color: var(--text_color_L1) !important;
+		}
+		.bet-rule-body{
+			color: var(--text_color_L1) !important;
+		}
+		.bet-rule-body > div{
+			p{
+				color: var(--text_color_L1) !important;
+				span{
+					color: var(--text_color_L1) !important;
+				}
+			}
+		}
+	}
+
+	// === BDGbet 站点级 override ===
+
+	.gameTypeHome {
+		margin-bottom: 0 !important;
+		.van-tabs__wrap {
+			height: 2.6667rem !important;
+		}
+		.van-tabs__wrap .van-tabs__nav {
+			.van-tab {
+				color: var(--text_color_L2) !important;
+				opacity: 1 !important;
+				.tabs-btn {
+					font-family: 'Roboto', 'Inter', sans-serif;
+					font-size: 26px;
+					line-height: 30px;
+					font-weight: 400;
+					img {
+						transition: transform 0.2s ease;
+						transform-origin: center bottom;
+					}
+				}
+				&.van-tab--active {
+					color: var(--text_color_L1) !important;
+					.tabs-btn {
+						font-weight: 700;
+						img {
+							transform: scale(1.20);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	.homeNav {
+		.title {
+			color: var(--text_color_L1);
+			font-family: 'Roboto', 'Inter', sans-serif;
+			& > div > b {
+				background: var(--rect-86-gradient) !important;
+				width: 8px !important;
+				height: 25.58px !important;
+				border-radius: 4px !important;
+			}
+			.allMore {
+				background: var(--main-color) !important;
+				color: var(--text_color_L2) !important;
+				font-size: 22px !important;
+				height: 32px !important;
+				line-height: 32px !important;
+				padding: 0 14px !important;
+				border-radius: 6px !important;
+			}
+			.right_btn {
+				// 切换按钮 sprite 不可改，data-URI 注入金渐变 + 红箭头
+				display: flex;
+				gap: 12px;
+				align-items: center;
+				.svg-icon.icon-p3a_l,
+				.svg-icon.icon-p3a_r {
+					width: 58px;
+					height: 32px;
+					background: none;
+					padding: 0;
+					background-repeat: no-repeat;
+					background-size: contain;
+					use { display: none; }
+				}
+				.svg-icon.icon-p3a_l {
+					background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='58' height='32' viewBox='0 0 58 32' fill='none'><defs><linearGradient id='lg' x1='58' y1='16' x2='0' y2='16' gradientUnits='userSpaceOnUse'><stop stop-color='%23AE8639'/><stop offset='0.5' stop-color='%23F6E3A3'/><stop offset='1' stop-color='%23D2A753'/></linearGradient></defs><path d='M10 0H49.4694L53.4498 3.69622L58 7.71924L48 32H8.51783L4.14389 27.7198L0 23.743L10 0Z' fill='url(%23lg)'/><path d='M35 24.4982C35 25.3655 34.0186 25.8464 33.3382 25.3522L33.2661 25.2955L23.3665 16.796C23.2584 16.7032 23.1702 16.5894 23.1074 16.4615C23.0446 16.3336 23.0085 16.1943 23.0013 16.052C22.9941 15.9096 23.016 15.7674 23.0655 15.6338C23.1151 15.5002 23.1913 15.3781 23.2895 15.2749L23.3665 15.2021L33.2661 6.70253C33.9241 6.13832 34.9279 6.56953 34.9965 7.40814L35 7.49914V24.4989V24.4982Z' fill='%23902A32'/></svg>");
+				}
+				.svg-icon.icon-p3a_r {
+					background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='58' height='32' viewBox='0 0 58 32' fill='none'><defs><linearGradient id='rg' x1='58' y1='16' x2='0' y2='16' gradientUnits='userSpaceOnUse'><stop stop-color='%23AE8639'/><stop offset='0.5' stop-color='%23F6E3A3'/><stop offset='1' stop-color='%23D2A753'/></linearGradient></defs><path d='M10 0H49.4694L53.4498 3.69622L58 7.71924L48 32H8.51783L4.14389 27.7198L0 23.743L10 0Z' fill='url(%23rg)'/><path d='M26.6406 24.8107C26.6406 25.678 27.622 26.1589 28.3025 25.6647L28.3746 25.608L38.2741 17.1085C38.3823 17.0157 38.4704 16.9019 38.5332 16.774C38.596 16.6461 38.6321 16.5068 38.6393 16.3645C38.6465 16.2221 38.6247 16.0799 38.5751 15.9463C38.5256 15.8127 38.4493 15.6906 38.3511 15.5874L38.2741 15.5146L28.3746 7.01503C27.7165 6.45082 26.7127 6.88203 26.6441 7.72064L26.6406 7.81164V24.8114V24.8107Z' fill='%23902A32'/></svg>");
+				}
+			}
+		}
+		.tip {
+			font-size: 24px !important;
+			line-height: 28px;
+			color: var(--text_color_L2);
+		}
+		.picContainer {
+			img, .b {
+				border-radius: 16px;
+				background-color: var(--bg_color_L2);
+			}
+		}
+	}
+
+	.homeNav.van-tabs {
+		.van-tabs__wrap {
+			background: var(--main-color);
+			border-radius: 8px;
+			overflow: hidden;
+		}
+		.van-tabs__nav {
+			background: transparent !important;
+		}
+		.van-tabs__line {
+			display: none !important;
+		}
+		.van-tab {
+			color: var(--text_color_L2) !important;
+			background: transparent;
+			border-radius: 58px;
+			transition: background 0.3s ease, color 0.3s ease;
+			.tabs-btn {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				gap: 8px;
+				font-size: 22px;
+				line-height: 26px;
+				font-family: 'Roboto', 'Inter', sans-serif;
+				font-weight: 400;
+				.gameIcon {
+					transition: color 0.3s ease;
+				}
+			}
+			&.van-tab--active {
+				background: var(--main_gradient-color);
+				color: var(--text_color_L4) !important;
+				.tabs-btn {
+					font-weight: 700;
+					.gameIcon {
+						color: var(--text_color_L4);
+					}
+				}
+			}
+		}
+	}
+
+	.title > b {
+		background: var(--rect-86-gradient) !important;
+		width: 8px !important;
+		height: 25.58px !important;
+		border-radius: 4px !important;
+	}
+	.title:has(> b) {
+		color: var(--text_color_L1);
+		font-family: 'Roboto', 'Inter', sans-serif;
+	}
+
+	// 末尾位置最后胜出（前文已有同 class）
+	.tabbar__container {
+		background: var(--main-color) !important;
+		.tabbar__container-item {
+			color: var(--text_color_L2) !important;
+			&.active {
+				color: var(--text_color_L1) !important;
+			}
+		}
+	}
+
+	// promotion 按钮 sprite 用 currentColor 在金底看不清，data-URI 注入深红 SVG
+	.tabbar__container-item:nth-of-type(3) .promotionBg .svg-icon.icon-p3_home {
+		background: none;
+		background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='34' viewBox='0 0 40 34' fill='none'><path d='M11.4893 9.63147C10.8243 9.62472 10.1723 9.81574 9.61611 10.1803C9.05989 10.5448 8.62455 11.0664 8.36537 11.6789C8.10619 12.2914 8.03487 12.967 8.16046 13.6201C8.28604 14.2732 8.60288 14.8742 9.07072 15.3468C9.53857 15.8195 10.1363 16.1424 10.7881 16.2747C11.4398 16.4069 12.1162 16.3425 12.7313 16.0896C13.3463 15.8366 13.8723 15.4067 14.2425 14.8542C14.6128 14.3017 14.8104 13.6517 14.8105 12.9867C14.8083 12.1033 14.4588 11.2563 13.8374 10.6286C13.216 10.0008 12.3726 9.64265 11.4893 9.63147Z' fill='%23902A32'/><path d='M39.9999 7.24707C39.9976 5.32578 39.2334 3.48382 37.8748 2.12526C36.5163 0.766702 34.6743 0.00247319 32.753 0.000219473H27.5329C26.9884 -0.00654362 26.4535 0.143126 25.9915 0.431445C25.5296 0.719764 25.1602 1.13462 24.9271 1.62672C24.6827 2.15576 24.2925 2.60417 23.8023 2.91939C23.3121 3.23461 22.7423 3.40358 22.1595 3.4065H17.6802C17.1118 3.37109 16.5639 3.18103 16.0956 2.85685C15.6273 2.53267 15.2566 2.08669 15.0233 1.56711C14.7802 1.09833 14.4139 0.704718 13.9637 0.428628C13.5136 0.152538 12.9967 0.00442139 12.4686 0.000219473H7.08672C5.16542 0.00247319 3.32347 0.766702 1.96491 2.12526C0.606346 3.48382 -0.157883 5.32578 -0.160137 7.24707V26.9183C-0.162217 27.7592 0.00311668 28.5921 0.326226 29.3685C0.649336 30.1448 1.12376 30.849 1.72183 31.4402C2.32519 32.0325 3.04002 32.4993 3.82495 32.8135C4.60988 33.1278 5.44934 33.2833 6.29476 33.271C9.8458 33.271 11.4042 31.8319 12.5708 27.6336L13.8993 23.5972H25.949L27.2859 27.6847C28.5207 31.3124 29.9003 33.2795 33.6131 33.2795C35.3056 33.2751 36.9275 32.6007 38.1243 31.4039C39.321 30.2072 39.9954 28.5853 39.9999 26.8928V7.24707ZM11.4893 18.7518C10.3491 18.7518 9.23447 18.4137 8.2864 17.7802C7.33833 17.1467 6.5994 16.2463 6.16305 15.1929C5.7267 14.1394 5.61253 12.9803 5.83498 11.8619C6.05743 10.7436 6.60651 9.71636 7.41277 8.9101C8.21904 8.10383 9.24629 7.55475 10.3646 7.3323C11.4829 7.10985 12.6421 7.22402 13.6955 7.66037C14.749 8.09672 15.6494 8.83565 16.2829 9.78372C16.9163 10.7318 17.2545 11.8464 17.2545 12.9867C17.2522 14.515 16.6441 15.98 15.5634 17.0607C14.4827 18.1414 13.0176 18.7495 11.4893 18.7518ZM32.9148 14.1959H29.5596V17.5426C29.5596 17.7013 29.5284 17.8586 29.4676 18.0053C29.4068 18.152 29.3177 18.2853 29.2055 18.3976C29.0932 18.5099 28.9599 18.599 28.8132 18.6597C28.6665 18.7205 28.5092 18.7518 28.3504 18.7518C28.1916 18.7518 28.0344 18.7205 27.8877 18.6597C27.7409 18.599 27.6076 18.5099 27.4954 18.3976C27.3831 18.2853 27.294 18.152 27.2332 18.0053C27.1725 17.8586 27.1412 17.7013 27.1412 17.5426V14.1959H23.786C23.4653 14.1959 23.1577 14.0685 22.9309 13.8417C22.7042 13.6149 22.5768 13.3074 22.5768 12.9867C22.5768 12.6659 22.7042 12.3584 22.9309 12.1316C23.1577 11.9048 23.4653 11.7774 23.786 11.7774H27.1412V8.42224C27.1412 8.10153 27.2686 7.79396 27.4954 7.56719C27.7221 7.34041 28.0297 7.21301 28.3504 7.21301C28.6711 7.21301 28.9787 7.34041 29.2055 7.56719C29.4322 7.79396 29.5596 8.10153 29.5596 8.42224V11.7774H32.9148C33.2355 11.7774 33.5431 11.9048 33.7699 12.1316C33.9966 12.3584 34.124 12.6659 34.124 12.9867C34.124 13.3074 33.9966 13.6149 33.7699 13.8417C33.5431 14.0685 33.2355 14.1959 32.9148 14.1959Z' fill='%23902A32'/></svg>");
+		background-repeat: no-repeat;
+		background-position: center;
+		background-size: contain;
+		use {
+			display: none;
+		}
+	}
+
+	.homeNav .more {
+		background-color: var(--bg_color_L2) !important;
+		background-image: none !important;
+		&-l1 {
+			color: var(--text_color_L1) !important;
+			.svg-icon {
+				color: var(--text_color_L1);
+			}
+		}
+		&-l2 {
+			color: var(--text_color_L1) !important;
+			background: linear-gradient(180deg, rgba(36, 0, 5, 0) 0%, var(--main-color) 100%) !important;
+		}
+	}
+
+	// 隐藏 footer 责任博彩 tips
+	.p3-terms-tips {
+		display: none !important;
+	}
+
+	.p3-terms,
+	.tool-container {
+		background: transparent !important;
+	}
+
+	.tip span {
+		color: rgba(246, 227, 163, 1) !important;
+	}
+
+	.p3_winner-wrapper {
+		background: var(--main-color) !important;
+		border-radius: 20px !important;
+		overflow: hidden;
+	}
+	.p3_winner-wrapper__item {
+		background: transparent !important;
+		border-bottom: 1px solid rgba(177, 72, 80, 0.4);
+		&:last-child {
+			border-bottom: none;
+		}
+	}
+	.p3-terms {
+		margin-bottom: 2rem !important;
+	}
+
+	.p3-terms-rule {
+		display: flex;
+		align-items: flex-start;
+		gap: 12px;
+		color: var(--text_color_L3) !important;
+		font-size: 24px;
+		line-height: 28px;
+		font-family: 'Roboto', 'Inter', sans-serif;
+		margin: 0 0 24px 0;
+		svg {
+			flex-shrink: 0;
+			margin-top: 8px;
+			color: rgba(246, 227, 163, 1) !important;
+			rect {
+				fill: rgba(246, 227, 163, 1) !important;
+			}
+		}
+		span {
+			flex: 1;
+		}
+	}
+
+	.btn.pwa-btn {
+		background: var(--gold-gradient-vertical);
+		.text,
+		.bonus-con .bonus {
+			color: var(--text_color_L4) !important;
+		}
+		.icon {
+			box-sizing: border-box;
+			background: var(--light-bg_white);
+			border: 1px solid var(--light-bg_white);
+			border-radius: 12px;
+		}
+	}
+
+	.swiper_box .swiper-button span {
+		width: 10px !important;
+		height: 10px !important;
+		background-color: var(--main-color-dark) !important;
+		&.active {
+			width: 20px !important;
+			height: 10px !important;
+			background-color: var(--main-color) !important;
+			border-radius: 5px !important;
+		}
+	}
+
+	.turntable-text {
+		color: var(--text_color_L1) !important;
+		font-size: 28px !important;
+		line-height: 39px !important;
+		width: 124px !important;
+	}
+
+	// LotteryInfo 头部金渐变与品牌冲突，去除
+	.lottery-info .bg {
+		background: none !important;
+	}
+
+	// 钱包图标局部重定义 --main-color cascade
+	.svg-icon.icon-lottyWallet {
+		--main-color: var(--accent_red-deep-color);
+	}
+
+	.TimeLeft__C-time > div {
+		color: var(--accent_red-color) !important;
+	}
+
+	// 开奖历史 8 处 record.vue / PastDraws.vue 通用
+	.record-head {
+		background: var(--text_color_L1) !important;
+		color: var(--text_color_L4) !important;
+	}
+	.record-body {
+		background: var(--main-color) !important;
+		color: var(--text_color_L2) !important;
+	}
+
+	.history .nav > .nav-container > div:not(.active) {
+		background: var(--wingo3-tab-default-bg) !important;
+		color: var(--text_color_L2) !important;
+	}
+
+	// :not 保留 scoped active 绿色
+	.Betting__C-multiple-r:not(.active) {
+		background: var(--wingo3-tab-default-bg);
+		color: var(--text_color_L2);
+	}
+
+	.record-foot-previous:not(.disabled),
+	.record-foot-next:not(.disabled) {
+		background-color: var(--text_color_L1);
+	}
+
+	// CSS 变量 cascade 局部重定义（不污染其他 50+ 处 fallback）
+	.tf_C-l1-tip,
+	.tf_C-l1-r {
+		--darkLight: var(--bg_color_L1);
+		--darkTextW: var(--text_color_L1);
+	}
+
+	.trx_r-foot-previous:not(.disabled),
+	.trx_r-foot-next:not(.disabled) {
+		background-color: var(--text_color_L1);
+		color: var(--text_color_L4);
+	}
+
+	.trx_r-head {
+		background: var(--text_color_L1) !important;
+		color: var(--text_color_L4) !important;
+	}
+
+	// 直接子 > 隔离 trx1（trx1 是 #trxwingo > .history > .nav 嵌套）
+	#trxwingo > .nav > div.active {
+		background-image: var(--wingo3-tab-active-bg);
+		border-radius: 10px;
+	}
+	#trxwingo > .nav > div:not(.active) {
+		background-color: var(--wingo3-tab-default-bg);
+	}
+
+	.trx_r-foot-previous.disabled,
+	.trx_r-foot-next.disabled {
+		background-color: var(--bg_color_L1);
+		color: var(--text_color_L3);
+	}
+
+	.homeNav .btn {
+		color: var(--noticeBar-btn-bg-color) !important;
+	}
+
+	// 拆两块：尺寸 !important 全态覆盖；颜色 :not(.active) 保留 scoped 绿底 active
+	.bet_body .ramd .r {
+		width: 61px !important;
+		height: 60px !important;
+		padding: 10px 16px !important;
+		gap: 10px !important;
+		border-radius: 10px !important;
+		display: flex !important;
+		flex-direction: row !important;
+		justify-content: center !important;
+		align-items: center !important;
+		line-height: normal !important;
+	}
+	.bet_body .ramd .r:not(.active) {
+		background-color: var(--bet-multiple-default-bg);
+		color: var(--text_color_L1);
+	}
+
+	.GameRecord__C-foot-previous:not(.disabled),
+	.GameRecord__C-foot-next:not(.disabled) {
+		background-color: var(--text_color_L1);
+	}
+
+	// .k3_main 隔离其他游戏同名 .RecordNav__C
+	.k3_main .RecordNav__C > div.active {
+		background-image: var(--wingo3-tab-active-bg);
+		border-radius: 10px;
+	}
+	.k3_main .RecordNav__C > div:not(.active) {
+		background-color: var(--bet-multiple-default-bg);
+		border-radius: 10px;
+	}
+
+	.container .amount_txt {
+		color: var(--text_color_L1) !important;
+	}
+
+	.k3_main .GameRecord__C-head {
+		background-color: var(--text_color_L1);
+		color: var(--text_color_L4);
+	}
+
+	// 与 gameList.vue:84 scrollTo -140 magic offset 联动，padding 推下视觉起点避开 sticky 遮挡
+	.game-content > * {
+		padding-top: 30px;
+	}
+
+	// .FD_3 隔离其他游戏同名 .RecordNav__C
+	.FD_3 .RecordNav__C > div.active {
+		background-image: var(--wingo3-tab-active-bg);
+		border-radius: 10px;
+	}
+	.FD_3 .RecordNav__C > div:not(.active) {
+		background-color: var(--bet-multiple-default-bg);
+		color: var(--text_color_L2);
+	}
+
+	.FD_3 .GameRecord__C-head {
+		background-color: var(--text_color_L1);
+		color: var(--text_color_L4);
+	}
+
+
+	.nav-right .money {
+		color: var(--text_color_L1) !important;
+	}
+
+
+	.picContainer .bonusAmount {
+		color: var(--text_color_L1);
+	}
+
+
+	.gamestats-container-item-content-list div span {
+		color: var(--Dividing-line_color) !important;
+	}
+
+
+	.guide-container-content h2 {
+		color: var(--text_color_L1) !important;
+	}
+}

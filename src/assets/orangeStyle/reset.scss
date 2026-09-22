@@ -1,0 +1,80 @@
+#app {
+	.userInfo__container-setting-center {
+		background: var(--bg_color_L2);
+	}
+	// 首充奖励
+	.firstSaveDialog {
+		.header {
+			background: var(--main-color);
+			color: var(--text_color_L4);
+		}
+	}
+	.progress {
+		background: #d8d8d8 !important;
+	}
+	.gameList {
+		.box {
+			svg {
+				color: rgba(217, 217, 217, 0.2);
+			}
+		}
+	}
+	.championship {
+		.tabs {
+			background: var(--main-color);
+			& > div {
+				color: #fff !important;
+                &.active {
+                    &::after {
+                        border-bottom-color: #fff;
+                    }
+                }
+			}
+		}
+	}
+    .TeamReport__C-body .header-container {
+        background: var(--main-color);
+        &>div {
+            color: #fff;
+            &>div {
+                &:last-of-type{
+                    color: #fff;
+                }
+            }
+        }
+    }
+    .ruleHead {
+        position: relative;
+        svg {
+          position: absolute;
+          top: -2px;
+          left: 0;
+          right: 0;
+          margin-inline: auto;
+          width: 494px;
+          height: 60px;
+          z-index: 1;
+          color: var(--main-color);
+        }
+        .promotion-title {
+            color: var(--text_color_L4);
+        }
+    }
+    .promotion-grade-th {
+        color: var(--text_color_L4);
+    }
+    .wallet-container {
+        .imgD {
+            img {
+                position: relative;
+                width: calc(100% + 24px);
+            }
+        }
+    }
+    .GameList__C {
+        background: var(--bg_color_L2);
+    }
+    .empty__container svg{
+        opacity: .2;
+    }
+}

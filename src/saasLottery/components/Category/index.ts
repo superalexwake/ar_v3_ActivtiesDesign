@@ -1,0 +1,1 @@
+export { default as GameCategory} from './GameCategory.vue'

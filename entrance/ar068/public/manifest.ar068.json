@@ -1,0 +1,19 @@
+{
+	"manifest_version": 2,
+	"name": "92jeeto",
+	"version": "1.2",
+	"display": "standalone",
+	"background_color": "#fff",
+	"description": "92jeeto Game",
+	"icons": [
+		{
+			"src": "/ar068@192.png",
+			"sizes": "192x192"
+		},
+		{
+			"src": "/ar068@512.png",
+			"sizes": "512x512"
+		}
+	],
+	"start_url": "/#/"
+}

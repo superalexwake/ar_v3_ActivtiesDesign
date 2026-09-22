@@ -1,0 +1,19 @@
+{
+	"manifest_version": 2,
+	"name": "Pakvip",
+	"version": "1.2",
+	"display": "standalone",
+	"background_color": "#fff",
+	"description": "Pakvip Game",
+	"icons": [
+		{
+			"src": "/icon-192x192.png",
+			"sizes": "192x192"
+		},
+		{
+			"src": "/icon-512x512.png",
+			"sizes": "512x512"
+		}
+	],
+	"start_url": "/#/"
+}
