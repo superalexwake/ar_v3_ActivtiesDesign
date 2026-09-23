@@ -11,9 +11,9 @@
 
 | 要改的内容 | 位置 |
 |---|---|
-| 活动页面 | `src/views/activity`（含周卡月卡、积分商城）、`src/views/main`（洗码、电子大奖、保险箱、邀请奖励、充值优惠券、红包兑换）、`src/views/vip`、`src/views/turntable`、`src/views/promotion`、`src/views/wallet/Recharge`（首充赠送） |
+| 活动页面 | `src/views/activity`（含周卡月卡、积分商城）、`src/views/main`（洗码、电子大奖、保险箱、邀请奖励、充值优惠券、红包兑换）、`src/views/vip`、`src/views/turntable`、`src/views/promotion`、`src/views/wallet/Recharge`（首充赠送、充值等级奖励）、`src/views/wallet/Withdraw`（提现活动奖励）、`src/views/main/SettingCenter`（绑定手机 / 邮箱奖励） |
 | 共享组件 | `src/components`（优先复用） |
-| 假数据 | `entrance/prototype/mock/handlers/<功能>.ts`，文件名对应页面（周卡月卡 `periodCard.ts`、积分商城 `pointMall.ts`、优惠券 `coupon.ts`、宝箱 `treasureChest.ts`、红包兑换 `redeemGift.ts`、充值 `recharge.ts` 等） |
+| 假数据 | `entrance/prototype/mock/handlers/<功能>.ts`，文件名对应页面（周卡月卡 `periodCard.ts`、积分商城 `pointMall.ts`、优惠券 `coupon.ts`、宝箱 `treasureChest.ts`、红包兑换 `redeemGift.ts`、充值 `recharge.ts`、提现 `withdraw.ts`、绑定奖励 `bindReward.ts` 等） |
 | 控制台清单与控制项声明 | `entrance/prototype/public/catalog.json`：`groups` 是左栏清单，`activities` 是每个活动的参数、边界场景、动作 |
 | 读取活动参数 | `entrance/prototype/mock/scenario.ts` 的 `params<T>(ctx, '<活动ID>')` |
 | 独立 HTML 原型 | `entrance/prototype/public/prototypes/<名称>/index.html` |

@@ -6,6 +6,7 @@ import { params } from '../scenario'
 import { claim, featureState } from '../state'
 import type { MockContext, MockHandler, MockRoutes, PopupKey } from '../types'
 import type { ActivityCenterParams } from './activityCenter'
+import { bindInfo } from './bindReward'
 import { pointMallState } from './pointMall'
 
 /** 回归奖励（returnAward）的参数，声明见 catalog.json */
@@ -99,9 +100,6 @@ const FAKE_USER = {
 	isShowWalletTotalCT: '1',
 	isShowRechargeBankList: '0',
 	isOpenOfficialRechargeInputDialog: '0',
-	regType: 1,
-	verifyMethods: { email: '', google: '0', mobile: '91****8888' },
-	bindReward: 0,
 	isPopupCommissionSwitch: '0',
 	isPartnerReward: '1',
 	isOpenRechargeCoupon: '1',
@@ -271,11 +269,13 @@ const receiveRegisterGift: MockHandler = (ctx) => {
  *
  * @param ctx - 请求上下文；启动种子由 mock/index.ts 构造（没有请求路径与请求体）。
  * @returns 虚构用户信息：余额取会话钱包余额，积分取积分商城会话积分（与兑换、抽奖扣分联动），
- *   积分商城与锦标赛入口、未使用优惠券张数、注册彩金流水倍数取对应活动的参数，昵称与语言取当前 H5 语言。
+ *   积分商城与锦标赛入口、未使用优惠券张数、注册彩金流水倍数取对应活动的参数，注册方式、手机邮箱绑定状态与绑定奖励取绑定奖励活动，
+ *   昵称与语言取当前 H5 语言。
  */
 export function userInfoOf(ctx: MockContext) {
 	return {
 		...FAKE_USER,
+		...bindInfo(ctx),
 		nickName: nickName(ctx),
 		amount: ctx.state.balance,
 		integral: pointMallState(ctx).points,
@@ -296,6 +296,35 @@ const getVipUsers: MockHandler = (ctx) => {
 
 /** 登录、刷新 token 共用的假 token；tokenRefresher.ts 的 persistTokens 只读这三项，故不含 webSocketUrl */
 const fakeTokens = { token: 'prototype-token', tokenHeader: 'Bearer ', refreshToken: 'prototype-refresh' }
+
+/**
+ * RegisterState：注册与各类验证的开关（字符串 '1'/'0'），登录、注册、绑定手机、提现页共用。
+ * 开放手机与邮箱注册，保留短信验证码输入框（registerSMSState）；图形验证码、忘记密码、提现与绑卡的额外验证全部关闭，演示流程不依赖未做假数据的接口。
+ */
+const REGISTER_STATE = {
+	registerState: '1',
+	registerStateMsg: '',
+	registerSMSState: '1',
+	registerMobileState: '1',
+	registerEmailState: '1',
+	isOpenRegisterSMS: '0',
+	isOpenRegisterEmail: '0',
+	isOpenCaptcha: '0',
+	isOpenRegisterCaptcha: '0',
+	isOpenGoogleVerifySms: '0',
+	isOpenGoogleVerifyEmail: '0',
+	isOpenForgetPasswordSMS: '0',
+	isOpenForgetPasswordEmail: '0',
+	IsOpenForgetPasswordSMS: '0',
+	IsOpenForgetPasswordEmail: '0',
+	isOpenAddBankCardSMS: '0',
+	addBankCardOpenEmail: '0',
+	isOpenAddWithdrawSMS: '0',
+	isOpenAddWithdrawEmail: '0',
+	isOpenExternalAccount: '0',
+	isInvitecode: '0',
+	registerPrivacyChecked: '1',
+}
 
 /** 启动、会话、首页弹窗与活动页引导的接口假数据 */
 export const sessionRoutes: MockRoutes = {
@@ -319,4 +348,5 @@ export const sessionRoutes: MockRoutes = {
 	[api.Login]: () => ok(fakeTokens),
 	[api.RefreshToken]: () => ok(fakeTokens),
 	[api.LoginOff]: () => ok(null),
+	[api.RegisterState]: () => ok(REGISTER_STATE),
 }

@@ -41,6 +41,9 @@ const WINNERS = [
 /** 读取某个活动的开关参数 enabled */
 const isEnabled = (ctx: MockContext, activity: string) => params<{ enabled: boolean }>(ctx, activity).enabled
 
+/** 首页 Telegram 悬浮入口打开的链接：Telegram 官网首页，不指向任何真实频道 */
+const TG_LINK = 'https://t.me/'
+
 /**
  * 虚构电子游戏的名称，首页游戏列表、大奖预告和电子大奖页共用，保证三处同名。
  *
@@ -100,7 +103,8 @@ const homeSettings: MockHandler = (ctx) => {
 	const turntable = isEnabled(ctx, 'turntable')
 	const jackpot = params<{ validDays: number; maxAmount: number }>(ctx, 'jackpot')
 	return ok({
-		areaPhoneLenList: [{ area: '+91', len: 10 }],
+		// len 是字符串（固定长度 "10" 或区间 "8-10"），utils/util.ts 的 maxlength 对它调用 indexOf
+		areaPhoneLenList: [{ area: '+91', len: '10' }],
 		arbApiUrl: [],
 		headLogo: '',
 		isShowAppDownloadUp: false,
@@ -130,7 +134,8 @@ const homeSettings: MockHandler = (ctx) => {
 		homeBigTurntableLink: '',
 		homeBigTurntableImgUrl: '',
 		lotteryDragonIcon: '',
-		telegramExternalLink: '',
+		// 加入频道奖励（账变 124）：链接非空时首页右侧悬浮区出现 Telegram 入口（common/Turntable.vue）
+		telegramExternalLink: isEnabled(ctx, 'tgChannel') ? TG_LINK : '',
 		telegramImgUrl: '',
 		// setting.ts 用 || false 直接判真假，不走 translateBoolean，这里传原始布尔值
 		isOpenTurntable: turntable,
