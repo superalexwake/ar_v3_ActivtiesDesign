@@ -336,6 +336,18 @@
 			color: var(--c-html);
 		}
 
+		/* H5 默认隐藏：虚线空心标签，清单单字“隐”与面板头部标签共用 */
+		.catalog__kind--hidden,
+		.tag--hidden {
+			border: 1px dashed var(--c-muted);
+			background: none;
+			color: var(--c-muted);
+		}
+
+		.catalog__kind--hidden {
+			line-height: 16px;
+		}
+
 		.catalog__error {
 			margin: var(--space-2);
 			color: var(--c-danger);
@@ -692,7 +704,7 @@
 			['/main', ['strongBox', 'pointMall', 'championship', 'coupon']],
 		])
 		const USAGE = [
-			['左栏清单', '按分组列出活动与入口页。点击一项，手机按当前场景重新启动并打开对应页面或弹窗；标题前的蓝点表示该活动的参数已调整。'],
+			['左栏清单', '按分组列出活动与入口页。点击一项，手机按当前场景重新启动并打开对应页面或弹窗；标题前的蓝点表示该活动的参数已调整；右侧单字是打开方式（页面、弹窗、原型、无页面），虚线框的“隐”表示玩家端默认隐藏，要打开对应开关才看得到（开关位置见该项说明）。'],
 			['中间手机', 'H5 预览，视口固定 375×812。'],
 			['右栏面板', '当前清单项的控制面板，自上而下是边界场景、参数、动作。'],
 			['边界场景', '一键把多个参数设成某个典型状态并打开页面；场景里没写的参数回到默认值，所以同一场景每次点出来画面都一样。当前参数与某个场景完全一致时，该按钮高亮。'],
@@ -1180,6 +1192,11 @@
 			const dot = el('span', 'catalog__dot')
 			dot.title = '已调整'
 			node.append(dot, el('span', 'catalog__name', item.title))
+			if (item.hidden === true) {
+				const hidden = el('span', 'catalog__kind catalog__kind--hidden', '隐')
+				hidden.title = 'H5 默认隐藏'
+				node.append(hidden)
+			}
 			const kind = KINDS.get(item.kind)
 			node.append(el('span', 'catalog__kind' + (kind ? ' catalog__kind--' + item.kind : ''), kind?.mark ?? '?'))
 			entries.push({ item, node, dot })
@@ -1255,6 +1272,7 @@
 			info.append(el('h2', 'panel__title', item.title))
 			const meta = el('div', 'panel__meta')
 			meta.append(el('span', 'tag tag--' + item.kind, KINDS.get(item.kind)?.label ?? String(item.kind)))
+			if (item.hidden === true) meta.append(el('span', 'tag tag--hidden', 'H5 默认隐藏'))
 			const where = item.kind === 'popup' ? item.popup : item.target
 			if (where != null) meta.append(el('code', 'panel__where', String(where)))
 			info.append(meta)

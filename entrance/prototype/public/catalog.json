@@ -22,6 +22,7 @@
 				{ "title": "保险箱收益", "type": 17, "kind": "route", "target": "/main/StrongBox", "activity": "strongBox" },
 				{ "title": "回归新充值奖励", "type": 134, "kind": "popup", "popup": "re-benefit", "note": "首页弹窗", "activity": "reBenefit" },
 				{ "title": "新手礼包", "type": 113, "kind": "route", "target": "/activity?tab=task", "note": "落在每日任务页的「新手礼包」Tab", "activity": "newbieGift" },
+				{ "title": "锦标赛奖励", "type": 114, "kind": "route", "target": "/activity/Championship", "note": "H5 默认隐藏：在入口页“活动”面板打开“显示电子锦标赛”后，活动页、我的页才出现入口；从这里点开直接进锦标赛页", "hidden": true, "activity": "championship" },
 				{ "title": "新会员玩游戏送彩金", "type": 117, "kind": "route", "target": "/activity/MemberPackage", "activity": "memberPackage" },
 				{ "title": "首充赠送", "type": 10, "kind": "route", "target": "/wallet/Recharge", "note": "充值页各通道展示首充赠送比例", "activity": "rechargeGift" },
 				{ "title": "绑定手机奖励", "type": 104, "kind": "route", "target": "/main/SettingCenter", "note": "安全中心“绑定手机”一行显示奖励（邮箱注册的用户才有这一行），点“绑定手机奖励”场景查看", "activity": "bindReward" },
@@ -371,9 +372,9 @@
 			]
 		},
 		"championship": {
-			"note": "活动开关控制活动页赛事卡和我的页“我的锦标赛”；进行中剩余时间从应用时刻起算，归零后该赛事移到“已结束”。",
+			"note": "默认隐藏：活动开关和入口页“活动”面板的“显示电子锦标赛”都打开时，活动页的电子锦标赛卡片与顶部图标、我的页“我的锦标赛”才出现；进行中剩余时间从应用时刻起算，归零后该赛事移到“已结束”。",
 			"params": [
-				{ "name": "enabled", "label": "活动开关", "type": "boolean", "default": true, "drives": "isOpenChampion（开关字段与 userInfo）" },
+				{ "name": "enabled", "label": "活动开关", "type": "boolean", "default": true, "drives": "isOpenChampion（开关字段与 userInfo；还要“活动”面板的“显示电子锦标赛”打开才为 1）" },
 				{ "name": "entrance", "label": "活动页入口卡", "type": "select", "default": "signup", "options": [{ "value": "signup", "label": "报名中" }, { "value": "running", "label": "进行中" }, { "value": "ended", "label": "已结束" }], "drives": "ChampionEntrance 返回对应赛事" },
 				{ "name": "remain", "label": "进行中剩余时间", "type": "countdown", "default": 518400, "min": 0, "max": 2592000, "drives": "进行中赛事 endTime + 信封 serviceNowTime" },
 				{ "name": "joined", "label": "已报名进行中赛事", "type": "boolean", "default": false, "drives": "isJoin、GetChampionTaskDetail.userJoinInfo" },
@@ -381,7 +382,7 @@
 			],
 			"presets": [
 				{ "label": "默认", "values": {}, "note": "报名中入口、未报名" },
-				{ "label": "入口进行中", "values": { "entrance": "running" }, "note": "活动页卡片显示倒计时", "route": "/activity" },
+				{ "label": "入口进行中", "values": { "entrance": "running" }, "note": "活动页卡片显示倒计时（需先在“活动”面板打开“显示电子锦标赛”）", "route": "/activity" },
 				{ "label": "即将结束", "values": { "remain": 30 }, "note": "归零后列表刷新，该赛事移到“已结束”" },
 				{ "label": "已报名", "values": { "joined": true }, "note": "按钮“已报名”，详情显示我的排名、投注额" },
 				{ "label": "报名失败·充值不足", "values": { "joinResult": "804" } },
