@@ -8,7 +8,7 @@
 						:dot="isDot(item.noread)"
 						:content="badgeNum(item.noread)"
 						max="99"
-						color="#FA5B5B"
+						color="#F95959"
 					>
 						<div :class="[item.icon, 'bgcontainer']"></div>
 					</van-badge>

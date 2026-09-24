@@ -114,7 +114,7 @@ const formatBonusAmount = (value: number) => {
 	.activity-bonus-card{
 		display: flex;
 		width: 100%;
-		background: #FDE9E9;
+		background: #F6E1E6;
 		border-radius: 16px;
 		padding: 24px 0;
 		&.is-hidden{
@@ -127,14 +127,14 @@ const formatBonusAmount = (value: number) => {
 			flex: 1;
 			padding: 0 24px;
 			&:first-child{
-				border-right: 1px solid rgba(249, 89, 89, 0.15);
+				border-right: 1px solid #F3E0E5;
 			}
 			p{
 				font-weight: 400;
 				font-size: 26px;
 				line-height: 32px;
 				margin-bottom: 6px;
-				color: #1E2637;
+				color: #544E54;
 			}
 			h3{
 				font-weight: 700;

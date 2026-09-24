@@ -931,7 +931,7 @@ $buy-tint: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 
 		width: 100%;
 		margin: 32px 0;
 		padding: 24px;
-		background: #FDE9E9;
+		background: #F7E9EE;
 		border-radius: 16px;
 
 		&__info{
@@ -960,7 +960,7 @@ $buy-tint: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 
 			align-items: center;
 			justify-content: center;
 			border-radius: 32px;
-			background: linear-gradient(90deg, #FFC3A2 0%, #FF8E89 100%);
+			background: linear-gradient(90deg, #FD6969 0%, #FE8A86 100%);
 			color: #fff;
 			font-size: 28px;
 			font-weight: 600;
@@ -1158,18 +1158,29 @@ $buy-tint: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 
 					position: relative;
 					height: 32px;
 					border-radius: 16px;
-					background: #FDE9E9;
+					background: linear-gradient(90deg, #FE8D88 0%, #FFBA9F 100%);
 					overflow: hidden;
+					// 未完成部分在渐变底上叠一层60%白色半透明,已完成部分由更高层级的 .tp-fill 用同一渐变实色覆盖,视觉上更"实"
+					&::before{
+						content: '';
+						position: absolute;
+						inset: 0;
+						z-index: 0;
+						background: rgba(255, 255, 255, 0.6);
+					}
 				}
 				.tp-fill{
+					position: relative;
+					z-index: 1;
 					height: 100%;
 					border-radius: 16px;
-					background: linear-gradient(90deg, #FFC3A2 0%, #FF8E89 100%);
+					background: linear-gradient(90deg, #FE8D88 0%, #FFBA9F 100%);
 					transition: width .3s;
 				}
 				.tp-text{
 					position: absolute;
 					inset: 0;
+					z-index: 2;
 					display: flex;
 					align-items: center;
 					justify-content: center;
@@ -1180,7 +1191,7 @@ $buy-tint: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 
 						color: #fff;
 					}
 					&--dark{
-						color: #1E2637;
+						color: #fff;
 					}
 				}
 			}
@@ -1262,7 +1273,7 @@ $buy-tint: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 
 					line-height: 66px; // 70 减去上下各 2px 边框,与其余三态视觉齐高
 				}
 				&.status2{
-					background: linear-gradient(90deg, #FFC3A2 0%, #FF8E89 100%);
+					background: #F95959;
 					color: #fff;
 				}
 				&.status3{

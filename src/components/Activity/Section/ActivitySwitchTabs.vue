@@ -47,12 +47,12 @@ const tabs = computed<{ key: ActivityTopTab; label: string }[]>(() => [
 		align-items: center;
 		justify-content: center;
 		font-size: 32px;
-		color: var(--text_color_L2, #768096);
+		color: #898E9C;
 
 		&.is-active {
 			margin: 8px 4px;
 			height: 72px;
-			background: var(--main_gradient-color);
+			background: linear-gradient(90deg, #FE8D88 0%, #FEBD9F 100%);
 			border-radius: 12px;
 			color: var(--text_color_L4, #fff);
 			font-weight: 700;
