@@ -2230,6 +2230,7 @@ export default {
 	activityTip7: '领取奖励',
 	activityTip8: '完成每周/每日任务，领取丰富的奖励',
 	activityTaskTab: '任务',
+	activityGoLoginBtn: '前往登录',
 	activityFilterNewUser: '新人',
 	activityBigWheel: '大转盘',
 	activityTagHot: 'HOT',

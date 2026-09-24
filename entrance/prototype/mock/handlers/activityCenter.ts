@@ -107,7 +107,7 @@ const DEFAULT_ICON_ORDER: Record<number, number> = { 1007: 1, 1008: 2, 1009: 3, 
  * 图标行(推荐位)完全由这里算出的 iconSet 驱动(2026-09-23 二次拍板：去掉上一轮"活动奖励固定排
  * 第一位"的前端写死逻辑)。控制台没有多选清单控件，用 3 组预设(按 bannerID)代替逐条勾选。
  *
- * @param showChampionship - 电子锦标赛(1004)默认从活动列表里隐藏(见 `showChampionship` 参数)。
+ * @param showChampionship - 电子锦标赛(1004)是否出现在活动列表(见 `showChampionship` 参数，默认打开)。
  * @param showActivityAward - 活动奖励(1007)默认从活动列表里隐藏(见 `showActivityAward` 参数)；
  * 2026-09-24 起该开关只影响"活动奖励"是否作为卡片出现在下方活动列表，不再影响图标行(图标行的活动奖励
  * 图标始终按 iconSet 展示，与 RECOMMEND_ICON_META.taskReward 的 enabled() 各自把关)。
@@ -122,7 +122,7 @@ const recommendSetFor = (
 	switch (preset) {
 		case 'default': {
 			// 推荐标签名单(卡片"推荐"角标):活动奖励(1007)、首充返利(1002)、邀请奖励(1008)、
-			// 大转盘(1003)、新会员礼包(1005)、洗码返水(1009)、超级奖池(1010)
+			// 大转盘(1003)、新会员礼包(1005)、洗码量(1009)、超级大奖(1010)
 			const tagSet = new Set([1007, 1002, 1008, 1003, 1005, 1009, 1010])
 			// 图标行名单(固定 6 个，不含首充返利 1002):见 DEFAULT_ICON_ORDER
 			const iconSet = new Set(Object.keys(DEFAULT_ICON_ORDER).map(Number))
@@ -147,7 +147,7 @@ const recommendSetFor = (
  * 活动列表默认(未打开任何显示开关时)只展示这 4 张卡:电子锦标赛(1004,受 showChampionship 单独控制)、
  * 首充返利(1002)、邀请奖励(1008)、积分商城(1011)。以下条目 2026-09-24 起默认从活动列表隐藏，但假数据
  * 不删除，仍可通过顶部图标行(iconSet)或活动详情直接访问：大转盘(1003)、新会员礼包(1005)、
- * 国庆充值活动(1006)、洗码返水(1009)、超级奖池(1010)。活动奖励(1007)本身不是真实活动(点击只是切到
+ * 国庆充值活动(1006)、洗码量(1009)、超级大奖(1010)。活动奖励(1007)本身不是真实活动(点击只是切到
  * 任务页签)，是否作为列表卡片出现单独由 showActivityAward 控制，默认关闭。
  */
 const LIST_HIDDEN_BY_DEFAULT = new Set([1003, 1005, 1006, 1009, 1010])
@@ -157,7 +157,7 @@ const LIST_HIDDEN_BY_DEFAULT = new Set([1003, 1005, 1006, 1009, 1010])
  * 默认(未打开任何开关时)下方滚动列表只展示 4 张卡，顺序为 电子锦标赛(HOT，带倒计时/最高奖金框，
  * showChampionship 默认已打开) → 首充返利(推荐) → 邀请奖励(NEW) → 积分商城(无标签)。活动奖励
  * (点击切任务页签，未登录也能点)本身不算一张真实活动卡，默认不出现在列表，只受 `showActivityAward`
- * 参数单独控制是否额外出现在列表；大转盘/新会员礼包/国庆充值活动/洗码返水/超级奖池等条目默认也不在
+ * 参数单独控制是否额外出现在列表；大转盘/新会员礼包/国庆充值活动/洗码量/超级大奖等条目默认也不在
  * 列表里出现(数据仍在，见 `LIST_HIDDEN_BY_DEFAULT`)，但仍可能出现在顶部图标行。「每日签到」仍不放
  * 回来(它属于任务页签)。卡名"电子锦标赛""首充返利"按 2026-09-23 设计稿口径改名，之前分别叫
  * "锦标赛""首充奖励"。
@@ -168,7 +168,7 @@ const LIST_HIDDEN_BY_DEFAULT = new Set([1003, 1005, 1006, 1009, 1010])
  * `specialTag ?? (recommend ? 'recommend' : null)`。specialTag 与 recommend 同时命中时(如"邀请奖励"
  * 默认 NEW+推荐都成立)按这条规则 specialTag 优先显示，因为卡片同一时间只有一个标签位——这是我这轮加的
  * 取舍规则，不是已有约定，已在回报里单独标注待确认。
- * 1007(活动奖励)、1008(邀请奖励)、1009(洗码返水)、1010(超级奖池)、1011(积分商城)没有现成的大图
+ * 1007(活动奖励)、1008(邀请奖励)、1009(洗码量)、1010(超级大奖)、1011(积分商城)没有现成的大图
  * banner 素材，复用 1006 同款通用活动图(image: 'activity')占位。
  * category(充值/游戏/新人)是活动页筛选用的固定枚举，不走 pick() 本地化——展示文案由
  * ActivityFilterTabs.vue 按枚举值统一走 $t()。
@@ -189,8 +189,9 @@ const banners = (ctx: MockContext) => {
 		{ bannerID: 1003, bannerTitle: pick(ctx, '大转盘', 'Spin Wheel', 'स्पिन व्हील'), jumpType: 2, contents: '/activity/Turntable', image: 'turntable', category: 'game', specialTag: null, activityCode: 'bigWheel' },
 		{ bannerID: 1005, bannerTitle: pick(ctx, '新会员礼包', 'New Member Gift Pack', 'नए सदस्य उपहार पैक'), jumpType: 2, contents: '/activity/MemberPackage', image: 'member-package', category: 'newUser', specialTag: null, activityCode: 'newMemberPackage' },
 		{ bannerID: 1006, bannerTitle: pick(ctx, '国庆充值活动', 'National Day Deposit Event', 'राष्ट्रीय दिवस डिपॉज़िट इवेंट'), jumpType: 0, contents: '', image: 'activity', category: 'recharge', specialTag: null, activityCode: null },
-		{ bannerID: 1009, bannerTitle: pick(ctx, '洗码返水', 'Betting Rebate', 'बेटिंग रिबेट'), jumpType: 2, contents: '/main/Laundry', image: 'activity', category: 'game', specialTag: null, activityCode: 'laundry' },
-		{ bannerID: 1010, bannerTitle: pick(ctx, '超级奖池', 'Super Jackpot', 'सुपर जैकपॉट'), jumpType: 2, contents: '/main/SuperJackpot', image: 'activity', category: 'game', specialTag: null, activityCode: 'superJackpot' },
+		// 2026-09-24 拍板:名称改「洗码量」「超级大奖」,对齐设计稿图标行第 3、4 个文字(两条默认不出现在下方列表,不连带影响列表展示)
+		{ bannerID: 1009, bannerTitle: pick(ctx, '洗码量', 'Turnover', 'टर्नओवर'), jumpType: 2, contents: '/main/Laundry', image: 'activity', category: 'game', specialTag: null, activityCode: 'laundry' },
+		{ bannerID: 1010, bannerTitle: pick(ctx, '超级大奖', 'Super Jackpot', 'सुपर जैकपॉट'), jumpType: 2, contents: '/main/SuperJackpot', image: 'activity', category: 'game', specialTag: null, activityCode: 'superJackpot' },
 	]
 		// 不再整条过滤掉 1004/1007:两者数据始终保留在返回结果里，是否作为下方列表卡片出现改由 hidden 字段控制，
 		// 顶部图标行(iconSet)与它们是否 hidden 无关(图标行可以出现，即使对应活动此刻在列表里是隐藏的)

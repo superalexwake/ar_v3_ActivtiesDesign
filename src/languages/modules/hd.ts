@@ -2214,6 +2214,7 @@ export default {
 	activityTip7: 'पुरस्कार प्राप्त करें',
 	activityTip8: 'साप्ताहिक/दैनिक कार्यों को पूरा करें और भरपूर पुरस्कार प्राप्त करें',
 	activityTaskTab: 'कार्य',
+	activityGoLoginBtn: 'लॉगिन पर जाएँ',
 	activityFilterNewUser: 'नया उपयोगकर्ता',
 	activityBigWheel: 'स्पिन व्हील',
 	activityTagHot: 'HOT',

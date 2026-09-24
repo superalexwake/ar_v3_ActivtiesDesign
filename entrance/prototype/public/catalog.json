@@ -365,14 +365,14 @@
 			"note": "活动开关控制活动页赛事卡和我的页“我的锦标赛”；进行中剩余时间从应用时刻起算，归零后该赛事移到“已结束”。",
 			"params": [
 				{ "name": "enabled", "label": "活动开关", "type": "boolean", "default": true, "drives": "isOpenChampion（开关字段与 userInfo）" },
-				{ "name": "entrance", "label": "活动页入口卡", "type": "select", "default": "signup", "options": [{ "value": "signup", "label": "报名中" }, { "value": "running", "label": "进行中" }, { "value": "ended", "label": "已结束" }], "drives": "ChampionEntrance 返回对应赛事" },
-				{ "name": "remain", "label": "进行中剩余时间", "type": "countdown", "default": 518400, "min": 0, "max": 2592000, "drives": "进行中赛事 endTime + 信封 serviceNowTime" },
+				{ "name": "entrance", "label": "活动页入口卡", "type": "select", "default": "running", "options": [{ "value": "signup", "label": "报名中" }, { "value": "running", "label": "进行中" }, { "value": "ended", "label": "已结束" }], "drives": "ChampionEntrance 返回对应赛事；2026-09-24 起默认改为「进行中」，与活动列表默认第一张卡(电子锦标赛)常驻显示的倒计时/最高奖金叠层对齐设计稿" },
+				{ "name": "remain", "label": "进行中剩余时间", "type": "countdown", "default": 475926, "min": 0, "max": 2592000, "drives": "进行中赛事 endTime + 信封 serviceNowTime；默认值对齐设计稿 `5.webp` 的示例「倒计时 5天 12:12:06」" },
 				{ "name": "joined", "label": "已报名进行中赛事", "type": "boolean", "default": false, "drives": "isJoin、GetChampionTaskDetail.userJoinInfo" },
 				{ "name": "joinResult", "label": "报名结果", "type": "select", "default": "ok", "options": [{ "value": "ok", "label": "成功" }, { "value": "803", "label": "打码不足" }, { "value": "804", "label": "充值不足" }, { "value": "805", "label": "绑定不足" }, { "value": "807", "label": "指定游戏投注" }], "drives": "JoinChampionTask：fail(msg, { msgCode, data })，data 依次为 ₹100、₹500、2（UPI）、{ a: 'Win Go', b: 'K3', c: '₹100' }" }
 			],
 			"presets": [
-				{ "label": "默认", "values": {}, "note": "报名中入口、未报名" },
-				{ "label": "入口进行中", "values": { "entrance": "running" }, "note": "活动页卡片显示倒计时", "route": "/activity" },
+				{ "label": "默认", "values": {}, "note": "进行中入口、未报名，活动页卡片默认显示倒计时/最高奖金" },
+				{ "label": "入口报名中", "values": { "entrance": "signup" }, "note": "活动页卡片不显示倒计时叠层" },
 				{ "label": "即将结束", "values": { "remain": 30 }, "note": "归零后列表刷新，该赛事移到“已结束”" },
 				{ "label": "已报名", "values": { "joined": true }, "note": "按钮“已报名”，详情显示我的排名、投注额" },
 				{ "label": "报名失败·充值不足", "values": { "joinResult": "804" } },

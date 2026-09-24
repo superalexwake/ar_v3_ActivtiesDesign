@@ -128,10 +128,10 @@ const flag = (on: boolean) => (on ? '1' : '0')
 const isEnabled = (ctx: MockContext, activity: string) => params<{ enabled: boolean }>(ctx, activity).enabled
 
 /**
- * 锦标赛入口是否对用户可见(2026-09-23 拍板:锦标赛全站默认隐藏)：既要 championship 活动自己的开关打开，
- * 也要活动页「显示锦标赛」开关(activityCenter.showChampionship)打开；后者默认 false，所以锦标赛在两处
- * 开关都保持默认时不可见——isOpenChampion 字段是"我的"页锦标赛入口、活动页赛事卡数据拉取共用的唯一开关，
- * 这里统一收口，不用在各个消费它的前端文件里分别判断。
+ * 锦标赛入口是否对用户可见：既要 championship 活动自己的开关打开，也要活动页「显示锦标赛」开关
+ * (activityCenter.showChampionship)打开；两者均默认 true(2026-09-24 起)，锦标赛默认可见——
+ * isOpenChampion 字段是"我的"页锦标赛入口、活动页赛事卡数据拉取共用的唯一开关，这里统一收口，
+ * 不用在各个消费它的前端文件里分别判断。
  */
 const isChampionshipVisible = (ctx: MockContext) =>
 	isEnabled(ctx, 'championship') && params<ActivityCenterParams>(ctx, 'activityCenter').showChampionship

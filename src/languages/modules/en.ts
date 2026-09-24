@@ -2287,6 +2287,7 @@ export default {
 	activityTip7: 'Receive award',
 	activityTip8: 'Complete weekly/daily tasks and receive rich rewards',
 	activityTaskTab: 'Task',
+	activityGoLoginBtn: 'Go to login',
 	activityFilterNewUser: 'New user',
 	activityBigWheel: 'Spin Wheel',
 	activityTagHot: 'HOT',

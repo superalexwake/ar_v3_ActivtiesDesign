@@ -25,7 +25,7 @@
 				</div>
 			</div>
 			<div v-else class="activity-banner__login-btn" @click="$emit('bonus')">
-				{{ $t('goLogin') }}
+				{{ $t('activityGoLoginBtn') }}
 			</div>
 		</div>
 	</div>
