@@ -11,9 +11,9 @@
 
 | 要改的内容 | 位置 |
 |---|---|
-| 活动页面 | `src/views/activity`（含周卡月卡、积分商城）、`src/views/main`（洗码、电子大奖、保险箱、邀请奖励、充值优惠券、红包兑换）、`src/views/vip`、`src/views/turntable`、`src/views/promotion`、`src/views/wallet/Recharge`（首充赠送） |
+| 活动页面 | `src/views/activity`（含周卡月卡、积分商城）、`src/views/main`（洗码、电子大奖、保险箱、邀请奖励、充值优惠券、红包兑换）、`src/views/vip`、`src/views/turntable`、`src/views/promotion`、`src/views/wallet/Recharge`（首充赠送、充值等级奖励）、`src/views/wallet/Withdraw`（提现活动奖励）、`src/views/main/SettingCenter`（绑定手机 / 邮箱奖励） |
 | 共享组件 | `src/components`（优先复用） |
-| 假数据 | `entrance/prototype/mock/handlers/<功能>.ts`，文件名对应页面（周卡月卡 `periodCard.ts`、积分商城 `pointMall.ts`、优惠券 `coupon.ts`、宝箱 `treasureChest.ts`、红包兑换 `redeemGift.ts`、充值 `recharge.ts` 等） |
+| 假数据 | `entrance/prototype/mock/handlers/<功能>.ts`，文件名对应页面（周卡月卡 `periodCard.ts`、积分商城 `pointMall.ts`、优惠券 `coupon.ts`、宝箱 `treasureChest.ts`、红包兑换 `redeemGift.ts`、充值 `recharge.ts`、提现 `withdraw.ts`、绑定奖励 `bindReward.ts` 等） |
 | 控制台清单与控制项声明 | `entrance/prototype/public/catalog.json`：`groups` 是左栏清单，`activities` 是每个活动的参数、边界场景、动作 |
 | 读取活动参数 | `entrance/prototype/mock/scenario.ts` 的 `params<T>(ctx, '<活动ID>')` |
 | 独立 HTML 原型 | `entrance/prototype/public/prototypes/<名称>/index.html` |
@@ -24,7 +24,7 @@
 2. 页面调用了新接口：在对应功能的 handlers 文件里加处理函数，键使用 `@/api/url` 的常量（如 `[api.GetDailyAwardList]`），返回字段与页面读取的字段一致。新功能就新建 handlers 文件，并在 `handlers/index.ts` 登记。
 3. mock 层只能导入第三方库、mock 自身文件、`@/api/url` 和 `import type`，不能导入 `src` 下的其他运行时模块。
 4. 领取类接口使用 `claim()`，领取键以 `<活动ID>:` 开头（如 `signIn:3`）；列表的已领取状态用 `rewardStatus()`（`entrance/prototype/mock/state.ts`）。控制台按活动 ID 清理会话数据，键名不按约定，该活动的“边界场景”和“恢复默认”就不会生效。
-5. 新增页面入口：在 `catalog.json` 的 `groups` 中登记，`kind` 取 `route`、`popup`、`html`、`none`；有可调参数的活动在清单项上写 `activity`（活动 ID），并在 `activities` 中声明参数、边界场景和动作（格式见控制项设计 §1.1）。
+5. 新增页面入口：在 `catalog.json` 的 `groups` 中登记，`kind` 取 `route`、`popup`、`html`、`none`；有可调参数的活动在清单项上写 `activity`（活动 ID），并在 `activities` 中声明参数、边界场景和动作（格式见控制项设计 §1.1）。玩家端默认隐藏的入口加 `"hidden": true`（清单显示“隐”），并在 `note` 里写明打开它的开关在哪。
 6. 独立 HTML 原型：复制 `prototypes/_example` 目录并改名后修改，再在 `catalog.json` 的 `groups` 里新增（或沿用已有的）“新设计”分组登记，路径写 `prototypes/<名称>/index.html`。
 7. 只看原型相关的租户文件：入口 `entrance/prototype`、皮肤 `src/assets/redStyle`、首页 `src/views/home/other/redHome.vue`。`entrance/` 下其他租户目录和 `src/assets` 下其他皮肤目录不参与构建，不要修改，也不要当作参考；这些租户目录里的接口域名已换成 `prototype.invalid`，GA、Firebase 等统计与推送配置已清空，不要填回真实值。
 8. 禁止改动：`entrance/prototype/main.ts` 第一行的 `import './mock'`、`entrance/prototype/mock/index.ts` 的安装顺序。`src/` 下只允许三类改动：`src/plugins/html.ts`；从 `upstream/uat` 整体移植、内容与 uat 完全一致的周卡月卡相关文件（含其中 `src/api/url.ts` 新增的接口 key 和 `src/api/modules/activity.ts` 新增的函数）；请求签名的空实现（`src/api/http/requestBuilder.ts` 的 `signRequest`、`src/saasLottery/utils/md5.ts` 的 `signData` 不计算签名，防止代码被拿去直接连接真实后端，不要恢复）。根提交是基线快照，`git diff --name-only $(git rev-list --max-parents=0 HEAD) -- src` 列出的就是这些文件，结果里不应出现其他路径。`src/api/axios.ts`、`src/api/http/` 等请求层其余部分禁止改动。

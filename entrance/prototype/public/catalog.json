@@ -22,8 +22,16 @@
 				{ "title": "保险箱收益", "type": 17, "kind": "route", "target": "/main/StrongBox", "activity": "strongBox" },
 				{ "title": "回归新充值奖励", "type": 134, "kind": "popup", "popup": "re-benefit", "note": "首页弹窗", "activity": "reBenefit" },
 				{ "title": "新手礼包", "type": 113, "kind": "route", "target": "/activity?tab=task", "note": "落在每日任务页的「新手礼包」Tab", "activity": "newbieGift" },
+				{ "title": "锦标赛奖励", "type": 114, "kind": "route", "target": "/activity/Championship", "note": "H5 默认隐藏：在入口页“活动”面板打开“显示电子锦标赛”后，活动页、我的页才出现入口；从这里点开直接进锦标赛页", "hidden": true, "activity": "championship" },
 				{ "title": "新会员玩游戏送彩金", "type": 117, "kind": "route", "target": "/activity/MemberPackage", "activity": "memberPackage" },
-				{ "title": "首充赠送", "type": 10, "kind": "route", "target": "/wallet/Recharge", "note": "充值页各通道展示首充赠送比例", "activity": "rechargeGift" }
+				{ "title": "首充赠送", "type": 10, "kind": "route", "target": "/wallet/Recharge", "note": "充值页各通道展示首充赠送比例", "activity": "rechargeGift" },
+				{ "title": "绑定手机奖励", "type": 104, "kind": "route", "target": "/main/SettingCenter", "note": "安全中心“绑定手机”一行显示奖励（邮箱注册的用户才有这一行），点“绑定手机奖励”场景查看", "activity": "bindReward" },
+				{ "title": "绑定邮箱奖励", "type": 106, "kind": "route", "target": "/main/SettingCenter", "note": "安全中心“绑定邮箱”一行显示奖励（手机注册的用户才有这一行）", "activity": "bindReward" },
+				{ "title": "绑卡赠送", "type": 25, "kind": "none", "note": "H5 没有展示，只出现在账变记录里" },
+				{ "title": "加入频道奖励", "type": 124, "kind": "route", "target": "/", "note": "首页右侧悬浮的 Telegram 入口；奖励由后台发放，H5 没有领取界面", "activity": "tgChannel" },
+				{ "title": "充值等级奖励", "type": 132, "kind": "route", "target": "/wallet/Recharge", "note": "充值页选金额后“奖金”里含等级奖金，充值记录详情也显示", "activity": "rechargeLevel" },
+				{ "title": "VIP充值等级奖励", "type": 133, "kind": "route", "target": "/wallet/Recharge", "note": "充值明细里的“VIP充值等级奖励”一行，点“VIP 充值等级奖励 +2%”场景查看", "activity": "rechargeGift" },
+				{ "title": "提现活动奖励", "type": 126, "kind": "route", "target": "/wallet/Withdraw", "note": "提现页推荐 ARB 提现的弹窗与赠送比例", "activity": "arbWithdraw" }
 			]
 		},
 		{
@@ -47,7 +55,9 @@
 				{ "title": "优惠券到账弹窗", "kind": "popup", "popup": "coupon-arrival", "note": "首页弹窗", "activity": "couponArrival" },
 				{ "title": "宝箱", "kind": "popup", "popup": "treasure-chest", "note": "首页弹窗", "activity": "treasureChest" },
 				{ "title": "注册彩金", "kind": "popup", "popup": "register-gift", "note": "首页弹窗", "activity": "registerGift" },
-				{ "title": "红包兑换", "kind": "route", "target": "/main/RedeemGift", "activity": "redeemGift" }
+				{ "title": "红包兑换", "kind": "route", "target": "/main/RedeemGift", "activity": "redeemGift" },
+				{ "title": "C2C充值奖励", "kind": "none", "note": "有独立账变类型，业务挂在充值模块下；现网 H5 不展示该奖励" },
+				{ "title": "C2C提现奖励", "kind": "none", "note": "有独立账变类型，业务挂在提现模块下；现网 H5 的 C2C 奖励值恒为 0，不展示" }
 			]
 		}
 	],
@@ -364,7 +374,7 @@
 			]
 		},
 		"championship": {
-			"note": "活动开关控制活动页赛事卡和我的页“我的锦标赛”；进行中剩余时间从应用时刻起算，归零后该赛事移到“已结束”。",
+			"note": "默认隐藏：活动开关和入口页“活动”面板的“显示电子锦标赛”都打开时，活动页的电子锦标赛卡片与顶部图标、我的页“我的锦标赛”才出现；进行中剩余时间从应用时刻起算，归零后该赛事移到“已结束”。",
 			"params": [
 				{ "name": "enabled", "label": "活动开关", "type": "boolean", "default": true, "drives": "isOpenChampion（开关字段与 userInfo）" },
 				{ "name": "entrance", "label": "活动页入口卡", "type": "select", "default": "running", "options": [{ "value": "signup", "label": "报名中" }, { "value": "running", "label": "进行中" }, { "value": "ended", "label": "已结束" }], "drives": "ChampionEntrance 返回对应赛事；2026-09-24 起默认改为「进行中」，与活动列表默认第一张卡(电子锦标赛)常驻显示的倒计时/最高奖金叠层对齐设计稿" },
@@ -389,18 +399,83 @@
 			"note": "充值页各通道展示首充赠送比例；第 4 个通道固定无赠送，用来对照。",
 			"params": [
 				{ "name": "giftRate", "label": "首充赠送比例", "type": "number", "default": 8, "min": 0, "max": 500, "step": 0.1, "unit": "%", "drives": "前 3 个渠道的 maxRechargeRifts、rechargeRifts、newRechargeRiftRate（÷100）；第 4 个渠道固定 0，用来对照“无赠送”渠道" },
-				{ "name": "vipRate", "label": "VIP 加赠比例", "type": "number", "default": 0, "min": 0, "max": 100, "step": 0.1, "unit": "%", "drives": "GetPayTypeName.typelist[].vipRechargeRate（÷100）" },
+				{ "name": "vipRate", "label": "VIP 充值等级奖励比例", "type": "number", "default": 0, "min": 0, "max": 100, "step": 0.1, "unit": "%", "drives": "GetPayTypeName.typelist[].vipRechargeRate（÷100）" },
 				{ "name": "delayDays", "label": "延迟到账天数", "type": "number", "default": 0, "min": 0, "max": 30, "unit": "天", "drives": "rechargetypelist[].delayedRewardDays" },
 				{ "name": "quickGift", "label": "快捷金额赠送", "type": "boolean", "default": true, "drives": "quickConfigList[].giftAmount（false 时为 0）" },
-				{ "name": "records", "label": "有充值记录", "type": "boolean", "default": true, "drives": "GetRechargeRecord：4 条（处理中、成功、失败、已取消，即 state 0/1/2/6）或空列表" }
+				{ "name": "records", "label": "有充值记录", "type": "boolean", "default": true, "drives": "GetRechargeRecord：4 条（待支付、已完成两条、失败，即 state 0/1/1/2）或空列表" }
 			],
 			"presets": [
 				{ "label": "首充 +8%（默认）", "values": {} },
-				{ "label": "首充 + VIP 叠加", "values": { "vipRate": 2 }, "note": "角标“8%+2%”" },
+				{ "label": "VIP 充值等级奖励 +2%", "values": { "vipRate": 2 }, "note": "充值明细多出“VIP充值等级奖励”一行，通道角标变成“8%+2%”" },
 				{ "label": "延迟 3 天到账", "values": { "delayDays": 3 } },
 				{ "label": "已首充无赠送", "values": { "giftRate": 0, "quickGift": false }, "note": "角标消失" },
 				{ "label": "高比例 +188%", "values": { "giftRate": 188 } },
 				{ "label": "无充值记录", "values": { "records": false }, "note": "充值记录区显示空态" }
+			]
+		},
+		"bindReward": {
+			"note": "绑定手机号 / 邮箱送彩金（账变 104 / 106）：安全中心里待绑定的那一行显示“奖励 ₹X”。手机注册的用户显示“绑定邮箱”，邮箱注册的用户显示“绑定手机”。绑定流程可以走通：任意号码和验证码都能绑定成功，首次绑定把奖励加到余额。",
+			"params": [
+				{ "name": "enabled", "label": "活动开关", "type": "boolean", "default": true, "drives": "userInfo.bindReward（关闭时为 0，显示“去绑定”）" },
+				{ "name": "amount", "label": "奖励金额", "type": "number", "default": 58, "min": 0.01, "max": 99999, "step": 0.01, "unit": "₹", "drives": "userInfo.bindReward" },
+				{ "name": "regType", "label": "注册方式", "type": "select", "default": "phone", "options": [{ "value": "phone", "label": "手机注册（显示绑定邮箱）" }, { "value": "email", "label": "邮箱注册（显示绑定手机）" }], "drives": "userInfo.regType（1 手机注册、2 邮箱注册）" },
+				{ "name": "bound", "label": "已绑定", "type": "boolean", "default": false, "drives": "userInfo.verifyMethods 里待绑定的那一项" }
+			],
+			"presets": [
+				{ "label": "绑定邮箱奖励（默认）", "values": {}, "note": "手机注册用户：安全中心“绑定邮箱”显示奖励 ₹58" },
+				{ "label": "绑定手机奖励", "values": { "regType": "email" }, "note": "邮箱注册用户：安全中心“绑定手机”显示奖励 ₹58" },
+				{ "label": "已绑定", "values": { "bound": true }, "note": "显示已绑定的邮箱，不再显示奖励" },
+				{ "label": "活动关闭", "values": { "enabled": false }, "note": "待绑定的一行显示“去绑定”，没有奖励" }
+			],
+			"actions": [
+				{ "label": "打开安全中心", "route": "/main/SettingCenter" }
+			]
+		},
+		"tgChannel": {
+			"note": "加入 Telegram 频道送彩金（账变 124）：首页右侧悬浮区的 Telegram 入口，点击打开频道链接；奖励由后台在用户加入频道后发放，H5 没有领取界面。",
+			"params": [
+				{ "name": "enabled", "label": "显示 TG 入口", "type": "boolean", "default": true, "drives": "GetHomeSettings.telegramExternalLink（关闭时为空）" }
+			],
+			"presets": [
+				{ "label": "显示入口（默认）", "values": {}, "note": "首页右侧悬浮区出现 Telegram 图标" },
+				{ "label": "关闭", "values": { "enabled": false }, "note": "悬浮区没有 Telegram 图标" }
+			],
+			"actions": [
+				{ "label": "回首页看悬浮入口", "route": "/" }
+			]
+		},
+		"rechargeLevel": {
+			"note": "充值等级奖励（账变 132）：按会员充值等级给每笔充值加赠；页面把等级奖金、渠道赠送、快捷金额赠送合并成“奖金”一行，已完成的充值记录详情里也计入奖金。",
+			"params": [
+				{ "name": "enabled", "label": "活动开关", "type": "boolean", "default": true, "drives": "rechargetypelist[].userRechargeLevelGift（关闭时为 null）" },
+				{ "name": "level", "label": "充值等级", "type": "number", "default": 3, "min": 1, "max": 10, "drives": "userRechargeLevelGift.userLevel" },
+				{ "name": "ratio", "label": "等级赠送比例", "type": "number", "default": 2, "min": 0, "max": 100, "step": 0.1, "unit": "%", "drives": "userRechargeLevelGift.giftRatio（÷100）" },
+				{ "name": "cap", "label": "单笔封顶", "type": "number", "default": 200, "min": 1, "max": 99999, "unit": "₹", "drives": "userRechargeLevelGift.maxBonusAmount" }
+			],
+			"presets": [
+				{ "label": "等级 3 · 2%（默认）", "values": {}, "note": "充值 ₹1,000 时奖金多出 ₹20" },
+				{ "label": "高等级 · 5%", "values": { "level": 8, "ratio": 5, "cap": 500 }, "note": "充值 ₹1,000 时奖金多出 ₹50" },
+				{ "label": "封顶 ₹30", "values": { "ratio": 5, "cap": 30 }, "note": "充值 ₹1,000 时等级奖金按封顶只加 ₹30（不封顶应为 ₹50）" },
+				{ "label": "活动关闭", "values": { "enabled": false }, "note": "奖金里不再含等级奖金" }
+			],
+			"actions": [
+				{ "label": "打开充值页", "route": "/wallet/Recharge" }
+			]
+		},
+		"arbWithdraw": {
+			"note": "提现活动奖励（账变 126）：进入提现页弹出“ARPAY奖金指南”，ARB钱包提现方式上显示“平台赠送%+ARB 赠送%”角标，点“去ARB提现”切到 ARB 钱包。原型不做真实出款，提交提现会提示不支持。",
+			"params": [
+				{ "name": "enabled", "label": "活动开关", "type": "boolean", "default": true, "drives": "GetWithdrawals.withdrawalsrule.arbWithdrawRecommand（关闭时不返回）" },
+				{ "name": "giftPercent", "label": "提现赠送比例", "type": "number", "default": 2, "min": 0, "max": 100, "step": 0.1, "unit": "%", "drives": "arbWithdrawRecommand.giftPercent" },
+				{ "name": "arbGiftPercent", "label": "ARB 提现赠送比例", "type": "number", "default": 3, "min": 0, "max": 100, "step": 0.1, "unit": "%", "drives": "arbWithdrawRecommand.arbGiftPercent" }
+			],
+			"presets": [
+				{ "label": "推荐 ARB 提现（默认）", "values": {}, "note": "进入提现页弹出“ARPAY奖金指南”，ARB钱包角标“2%+3%”" },
+				{ "label": "仅 ARB 钱包赠送", "values": { "giftPercent": 0 }, "note": "角标显示“+3%”（页面原样拼接，前面多一个加号）" },
+				{ "label": "活动关闭", "values": { "enabled": false }, "note": "不弹窗、没有角标，ARB钱包提现方式仍在" }
+			],
+			"actions": [
+				{ "label": "打开提现页", "route": "/wallet/Withdraw" }
 			]
 		},
 		"home": {

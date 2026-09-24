@@ -63,6 +63,34 @@ interface RechargeRecordItem {
 	payName: string
 	groupID: number
 	orderAmount: number
+	/** 充值等级奖励金额（已完成订单才有），RechargeOrderDetail.vue 计入奖金合计 */
+	rechargeLevelBonusAmount: number
+}
+
+/** rechargeLevel 活动参数（catalog.json `activities.rechargeLevel.params`） */
+interface RechargeLevelParams {
+	/** 活动开关：关闭时渠道不下发 userRechargeLevelGift */
+	enabled: boolean
+	/** 会员当前的充值等级 */
+	level: number
+	/** 等级赠送比例（%） */
+	ratio: number
+	/** 单笔等级奖金封顶（元） */
+	cap: number
+}
+
+/** 当前渠道的充值等级赠送（RechargeDetail.vue / useRecharge.ts 读取）；活动关闭时为 null */
+function levelGiftOf(ctx: MockContext) {
+	const p = params<RechargeLevelParams>(ctx, 'rechargeLevel')
+	if (!p.enabled) return null
+	return { userLevel: p.level, giftRatio: p.ratio / 100, maxBonusAmount: p.cap }
+}
+
+/** 已完成订单的充值等级奖金：金额 × 比例，不超过封顶 */
+function levelBonusOf(ctx: MockContext, price: number): number {
+	const gift = levelGiftOf(ctx)
+	if (!gift) return 0
+	return Number(Math.min(price * gift.giftRatio, gift.maxBonusAmount).toFixed(2))
 }
 
 /** 充值记录:待支付、已完成两条、失败(state 0/1/1/2);页面的状态文案表 rootConfig.RechargeState 只有 0/1/2,其他状态码会让页面报错 */
@@ -86,6 +114,7 @@ function buildRechargeRecords(ctx: MockContext): RechargeRecordItem[] {
 		payName: channelName(ctx, row.channel),
 		groupID: 0,
 		orderAmount: row.price,
+		rechargeLevelBonusAmount: row.state === 1 ? levelBonusOf(ctx, row.price) : 0,
 	}))
 }
 
@@ -144,6 +173,7 @@ const getRechargeTypes: MockHandler = (ctx) => {
 				quickConfigList,
 				serviceFeeRate: 0,
 				newRechargeRiftRate: giftRate,
+				userRechargeLevelGift: levelGiftOf(ctx),
 			},
 		],
 		banklist: [],

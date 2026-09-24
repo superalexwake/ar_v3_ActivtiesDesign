@@ -1,5 +1,6 @@
 import type { MockRoutes } from '../types'
 import { activityCenterRoutes } from './activityCenter'
+import { bindRewardRoutes } from './bindReward'
 import { championshipRoutes } from './championship'
 import { couponRoutes } from './coupon'
 import { dailyTasksRoutes } from './dailyTasks'
@@ -21,6 +22,7 @@ import { teamPartnerRoutes } from './teamPartner'
 import { treasureChestRoutes } from './treasureChest'
 import { turntableRoutes } from './turntable'
 import { vipRoutes } from './vip'
+import { withdrawRoutes } from './withdraw'
 
 /** 全部接口的路由表，由各功能文件汇总；各文件的键互不重复 */
 export const routes: MockRoutes = {
@@ -46,4 +48,6 @@ export const routes: MockRoutes = {
 	...treasureChestRoutes,
 	...redeemGiftRoutes,
 	...rechargeRoutes,
+	...bindRewardRoutes,
+	...withdrawRoutes,
 }
