@@ -49,14 +49,15 @@ const filters = computed<{ key: ActivityCategory; label: string }[]>(() => [
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		border-radius: 12px;
+		border-radius: 8px;
 		background: #FFFFFF;
+		border: 1px solid #E1E1E1;
 		color: var(--text_color_L2, #768096);
 		font-size: 28px;
-		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
 
 		&.is-active {
-			background: #F95959;
+			background: linear-gradient(90deg, #FFC3A2 0%, #FF8E89 100%);
+			border-color: transparent;
 			color: #fff;
 		}
 	}

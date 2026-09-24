@@ -2,29 +2,29 @@
 	<div class="activity-banner">
 		<div class="activity-banner__row1">
 			<img class="activity-banner__logo" :src="logoImg" alt="" />
-			<div v-if="showRewardCenter" class="activity-banner__detail-link" @click="$emit('bonus')">
+			<div v-if="isLogin && showRewardCenter" class="activity-banner__detail-link" @click="$emit('bonus')">
 				<span>{{ $t('rewardDetails') }}</span>
 				<van-icon name="arrow" />
 			</div>
 		</div>
 		<!--
 			第二行(固定高度,三种状态都占同一个位置,避免下面的「活动｜任务」切换卡片跳动):
-			1) 已登录且未命中隐藏名单:显示"今日奖金/总奖金"两列金额
+			1) 已登录且未命中隐藏名单:显示粉色卡片,内含"今日奖金/总奖金"两列金额
 			2) 已登录但命中隐藏名单(activityBonusHiddenUsers):金额保留占位(visibility:hidden)
-			3) 未登录:换成"前往登录"提示,点击行为与「奖励明细」一致,交给外层同一个 @bonus 处理登录态判断
+			3) 未登录:换成红色实心「前往登录」按钮,点击行为与「奖励明细」一致,交给外层同一个 @bonus 处理登录态判断
 		-->
 		<div class="activity-banner__row2">
-			<ul v-if="isLogin" class="activity-bonus" :class="{ 'is-hidden': !showAmounts }">
-				<li>
+			<div v-if="isLogin" class="activity-bonus-card" :class="{ 'is-hidden': !showAmounts }">
+				<div class="activity-bonus-card__col">
 					<p>{{ $t('todayRewards') }}</p>
 					<h3>{{ formatBonusAmount(todayRewards) }}</h3>
-				</li>
-				<li>
+				</div>
+				<div class="activity-bonus-card__col">
 					<p>{{ $t('totalRewards') }}</p>
 					<h3>{{ formatBonusAmount(totalRewards) }}</h3>
-				</li>
-			</ul>
-			<div v-else class="activity-banner__login" @click="$emit('bonus')">
+				</div>
+			</div>
+			<div v-else class="activity-banner__login-btn" @click="$emit('bonus')">
 				{{ $t('goLogin') }}
 			</div>
 		</div>
@@ -65,9 +65,9 @@ const formatBonusAmount = (value: number) => {
 
 <style lang="scss" scoped>
 .activity-banner{
-	color: #fff;
+	color: #1E2637;
 	font-style: normal;
-	background: #F95959;
+	background: #FFFFFF;
 	padding: 16px 32px 16px;
 	&__row1{
 		display: flex;
@@ -78,14 +78,13 @@ const formatBonusAmount = (value: number) => {
 		display: block;
 		width: auto;
 		height: 40px;
-		// 现有 logo 素材是红色版,强制转白以贴合头部实底红色背景
-		filter: brightness(0) invert(1);
+		// logo 素材本身就是红色版,头部改白底后不再需要转白滤镜
 	}
 	&__detail-link{
 		display: flex;
 		align-items: center;
 		gap: 6px;
-		color: #fff;
+		color: #F95959;
 		font-size: 28px;
 		line-height: 40px;
 		.van-icon{
@@ -94,44 +93,54 @@ const formatBonusAmount = (value: number) => {
 	}
 	&__row2{
 		margin-top: 20px;
-		// 固定最小高度(标签行高32+标签到金额6+金额行高36=74),已登录/未登录两种内容切换时不改变头部总高度
-		min-height: 74px;
+		// 固定最小高度(粉色卡片上下padding24*2+标签行高32+标签到金额6+金额行高36=122),已登录/未登录两种内容切换时不改变头部总高度
+		min-height: 122px;
 		display: flex;
 		align-items: center;
 	}
-	&__login{
-		width: 100%;
-		text-align: center;
+	&__login-btn{
+		width: 320px;
+		height: 80px;
+		margin: 0 auto;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: #F95959;
 		color: #fff;
 		font-size: 28px;
 		font-weight: 500;
+		border-radius: 12px;
 	}
-	.activity-bonus{
+	.activity-bonus-card{
 		display: flex;
 		width: 100%;
+		background: #FDE9E9;
+		border-radius: 16px;
+		padding: 24px 0;
 		&.is-hidden{
 			visibility: hidden;
 		}
-		li{
+		&__col{
 			display: flex;
 			flex-direction: column;
 			align-items: flex-start;
 			flex: 1;
-			padding-left: 32px;
+			padding: 0 24px;
 			&:first-child{
-				border-right: 1px solid rgba(255, 255, 255, 0.35);
+				border-right: 1px solid rgba(249, 89, 89, 0.15);
 			}
 			p{
 				font-weight: 400;
 				font-size: 26px;
 				line-height: 32px;
 				margin-bottom: 6px;
+				color: #1E2637;
 			}
 			h3{
 				font-weight: 700;
 				font-size: 32px;
 				line-height: 36px;
-				color: #FFE45C;
+				color: #F95959;
 			}
 		}
 	}

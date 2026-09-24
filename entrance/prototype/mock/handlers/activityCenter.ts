@@ -13,7 +13,7 @@ export interface ActivityCenterParams {
 	todayRewards: number
 	/** 累计奖励（₹） */
 	totalRewards: number
-	/** 入口红点：count 活动奖励 2、其余 1；dot 全部为 1；none 全部为 0 */
+	/** 入口红点：count 活动奖励 5、超级大奖 4、其余 1；dot 全部为 1；none 全部为 0 */
 	redDot: 'count' | 'dot' | 'none'
 	/** 显示新手引导气泡 */
 	guide: boolean
@@ -28,15 +28,14 @@ export interface ActivityCenterParams {
 	 */
 	recommendPreset: 'default' | 'top3' | 'none'
 	/**
-	 * 显示锦标赛(2026-09-22 拍板:锦标赛默认隐藏,不再从活动列表里删除——HOT 标签、倒计时/最高奖金数据
-	 * 仍保留在假数据里,只是默认不放进 GetActivityList 的返回结果,活动列表和顶部图标行都不出现;打开后原样
-	 * 出现(HOT、倒计时、最高奖金都在)。2026-09-23 拍板对齐设计稿 `活动.png`，卡名改叫"电子锦标赛"。
+	 * 显示锦标赛(2026-09-24 拍板改为默认打开，对齐设计稿 `活动.png` 默认列表第一张即电子锦标赛)：
+	 * 关闭时该条目从下方活动列表隐藏(HOT 标签、倒计时/最高奖金数据仍保留在假数据里，只是 hidden=true，
+	 * 不是删除)；打开后原样出现(HOT、倒计时、最高奖金都在)。卡名"电子锦标赛"对齐 2026-09-23 设计稿口径。
 	 */
 	showChampionship: boolean
 	/**
-	 * 显示活动奖励(2026-09-23 拍板:"活动奖励"以前是每日/每周/月卡/周卡/新人几个活动的汇总入口,现在这些
-	 * 都迁进任务页签了,这条本身默认隐藏,处理方式与 showChampionship 一致——假数据不删,只是默认不放进
-	 * GetActivityList 的返回结果,活动列表和顶部图标行都不出现;打开后原样出现。
+	 * 显示活动奖励(2026-09-24 更新语义：默认关闭，"活动奖励"本身不是真实活动，是"切到任务页签"的
+	 * 顶部图标入口，默认只出现在顶部图标行；打开本开关后额外把它作为一张卡片显示在下方活动列表里)。
 	 */
 	showActivityAward: boolean
 }
@@ -97,46 +96,71 @@ export type RecommendActivityCode = 'taskReward' | 'invitationBonus' | 'laundry'
 const TOP3_CANDIDATE_ORDER = [1007, 1004, 1002, 1008, 1003, 1005, 1009, 1010]
 
 /**
- * 图标行(推荐位)完全由这里的 recommend 勾选驱动(2026-09-23 二次拍板：去掉上一轮"活动奖励固定排
- * 第一位"的前端写死逻辑——连活动奖励本身现在也只是列表里一条普通配置，靠这里勾了 recommend 才会
- * 出现在图标行，勾选顺序跟着下面活动列表的展示顺序走)。控制台没有多选清单控件，用 3 组预设(按
- * bannerID)代替逐条勾选。
+ * 图标行(推荐位)在"default"预设下的固定 6 个 + 顺序(2026-09-24 三次拍板对齐设计稿：活动奖励→邀请奖励→
+ * 洗码量→超级大奖→新会员礼包→大转盘，共 6 个，不含首充返利)。数值即展示顺序，前端 navList 按它排序。
+ * "推荐"标签(卡片上显示的 tag)与图标行membership 不再是同一份名单——首充返利(1002)卡片仍要显示"推荐"
+ * 标签(与下方活动列表口径一致)，但不占图标行的第 7 个位置，故拆成 iconSet/tagSet 两份。
+ */
+const DEFAULT_ICON_ORDER: Record<number, number> = { 1007: 1, 1008: 2, 1009: 3, 1010: 4, 1005: 5, 1003: 6 }
+
+/**
+ * 图标行(推荐位)完全由这里算出的 iconSet 驱动(2026-09-23 二次拍板：去掉上一轮"活动奖励固定排
+ * 第一位"的前端写死逻辑)。控制台没有多选清单控件，用 3 组预设(按 bannerID)代替逐条勾选。
  *
  * @param showChampionship - 电子锦标赛(1004)默认从活动列表里隐藏(见 `showChampionship` 参数)。
- * @param showActivityAward - 活动奖励(1007)默认从活动列表里隐藏(见 `showActivityAward` 参数)。
- * 两者任一隐藏时，"top3"预设按 `TOP3_CANDIDATE_ORDER` 顺序跳过它，取剩余候选的前 3 条；两个都保持
- * 默认(隐藏)时前 3 条是 首充返利→邀请奖励→大转盘。
+ * @param showActivityAward - 活动奖励(1007)默认从活动列表里隐藏(见 `showActivityAward` 参数)；
+ * 2026-09-24 起该开关只影响"活动奖励"是否作为卡片出现在下方活动列表，不再影响图标行(图标行的活动奖励
+ * 图标始终按 iconSet 展示，与 RECOMMEND_ICON_META.taskReward 的 enabled() 各自把关)。
+ * @returns iconSet：决定哪些活动出现在顶部图标行；tagSet：决定哪些活动的卡片显示"推荐"标签。
+ * "top3"/"none"两种预设下两者相同(与旧版行为一致)；仅"default"预设下二者不同。
  */
 const recommendSetFor = (
 	preset: ActivityCenterParams['recommendPreset'],
 	showChampionship: boolean,
 	showActivityAward: boolean
-): Set<number> => {
+): { iconSet: Set<number>; tagSet: Set<number> } => {
 	switch (preset) {
-		// 默认勾选:活动奖励(1007)、首充返利(1002，卡片本来就挂着"推荐"标签)、邀请奖励(1008)、
-		// 大转盘(1003)、新会员礼包(1005)、洗码返水(1009)、超级奖池(1010)
-		case 'default':
-			return new Set([1007, 1002, 1008, 1003, 1005, 1009, 1010])
+		case 'default': {
+			// 推荐标签名单(卡片"推荐"角标):活动奖励(1007)、首充返利(1002)、邀请奖励(1008)、
+			// 大转盘(1003)、新会员礼包(1005)、洗码返水(1009)、超级奖池(1010)
+			const tagSet = new Set([1007, 1002, 1008, 1003, 1005, 1009, 1010])
+			// 图标行名单(固定 6 个，不含首充返利 1002):见 DEFAULT_ICON_ORDER
+			const iconSet = new Set(Object.keys(DEFAULT_ICON_ORDER).map(Number))
+			return { iconSet, tagSet }
+		}
 		case 'top3': {
 			const visible = TOP3_CANDIDATE_ORDER.filter((id) => {
 				if (id === 1007) return showActivityAward
 				if (id === 1004) return showChampionship
 				return true
 			})
-			return new Set(visible.slice(0, 3))
+			const set = new Set(visible.slice(0, 3))
+			return { iconSet: set, tagSet: set }
 		}
 		case 'none':
 		default:
-			return new Set()
+			return { iconSet: new Set(), tagSet: new Set() }
 	}
 }
 
 /**
- * 活动页的活动列表；顺序、名称、标签对齐设计稿 `活动.png` + 2026-09-23 两轮打回的最终口径：
- * 活动奖励(点击切任务页签，未登录也能点，2026-09-23 起默认隐藏，见 `showActivityAward` 参数) → 电子锦标赛
- * (HOT，带倒计时/最高奖金框，2026-09-22 起默认隐藏，见 `showChampionship` 参数) → 首充返利 → 邀请奖励
- * (NEW) → 积分商城 → 其余活动。「每日签到」仍不放回来(它属于任务页签)。卡名"电子锦标赛""首充返利"按
- * 2026-09-23 设计稿口径改名，之前分别叫"锦标赛""首充奖励"。
+ * 活动列表默认(未打开任何显示开关时)只展示这 4 张卡:电子锦标赛(1004,受 showChampionship 单独控制)、
+ * 首充返利(1002)、邀请奖励(1008)、积分商城(1011)。以下条目 2026-09-24 起默认从活动列表隐藏，但假数据
+ * 不删除，仍可通过顶部图标行(iconSet)或活动详情直接访问：大转盘(1003)、新会员礼包(1005)、
+ * 国庆充值活动(1006)、洗码返水(1009)、超级奖池(1010)。活动奖励(1007)本身不是真实活动(点击只是切到
+ * 任务页签)，是否作为列表卡片出现单独由 showActivityAward 控制，默认关闭。
+ */
+const LIST_HIDDEN_BY_DEFAULT = new Set([1003, 1005, 1006, 1009, 1010])
+
+/**
+ * 活动页的活动列表；顺序、名称、标签对齐设计稿 `活动.png` + 2026-09-24 三次拍板的最终口径：
+ * 默认(未打开任何开关时)下方滚动列表只展示 4 张卡，顺序为 电子锦标赛(HOT，带倒计时/最高奖金框，
+ * showChampionship 默认已打开) → 首充返利(推荐) → 邀请奖励(NEW) → 积分商城(无标签)。活动奖励
+ * (点击切任务页签，未登录也能点)本身不算一张真实活动卡，默认不出现在列表，只受 `showActivityAward`
+ * 参数单独控制是否额外出现在列表；大转盘/新会员礼包/国庆充值活动/洗码返水/超级奖池等条目默认也不在
+ * 列表里出现(数据仍在，见 `LIST_HIDDEN_BY_DEFAULT`)，但仍可能出现在顶部图标行。「每日签到」仍不放
+ * 回来(它属于任务页签)。卡名"电子锦标赛""首充返利"按 2026-09-23 设计稿口径改名，之前分别叫
+ * "锦标赛""首充奖励"。
  *
  * @remarks 卡片上显示的"推荐"标签就是 recommend 字段本身(2026-09-23 拍板)：勾了 recommend 才会
  * 同时"上图标行"+"显示推荐标签"，两件事不再分开配置——所以这里不再有独立的 tag:'recommend' 字面量，
@@ -151,12 +175,13 @@ const recommendSetFor = (
  */
 const banners = (ctx: MockContext) => {
 	const { recommendPreset, showChampionship, showActivityAward } = params<ActivityCenterParams>(ctx, 'activityCenter')
-	const recommendSet = recommendSetFor(recommendPreset, showChampionship, showActivityAward)
+	const { iconSet, tagSet } = recommendSetFor(recommendPreset, showChampionship, showActivityAward)
 	return [
-		// 活动奖励(HOT/倒计时等无关，但数据本身都留着):默认不放进返回结果,由 showActivityAward 开关控制显隐,不是删除；
-		// 不是真的可进入活动，是"切到任务页签"的快捷方式；前端按 bannerID===1007 特判，点击不导航、只切 Tab，也不需要登录
+		// 活动奖励(HOT/倒计时等无关):始终在返回结果里(供顶部图标行使用)，是否作为下方列表卡片出现由
+		// showActivityAward 控制 hidden 字段(默认 hidden=true，不是真的删除)；不是真的可进入活动，
+		// 是"切到任务页签"的快捷方式；前端按 bannerID===1007 特判，点击不导航、只切 Tab，也不需要登录
 		{ bannerID: 1007, bannerTitle: pick(ctx, '活动奖励', 'Activity Rewards', 'गतिविधि पुरस्कार'), jumpType: 0, contents: '', image: 'activity', category: 'game', specialTag: null, activityCode: 'taskReward' },
-		// 电子锦标赛(HOT、倒计时、最高奖金数据都留着):默认不放进返回结果,由 showChampionship 开关控制显隐,不是删除
+		// 电子锦标赛(HOT、倒计时、最高奖金数据都留着):始终在返回结果里，hidden 字段由 showChampionship 开关控制(默认打开)
 		{ bannerID: 1004, bannerTitle: pick(ctx, '电子锦标赛', 'e-Tournament', 'ई-टूर्नामेंट'), jumpType: 2, contents: '/activity/Championship', image: 'championship', category: 'game', specialTag: 'hot', activityCode: null },
 		{ bannerID: 1002, bannerTitle: pick(ctx, '首充返利', 'First Deposit Rebate', 'पहला डिपॉज़िट वापसी'), jumpType: 2, contents: '/activity/FirstRecharge', image: 'first-recharge', category: 'recharge', specialTag: null, activityCode: 'firstRecharge' },
 		{ bannerID: 1008, bannerTitle: pick(ctx, '邀请奖励', 'Invitation Bonus', 'आमंत्रण बोनस'), jumpType: 2, contents: '/main/InvitationBonus', image: 'activity', category: 'game', specialTag: 'new', activityCode: 'invitationBonus' },
@@ -167,9 +192,14 @@ const banners = (ctx: MockContext) => {
 		{ bannerID: 1009, bannerTitle: pick(ctx, '洗码返水', 'Betting Rebate', 'बेटिंग रिबेट'), jumpType: 2, contents: '/main/Laundry', image: 'activity', category: 'game', specialTag: null, activityCode: 'laundry' },
 		{ bannerID: 1010, bannerTitle: pick(ctx, '超级奖池', 'Super Jackpot', 'सुपर जैकपॉट'), jumpType: 2, contents: '/main/SuperJackpot', image: 'activity', category: 'game', specialTag: null, activityCode: 'superJackpot' },
 	]
-		.filter((item) => (showChampionship || item.bannerID !== 1004) && (showActivityAward || item.bannerID !== 1007))
+		// 不再整条过滤掉 1004/1007:两者数据始终保留在返回结果里，是否作为下方列表卡片出现改由 hidden 字段控制，
+		// 顶部图标行(iconSet)与它们是否 hidden 无关(图标行可以出现，即使对应活动此刻在列表里是隐藏的)
 		.map(({ image, activityCode, specialTag, ...item }) => {
-			const recommend = recommendSet.has(item.bannerID)
+			const recommend = iconSet.has(item.bannerID)
+			const hidden =
+				item.bannerID === 1007 ? !showActivityAward
+				: item.bannerID === 1004 ? !showChampionship
+				: LIST_HIDDEN_BY_DEFAULT.has(item.bannerID)
 			return {
 				...item,
 				bannerUrl: bannerUrl(ctx, image),
@@ -177,7 +207,8 @@ const banners = (ctx: MockContext) => {
 				visibility: 0,
 				activityCode,
 				recommend,
-				tag: specialTag ?? (recommend ? 'recommend' : null),
+				hidden,
+				tag: specialTag ?? (tagSet.has(item.bannerID) ? 'recommend' : null),
 			}
 		})
 }

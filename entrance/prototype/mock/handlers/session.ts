@@ -111,11 +111,14 @@ const FAKE_USER = {
 	canDirectToGame: true,
 }
 
-/** 活动页入口红点：页面把 1 画成圆点、大于 1 画成数字 */
-const RED_DOT: Record<ActivityCenterParams['redDot'], { award: number; other: number }> = {
-	count: { award: 2, other: 1 },
-	dot: { award: 1, other: 1 },
-	none: { award: 0, other: 0 },
+/**
+ * 活动页入口红点：页面把 1 画成圆点、大于 1 画成数字。
+ * 2026-09-24 对齐设计稿角标示例值：count 档下活动奖励=5、超级大奖=4，其余入口仍为 1。
+ */
+const RED_DOT: Record<ActivityCenterParams['redDot'], { award: number; superJackpot: number; other: number }> = {
+	count: { award: 5, superJackpot: 4, other: 1 },
+	dot: { award: 1, superJackpot: 1, other: 1 },
+	none: { award: 0, superJackpot: 0, other: 0 },
 }
 
 /** 活动开关编码：'1' 开启、'0' 关闭；useActive.ts 的 translateBoolean 只认 '1' */
@@ -178,13 +181,13 @@ function activeSetting(ctx: MockContext) {
  * @returns 各入口计数与 totalCount（底部导航“活动”的红点）；今日已签到或本周期已签满时签到入口为 0。
  */
 function activityRedDot(ctx: MockContext) {
-	const { award, other } = RED_DOT[params<ActivityCenterParams>(ctx, 'activityCenter').redDot]
+	const { award, superJackpot, other } = RED_DOT[params<ActivityCenterParams>(ctx, 'activityCenter').redDot]
 	const signIn = params<{ signedDays: number; todaySigned: boolean }>(ctx, 'signIn')
 	const counts = {
 		activityAwardCount: award,
 		invitationBonusCount: other,
 		bettingRebateCount: other,
-		superJackpotCount: other,
+		superJackpotCount: superJackpot,
 		firstGiftCount: other,
 		invitedWheelCount: other,
 		attendanceBonusCount: signIn.todaySigned || signIn.signedDays >= 7 ? 0 : other,

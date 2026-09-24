@@ -18,7 +18,7 @@
 		</div>
 		<div v-if="hasError" class="gift-exchange-card__error">
 			<svg-icon name="periodCardWarn" />
-			<span>{{ $t('giftExchangeCodeError') }}</span>
+			<span>{{ errorMsg || $t('giftExchangeCodeError') }}</span>
 		</div>
 	</div>
 </template>
@@ -37,6 +37,8 @@ defineEmits<{
 const { t } = useI18n()
 const code = ref('')
 const hasError = ref(false)
+/** 兑换失败时展示的提示文案,取自接口返回的 msg(见下方 onSubmit);没有则回退到本地通用文案 */
+const errorMsg = ref('')
 const submitting = ref(false)
 
 /**
@@ -52,6 +54,7 @@ const onSubmit = async () => {
 	const value = code.value.trim()
 	if (!value) {
 		hasError.value = true
+		errorMsg.value = ''
 		return
 	}
 	if (!(await requireLoginAction())) return
@@ -62,8 +65,10 @@ const onSubmit = async () => {
 			showSuccessToast(t('redeemDialogDesc1'))
 			code.value = ''
 			hasError.value = false
+			errorMsg.value = ''
 		} else {
 			hasError.value = true
+			errorMsg.value = res?.msg || ''
 		}
 	} finally {
 		submitting.value = false

@@ -423,24 +423,24 @@
 			"params": [
 				{ "name": "todayRewards", "label": "今日奖励", "type": "number", "default": 128.5, "min": 0, "max": 9999999, "step": 0.01, "unit": "₹", "drives": "todayRewards（GetLoadedSetting/GetActiveSetting）" },
 				{ "name": "totalRewards", "label": "累计奖励", "type": "number", "default": 3560.8, "min": 0, "max": 9999999, "step": 0.01, "unit": "₹", "drives": "totalRewards" },
-				{ "name": "redDot", "label": "入口红点", "type": "select", "default": "count", "options": [{ "value": "count", "label": "数字（活动奖励 2、其余 1）" }, { "value": "dot", "label": "全部圆点" }, { "value": "none", "label": "无" }], "drives": "activityRedDot.*、unJackpotCount、unWeeklyAwardCount、newbieGiftPackCount" },
+				{ "name": "redDot", "label": "入口红点", "type": "select", "default": "count", "options": [{ "value": "count", "label": "数字（活动奖励 5、超级大奖 4、其余 1）" }, { "value": "dot", "label": "全部圆点" }, { "value": "none", "label": "无" }], "drives": "activityRedDot.*、unJackpotCount、unWeeklyAwardCount、newbieGiftPackCount" },
 				{ "name": "guide", "label": "新手引导气泡", "type": "boolean", "default": false, "drives": "isFinishUserGuidelines（接口 false = 显示气泡，前端取反）" },
 				{ "name": "reminder", "label": "未领奖励提醒", "type": "boolean", "default": false, "drives": "isFirstUserDayRequest: true（需同时有未领数量）" },
 				{ "name": "banners", "label": "活动 Banner", "type": "select", "default": "six", "options": [{ "value": "six", "label": "9 张" }, { "value": "empty", "label": "无" }], "drives": "GetActivityList" },
 				{ "name": "recommendPreset", "label": "活动列表·推荐(recommend)勾选方案", "type": "select", "default": "default", "options": [{ "value": "default", "label": "按预设名单显示推荐标签和顶部图标" }, { "value": "top3", "label": "只显示排在最前面 3 个活动的推荐标签和顶部图标" }, { "value": "none", "label": "不显示任何推荐标签，顶部图标行整块隐藏" }], "drives": "决定哪些活动显示「推荐」标签、哪些活动出现在活动页顶部图标行" },
-				{ "name": "showChampionship", "label": "显示电子锦标赛", "type": "boolean", "default": false, "drives": "打开后电子锦标赛出现在活动列表和顶部图标行" },
-				{ "name": "showActivityAward", "label": "显示活动奖励", "type": "boolean", "default": false, "drives": "打开后活动奖励出现在活动列表和顶部图标行" }
+				{ "name": "showChampionship", "label": "显示电子锦标赛", "type": "boolean", "default": true, "drives": "打开后电子锦标赛出现在活动列表和顶部图标行" },
+				{ "name": "showActivityAward", "label": "显示活动奖励", "type": "boolean", "default": false, "drives": "打开后活动奖励额外出现在活动列表(默认只作为顶部图标行的一个快捷入口，不占列表卡片位)" }
 			],
 			"presets": [
-				{ "label": "默认", "values": {}, "note": "数字红点，活动奖励、电子锦标赛默认隐藏" },
+				{ "label": "默认", "values": {}, "note": "数字红点，电子锦标赛默认显示；活动奖励默认只在顶部图标行" },
 				{ "label": "无红点", "values": { "redDot": "none" } },
 				{ "label": "新手引导气泡", "values": { "guide": true }, "note": "“活动奖励”入口上方出现引导气泡，点击进每日任务" },
 				{ "label": "未领奖励提醒弹窗", "values": { "reminder": true }, "note": "进活动页弹“还有 N 笔奖励未领取”" },
 				{ "label": "无 Banner", "values": { "banners": "empty" }, "note": "空态" },
 				{ "label": "推荐：只前 3 条", "values": { "recommendPreset": "top3" }, "note": "只显示排在最前面的 3 个活动" },
 				{ "label": "推荐：全不推荐", "values": { "recommendPreset": "none" }, "note": "所有活动都不显示推荐标签，顶部图标行隐藏" },
-				{ "label": "显示电子锦标赛", "values": { "showChampionship": true }, "note": "打开后电子锦标赛出现在活动列表和顶部图标行" },
-				{ "label": "显示活动奖励", "values": { "showActivityAward": true }, "note": "打开后活动奖励出现在活动列表和顶部图标行" }
+				{ "label": "隐藏电子锦标赛", "values": { "showChampionship": false }, "note": "关闭后电子锦标赛从活动列表隐藏(默认打开)" },
+				{ "label": "显示活动奖励", "values": { "showActivityAward": true }, "note": "打开后活动奖励额外出现在活动列表(默认只在顶部图标行)" }
 			]
 		},
 		"rewardCenter": {

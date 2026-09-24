@@ -121,7 +121,10 @@ const redeemState = (ctx: MockContext) =>
  */
 const conversionRedpage: MockHandler = (ctx) => {
 	const code = String(ctx.body.giftCode ?? '').trim()
-	if (!code) return fail(pick(ctx, '兑换码错误', 'Invalid redeem code', 'अमान्य रिडीम कोड'), { code: 1, msgCode: 230 })
+	// 兑换码校验:非空但不是 8 位数字、或全 0,直接返回错误,不再往下走 redeemGift.result 参数
+	if (!code || !/^\d{8}$/.test(code) || /^0+$/.test(code)) {
+		return fail(pick(ctx, '兑换码错误', 'Invalid redeem code', 'अमान्य रिडीम कोड'), { code: 1, msgCode: 230 })
+	}
 
 	const p = params<RedeemGiftParams>(ctx, 'redeemGift')
 	if (p.result !== 'cash' && p.result !== 'coupon') {

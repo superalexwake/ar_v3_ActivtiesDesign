@@ -142,12 +142,17 @@ const onSwitchTopTab = (tab: ActivityTopTab) => {
 	switchTopTab(tab)
 }
 
+// 活动列表默认只展示 4 张卡(电子锦标赛/首充返利/邀请奖励/积分商城),其余(大转盘/新会员礼包/国庆充值活动/
+// 洗码返水/超级奖池等)由 mock 按 hidden 字段标记为默认不出现在下方滚动列表(数据仍在,只是不渲染成卡片);
+// hidden 与顶部图标行(recommend)是两个独立维度,某活动即使在下方列表隐藏,仍可能出现在图标行
+const visibleActivityList = computed(() => activityList.value.filter((item: any) => !item.hidden))
+
 // 活动列表筛选(全部/充值/游戏/新人),category 由 mock 假数据的 category 字段提供
 const activeCategory = ref<ActivityCategory>('all')
 const filteredActivityList = computed(() =>
 	activeCategory.value === 'all'
-		? activityList.value
-		: activityList.value.filter((item: any) => item.category === activeCategory.value)
+		? visibleActivityList.value
+		: visibleActivityList.value.filter((item: any) => item.category === activeCategory.value)
 )
 
 // 顶部图标行=「推荐位」,完全由下方活动列表里 recommend=true 的条目筛选+排序驱动(2026-09-23 二次拍板:
@@ -167,6 +172,9 @@ const RECOMMEND_ICON_META: Partial<Record<string, { icon: string; enabled: () =>
 	// 首充奖励专用图标(2026-09-22 换掉通用兜底图),没有对应开关/红点
 	firstRecharge: { icon: 'a7', enabled: () => true, badge: () => 0 },
 }
+// 图标行默认(推荐方案=default)展示顺序:活动奖励→邀请奖励→洗码量→超级大奖→新会员礼包→大转盘;
+// 只对这 6 个 bannerID 生效,其它 bannerID(如 top3/none 预设选出的活动)不在此名单时按原有相对顺序排在最后
+const DEFAULT_ICON_ORDER: Record<number, number> = { 1007: 1, 1008: 2, 1009: 3, 1010: 4, 1005: 5, 1003: 6 }
 const navList = computed<ActivityEntryItem[]>(() =>
 	activityList.value
 		.filter((item: any) => {
@@ -183,6 +191,7 @@ const navList = computed<ActivityEntryItem[]>(() =>
 				noread: meta?.badge() ?? 0,
 			}
 		})
+		.sort((a, b) => (DEFAULT_ICON_ORDER[a.bannerID] ?? 99) - (DEFAULT_ICON_ORDER[b.bannerID] ?? 99))
 )
 
 // 图标点击统一入口:按 bannerID 找回下方活动列表里的原始条目,复用与下方卡片一样的 onClick 跳转/登录逻辑
