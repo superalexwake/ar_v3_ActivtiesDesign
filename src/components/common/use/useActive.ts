@@ -39,6 +39,7 @@ const ActiveObj = reactive({
     newbieGiftPackCount: 0, //未领取新手礼包奖励数
     isOpenChampion: 0, //是否展示锦标赛入口
 	newMemberGiftPackageSwitch:false,  //新会员礼包
+	showTaskStatusFilter: false, // 任务页每日/每周任务状态筛选行(全部/可领取/可参与/已领取/已结束)是否显示
     firstDepositRewardCodeAmount: '', // 首充戏码量倍数
 	todayRewards:0,
 	totalRewards: 0,
@@ -110,6 +111,7 @@ const applyActive = (data: any) => {
     ActiveObj.todayRewards = data.todayRewards || 0
     ActiveObj.totalRewards = data.totalRewards || 0
     ActiveObj.newMemberGiftPackageSwitch = translateBoolean(data.newMemberGiftPackageSwitch)
+    ActiveObj.showTaskStatusFilter = translateBoolean(data.showTaskStatusFilter)
     setRedDot(data?.activityRedDot ?? data?.ActivityRedDot)
 }
 

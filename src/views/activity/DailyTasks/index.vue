@@ -48,7 +48,7 @@
 			<DailySignInPage v-if="activeTab === 'signin'" embedded />
 
 			<template v-if="activeTab === 'day' || activeTab === 'week'">
-				<div class="status-filter" ref="statusFilterRef" @mousedown="statusFilterDrag.onDown">
+				<div v-if="ActiveSotre.showTaskStatusFilter" class="status-filter" ref="statusFilterRef" @mousedown="statusFilterDrag.onDown">
 					<div
 						v-for="f in TASK_FILTERS"
 						:key="String(f.key)"
@@ -827,10 +827,11 @@ $buy-tint: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 
 		}
 	}
 
+	// 2026-09-24 对齐设计稿改为下划线式子页签(原是胶囊按钮):选中项红字+底部短横线,未选中灰字，去掉胶囊底色/阴影
 	.task-tabs{
 		display: flex;
-		gap: 20px;
-		// overflow-x 形成裁切上下文,padding 不留够会切掉按钮阴影
+		gap: 36px;
+		// overflow-x 形成裁切上下文
 		padding: 10px 20px 20px;
 		overflow-x: auto;
 		scrollbar-width: none;
@@ -846,28 +847,33 @@ $buy-tint: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			// 取 min-width 是因 16 语言中长词会撑破定宽,中文下二者等价
-			min-width: 190px;
-			height: 76px;
-			padding: 0 20px;
+			height: 60px;
+			padding: 0 4px;
 			border: none;
-			border-radius: 38px;
-			font-size: 26px;
+			background: transparent;
+			font-size: 28px;
 			white-space: nowrap;
-			background: var(--bg_color_L2);
-			color: var(--text_color_L2);
-			box-shadow: 0 6px 12px 4px rgba(208, 208, 237, 0.36);
+			color: #768096;
 			&.active{
-				background: var(--main_gradient-color2);
-				color: var(--text_color_L4);
+				color: #F95959;
 				font-weight: 700;
-				box-shadow: 0 6px 12px rgba(208, 208, 237, 0.6), inset 0 -4px 10px #FFF6F4;
+				&::after{
+					content: '';
+					position: absolute;
+					left: 50%;
+					bottom: -6px;
+					transform: translateX(-50%);
+					width: 40px;
+					height: 4px;
+					border-radius: 2px;
+					background: #F95959;
+				}
 			}
-			// 可领数量角标,0 不渲染(模板层已判断)
+			// 可领数量角标,0 不渲染(模板层已判断);红底白字圆形
 			.tab-badge{
 				position: absolute;
 				top: -10px;
-				inset-inline-end: -6px;
+				inset-inline-end: -14px;
 				min-width: 32px;
 				height: 32px;
 				padding: 0 6px;
@@ -875,7 +881,7 @@ $buy-tint: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 
 				align-items: center;
 				justify-content: center;
 				border-radius: 16px;
-				background: var(--norm_red-color, #F95959);
+				background: #F95959;
 				color: #fff;
 				font-size: 20px;
 				font-weight: 700;
@@ -917,48 +923,46 @@ $buy-tint: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 
 		}
 	}
 
-	// 一键领取横条
+	// 可领取金额卡(2026-09-24 对齐设计稿:浅粉底+左侧两行金额+右侧渐变按钮)
 	.claim-all{
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 		width: 100%;
-		max-width: 702px;
-		height: 80px;
-		margin: 32px auto 32px;
-		padding: 0 12px 0 24px;
-		background: #FFFFFF;
-		border-radius: 12px;
-		box-shadow: 0 6px 12px 4px rgba(208, 208, 237, 0.2);
+		margin: 32px 0;
+		padding: 24px;
+		background: #FDE9E9;
+		border-radius: 16px;
 
 		&__info{
 			display: flex;
-			align-items: baseline;
-			gap: 12px;
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 6px;
 			overflow: hidden;
 		}
 		&__label{
 			flex-shrink: 0;
-			font-size: 26px;
-			color: #768096;
+			font-size: 24px;
+			color: #1E2637;
 		}
 		&__amount{
-			font-size: 28px;
+			font-size: 48px;
 			font-weight: 700;
-			color: #FEAA57;
+			color: #F95959;
 			white-space: nowrap;
 		}
 		&__btn{
 			flex-shrink: 0;
 			width: 200px;
-			height: 60px;
+			height: 64px;
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			border-radius: 30px;
-			background: linear-gradient(90deg, #FE6868 0%, #FF8A87 100%);
+			border-radius: 32px;
+			background: linear-gradient(90deg, #FFC3A2 0%, #FF8E89 100%);
 			color: #fff;
-			font-size: 26px;
+			font-size: 28px;
 			font-weight: 600;
 			&.locked{
 				opacity: .6;
@@ -996,11 +1000,11 @@ $buy-tint: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 
 		.task-item{
 			position: relative;
 			width: 100%;
-			background:var(--bg_color_L2);
-			border-radius: 20px;
+			background: #FFFFFF;
+			border-radius: 16px;
 			overflow: hidden;
 			padding: 0 0 10px;
-			margin-bottom: 16px;
+			margin-bottom: 20px;
 
 			// 每日/每周任务卡去掉了顶部状态横条(设计稿没有),改用顶部内边距顶开图标+标题行;
 			// 按设计稿实测(卡顶到图标顶)为 24px,新手礼包卡仍保留横条、不叠加这层内边距;
@@ -1015,11 +1019,13 @@ $buy-tint: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 
 			}
 
 			// 已结束(status 4):整卡叠一层灰,不必逐个子元素改色;按钮的置灰另见 .btnOther.status4
+			// 2026-09-24 对齐设计稿改用 #F2F2F2 浅灰(原 rgba(176,179,185,.75) 偏深);
+			// 留一点透明度而非纯色 100%,让图标/文字的轮廓仍隐约可辨,不做逐元素改色的更大改动
 			&.is-ended::after{
 				content: '';
 				position: absolute;
 				inset: 0;
-				background: rgba(176, 179, 185, 0.75);
+				background: rgba(242, 242, 242, 0.9);
 				pointer-events: none;
 			}
 
@@ -1121,13 +1127,15 @@ $buy-tint: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 
 				.type-title{
 					display: flex;
 					align-items: center;
-					justify-content: center;
+					justify-content: flex-start;
 					column-gap: 14px;
-					height: 40px;
-					color: var(--text_color_L2);
+					height: 32px;
+					color: #1E2637;
+					font-size: 28px;
+					font-weight: 700;
 					svg{
-						width:40px;
-						height: 40px;
+						width:32px;
+						height: 32px;
 					}
 
 					html:lang(ar) &{
@@ -1150,13 +1158,13 @@ $buy-tint: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 
 					position: relative;
 					height: 32px;
 					border-radius: 16px;
-					background: #E5E5E5;
+					background: #FDE9E9;
 					overflow: hidden;
 				}
 				.tp-fill{
 					height: 100%;
 					border-radius: 16px;
-					background: linear-gradient(90deg, #FF8E89 0%, #FFC3A2 100%);
+					background: linear-gradient(90deg, #FFC3A2 0%, #FF8E89 100%);
 					transition: width .3s;
 				}
 				.tp-text{
@@ -1165,7 +1173,7 @@ $buy-tint: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 
 					display: flex;
 					align-items: center;
 					justify-content: center;
-					font-size: 24px;
+					font-size: 22px;
 					line-height: 32px;
 					white-space: nowrap;
 					&--light{
@@ -1204,12 +1212,12 @@ $buy-tint: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 
 				}
 			}
 			&-description{
-				color: var(--text_color_L2);
+				color: #768096;
 				padding: 20px;
-				background: var(--bg_color_L3);
-				border-radius: 10px;
+				background: #F6F6F6;
+				border-radius: 8px;
 				margin: 20px;
-				font-size: 22px;
+				font-size: 24px;
 			}
 			&-bottom{
 				display: flex;
@@ -1217,7 +1225,8 @@ $buy-tint: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 
 				justify-content: space-between;
 				padding-bottom: 20px;
 				margin: 0 20px;
-				color: var(--text_color_L2);
+				color: #768096;
+				font-size: 24px;
 				border-bottom: 1px solid var(--Dividing-line_color);
 				.bottom-title{
 					display: flex;
@@ -1230,14 +1239,14 @@ $buy-tint: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 
 					height: 30px;
 				}
 				span {
-					color: var(--norm_secondary-color);
-					font-weight: 400;
+					color: #FEAA57;
+					font-weight: 700;
 					font-size: 28px;
 				}
 			}
 			.btn{
 				color: var(--darkTextW,var(--bg_color_L2));
-				font-size: 30px;
+				font-size: 28px;
 				font-weight: 700;
 				height: 70px;
 				line-height: 70px;
@@ -1247,23 +1256,23 @@ $buy-tint: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 
 			}
 			.btnOther{
 				&.status1{
-					color: var(--main-color);
-					border:1px solid var(--main-color);
-					line-height: 68px; // 减去 1px 边框,与其余三态视觉齐高
+					background: #FFFFFF;
+					color: #F95959;
+					border: 2px solid #F95959;
+					line-height: 66px; // 70 减去上下各 2px 边框,与其余三态视觉齐高
 				}
 				&.status2{
-					background: var(--main_gradient-color);
-					color: var(--text_color_L4);
-
+					background: linear-gradient(90deg, #FFC3A2 0%, #FF8E89 100%);
+					color: #fff;
 				}
 				&.status3{
-					background: var(--button_dis_color, var(--bg_color_L3));
-					color: var(--text_white, var(--text_color_L1));
-				}
-				// 已结束:按钮同样置灰,不可点(clickBtn 已按 status 4 短路)
-				&.status4{
-					background: #AAADB3;
+					background: #CCCEDC;
 					color: #fff;
+				}
+				// 已结束:整卡覆盖浅灰(见 .task-item.is-ended::after),按钮同样置灰,不可点(clickBtn 已按 status 4 短路)
+				&.status4{
+					background: #F2F2F2;
+					color: #768096;
 				}
 			}
 			.btnNew{

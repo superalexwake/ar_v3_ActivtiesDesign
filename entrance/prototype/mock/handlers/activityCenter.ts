@@ -28,9 +28,9 @@ export interface ActivityCenterParams {
 	 */
 	recommendPreset: 'default' | 'top3' | 'none'
 	/**
-	 * 显示锦标赛(2026-09-24 拍板改为默认打开，对齐设计稿 `活动.png` 默认列表第一张即电子锦标赛)：
-	 * 关闭时该条目从下方活动列表隐藏(HOT 标签、倒计时/最高奖金数据仍保留在假数据里，只是 hidden=true，
-	 * 不是删除)；打开后原样出现(HOT、倒计时、最高奖金都在)。卡名"电子锦标赛"对齐 2026-09-23 设计稿口径。
+	 * 显示锦标赛(2026-09-24 拍板恢复默认隐藏)：关闭时该条目从下方活动列表隐藏(HOT 标签、倒计时/
+	 * 最高奖金数据仍保留在假数据里，只是 hidden=true，不是删除)；打开后原样出现(HOT、倒计时、
+	 * 最高奖金都在)。卡名"电子锦标赛"对齐 2026-09-23 设计稿口径。
 	 */
 	showChampionship: boolean
 	/**
@@ -107,7 +107,7 @@ const DEFAULT_ICON_ORDER: Record<number, number> = { 1007: 1, 1008: 2, 1009: 3, 
  * 图标行(推荐位)完全由这里算出的 iconSet 驱动(2026-09-23 二次拍板：去掉上一轮"活动奖励固定排
  * 第一位"的前端写死逻辑)。控制台没有多选清单控件，用 3 组预设(按 bannerID)代替逐条勾选。
  *
- * @param showChampionship - 电子锦标赛(1004)是否出现在活动列表(见 `showChampionship` 参数，默认打开)。
+ * @param showChampionship - 电子锦标赛(1004)默认从活动列表里隐藏(见 `showChampionship` 参数)。
  * @param showActivityAward - 活动奖励(1007)默认从活动列表里隐藏(见 `showActivityAward` 参数)；
  * 2026-09-24 起该开关只影响"活动奖励"是否作为卡片出现在下方活动列表，不再影响图标行(图标行的活动奖励
  * 图标始终按 iconSet 展示，与 RECOMMEND_ICON_META.taskReward 的 enabled() 各自把关)。
@@ -144,23 +144,23 @@ const recommendSetFor = (
 }
 
 /**
- * 活动列表默认(未打开任何显示开关时)只展示这 4 张卡:电子锦标赛(1004,受 showChampionship 单独控制)、
- * 首充返利(1002)、邀请奖励(1008)、积分商城(1011)。以下条目 2026-09-24 起默认从活动列表隐藏，但假数据
- * 不删除，仍可通过顶部图标行(iconSet)或活动详情直接访问：大转盘(1003)、新会员礼包(1005)、
- * 国庆充值活动(1006)、洗码量(1009)、超级大奖(1010)。活动奖励(1007)本身不是真实活动(点击只是切到
- * 任务页签)，是否作为列表卡片出现单独由 showActivityAward 控制，默认关闭。
+ * 活动列表默认(未打开任何显示开关时)只展示这 3 张卡:首充返利(1002)、邀请奖励(1008)、积分商城(1011)。
+ * 电子锦标赛(1004)默认也隐藏，由 showChampionship 单独控制(默认关闭)。以下条目 2026-09-24 起默认从
+ * 活动列表隐藏，但假数据不删除，仍可通过顶部图标行(iconSet)或活动详情直接访问：大转盘(1003)、
+ * 新会员礼包(1005)、国庆充值活动(1006)、洗码量(1009)、超级大奖(1010)。活动奖励(1007)本身不是真实
+ * 活动(点击只是切到任务页签)，是否作为列表卡片出现单独由 showActivityAward 控制，默认关闭。
  */
 const LIST_HIDDEN_BY_DEFAULT = new Set([1003, 1005, 1006, 1009, 1010])
 
 /**
- * 活动页的活动列表；顺序、名称、标签对齐设计稿 `活动.png` + 2026-09-24 三次拍板的最终口径：
- * 默认(未打开任何开关时)下方滚动列表只展示 4 张卡，顺序为 电子锦标赛(HOT，带倒计时/最高奖金框，
- * showChampionship 默认已打开) → 首充返利(推荐) → 邀请奖励(NEW) → 积分商城(无标签)。活动奖励
- * (点击切任务页签，未登录也能点)本身不算一张真实活动卡，默认不出现在列表，只受 `showActivityAward`
- * 参数单独控制是否额外出现在列表；大转盘/新会员礼包/国庆充值活动/洗码量/超级大奖等条目默认也不在
- * 列表里出现(数据仍在，见 `LIST_HIDDEN_BY_DEFAULT`)，但仍可能出现在顶部图标行。「每日签到」仍不放
- * 回来(它属于任务页签)。卡名"电子锦标赛""首充返利"按 2026-09-23 设计稿口径改名，之前分别叫
- * "锦标赛""首充奖励"。
+ * 活动页的活动列表；顺序、名称、标签对齐设计稿 `活动.png` + 2026-09-24 四次拍板的最终口径：
+ * 默认(未打开任何开关时)下方滚动列表只展示 3 张卡，顺序为 首充返利(推荐) → 邀请奖励(NEW) →
+ * 积分商城(无标签)。电子锦标赛(HOT，带倒计时/最高奖金框)默认也隐藏，由 `showChampionship`
+ * 单独控制(默认关闭，打开后排在列表最前)。活动奖励(点击切任务页签，未登录也能点)本身不算一张
+ * 真实活动卡，默认不出现在列表，只受 `showActivityAward` 参数单独控制是否额外出现在列表；
+ * 大转盘/新会员礼包/国庆充值活动/洗码量/超级大奖等条目默认也不在列表里出现(数据仍在，见
+ * `LIST_HIDDEN_BY_DEFAULT`)，但仍可能出现在顶部图标行。「每日签到」仍不放回来(它属于任务页签)。
+ * 卡名"电子锦标赛""首充返利"按 2026-09-23 设计稿口径改名，之前分别叫"锦标赛""首充奖励"。
  *
  * @remarks 卡片上显示的"推荐"标签就是 recommend 字段本身(2026-09-23 拍板)：勾了 recommend 才会
  * 同时"上图标行"+"显示推荐标签"，两件事不再分开配置——所以这里不再有独立的 tag:'recommend' 字面量，
@@ -181,7 +181,7 @@ const banners = (ctx: MockContext) => {
 		// showActivityAward 控制 hidden 字段(默认 hidden=true，不是真的删除)；不是真的可进入活动，
 		// 是"切到任务页签"的快捷方式；前端按 bannerID===1007 特判，点击不导航、只切 Tab，也不需要登录
 		{ bannerID: 1007, bannerTitle: pick(ctx, '活动奖励', 'Activity Rewards', 'गतिविधि पुरस्कार'), jumpType: 0, contents: '', image: 'activity', category: 'game', specialTag: null, activityCode: 'taskReward' },
-		// 电子锦标赛(HOT、倒计时、最高奖金数据都留着):始终在返回结果里，hidden 字段由 showChampionship 开关控制(默认打开)
+		// 电子锦标赛(HOT、倒计时、最高奖金数据都留着):始终在返回结果里，hidden 字段由 showChampionship 开关控制(默认关闭)
 		{ bannerID: 1004, bannerTitle: pick(ctx, '电子锦标赛', 'e-Tournament', 'ई-टूर्नामेंट'), jumpType: 2, contents: '/activity/Championship', image: 'championship', category: 'game', specialTag: 'hot', activityCode: null },
 		{ bannerID: 1002, bannerTitle: pick(ctx, '首充返利', 'First Deposit Rebate', 'पहला डिपॉज़िट वापसी'), jumpType: 2, contents: '/activity/FirstRecharge', image: 'first-recharge', category: 'recharge', specialTag: null, activityCode: 'firstRecharge' },
 		{ bannerID: 1008, bannerTitle: pick(ctx, '邀请奖励', 'Invitation Bonus', 'आमंत्रण बोनस'), jumpType: 2, contents: '/main/InvitationBonus', image: 'activity', category: 'game', specialTag: 'new', activityCode: 'invitationBonus' },
