@@ -2,8 +2,13 @@ import { fail, ok } from './envelope'
 import { pick } from './i18n'
 import type { MockContext, MockEnvelope, SessionState } from './types'
 
-/** 会话状态在 sessionStorage 中的键，控制台"重置数据"时删除 */
-export const STATE_KEY = 'proto:state'
+/**
+ * 会话状态在 sessionStorage 中的键，控制台"重置数据"时删除。
+ *
+ * @remarks 2026-09-24 由 'proto:state' 升到 v2，避免旧会话残留数据(如 monthHoldings 空数组)干扰，
+ * 不做迁移、不兼容旧键。
+ */
+export const STATE_KEY = 'proto:state:v2'
 
 /** 奖励项状态 */
 export type RewardItemStatus = 'progress' | 'claimable' | 'claimed' | 'expired'

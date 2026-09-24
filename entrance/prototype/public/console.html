@@ -671,8 +671,9 @@
 	<aside id="panel" class="panel" aria-label="当前活动控制面板"></aside>
 
 	<script>
-		const SCENARIO_KEY = 'proto:scenario'
-		const STATE_KEY = 'proto:state'
+		// 2026-09-24 由 v1 升到 v2(一次性让旧覆盖值失效，不兼容旧键，不做迁移)，见 mock/scenario.ts、mock/state.ts
+		const SCENARIO_KEY = 'proto:scenario:v2'
+		const STATE_KEY = 'proto:state:v2'
 		// 控制台自己的记录（本标签页）：每个 countdown 截止时刻当初按多少秒应用，用于回显输入框和判断边界场景是否高亮
 		const COUNTDOWN_KEY = 'proto:console:countdown'
 		const POPUPS = ['first-recharge', 'return-award', 'app-download-reward', 're-benefit', 'coupon-arrival', 'treasure-chest', 'register-gift']

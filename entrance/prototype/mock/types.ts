@@ -119,7 +119,7 @@ export interface Catalog {
 /**
  * 演示场景。
  *
- * @remarks 由控制台写入 localStorage['proto:scenario']，H5 每次启动时读取一次。
+ * @remarks 由控制台写入 localStorage['proto:scenario:v2']，H5 每次启动时读取一次。
  */
 export interface Scenario {
 	/** 是否已登录；为 false 时启动阶段清除登录态 */
@@ -137,7 +137,7 @@ export interface Scenario {
 /**
  * 会话状态。
  *
- * @remarks 保存在 sessionStorage['proto:state']，同一标签页内刷新保留，新标签页从初始值开始。
+ * @remarks 保存在 sessionStorage['proto:state:v2']，同一标签页内刷新保留，新标签页从初始值开始。
  */
 export interface SessionState {
 	/** 钱包余额，单位为元 */

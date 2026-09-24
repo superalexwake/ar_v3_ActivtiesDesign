@@ -1,7 +1,13 @@
 import type { ActivityControls, MockContext, ParamDef, ParamValue, PopupKey, Scenario, SessionState } from './types'
 
-/** 场景在 localStorage 中的键，控制台使用同一个键 */
-export const SCENARIO_KEY = 'proto:scenario'
+/**
+ * 场景在 localStorage 中的键，控制台使用同一个键。
+ *
+ * @remarks 2026-09-24 由 'proto:scenario' 升到 v2：控制台 run() 按活动整份覆盖 activities[id]，
+ * 之前在某个活动面板动过参数的浏览器里会残留旧值(如 showChampionship:false)，盖掉当天改动的
+ * catalog.json 默认值。升级键让旧值一次性失效，不做迁移、不兼容旧键。
+ */
+export const SCENARIO_KEY = 'proto:scenario:v2'
 
 const POPUPS: PopupKey[] = [
 	'first-recharge',
