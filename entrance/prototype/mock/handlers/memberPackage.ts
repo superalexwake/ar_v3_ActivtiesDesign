@@ -74,14 +74,7 @@ function recordState(ctx: MockContext, mode: Exclude<MemberPackageParams['record
 	return RECORD_STATE[rewardStatus(ctx, `memberPackage:${id}`, base)]
 }
 
-/** 礼包规则表 3 档，供 MemberPackage/Rules 页的 RulesTable 展示 */
-const GIFT_PACK_CONFIGS = [
-	{ registerDays: 1, grandTotalDeposit: 100, configAwardList: [{ totalValidBet: 200, giveAwayBonus: 20 }] },
-	{ registerDays: 2, grandTotalDeposit: 300, configAwardList: [{ totalValidBet: 500, giveAwayBonus: 50 }] },
-	{ registerDays: 3, grandTotalDeposit: 500, configAwardList: [{ totalValidBet: 1000, giveAwayBonus: 100 }] },
-]
-
-/** GetGiftPackUserRewardRecord：首存配置 + 礼包规则 + 返利记录 */
+/** GetGiftPackUserRewardRecord：116 既有配置和 117 历史返利记录 */
 const giftPackUserRewardRecord: MockHandler = (ctx) => {
 	const p = params<MemberPackageParams>(ctx, 'memberPackage')
 	const mode = p.records
@@ -106,7 +99,7 @@ const giftPackUserRewardRecord: MockHandler = (ctx) => {
 			rewardState: REWARD_STATE[p.applyState],
 			isAutomaticDistribution: p.autoDistribute,
 		},
-		giftPackConfigAwardList: GIFT_PACK_CONFIGS,
+		giftPackConfigAwardList: [],
 		newUserRewardRecordList: records,
 	})
 }

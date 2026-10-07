@@ -93,6 +93,36 @@
 				<div class="btn btnNew" :class="`status${newbieGiftPackage[0].status}`" @click="clickBtnNew(newbieGiftPackage[0])">{{ newStatus(newbieGiftPackage[0].status) }}</div>
 			</div>
 
+			<!-- 新手任务：绑定手机/邮箱、绑定银行卡、下载APP充值奖励（与新手礼包同卡片样式） -->
+			<div class="task-item" v-show="activeTab === 'newbie'" v-for="task in newbieExtraTasks" :key="task.key">
+				<div class="task-item-header">
+					<div class="hearder-status new" :class="`badge-${task.key}`">
+						{{ $t(NEWBIE_TASK_META[task.key].badge) }}
+					</div>
+					<span class="headerR">{{ newHeadStatus(task.status) }}</span>
+				</div>
+				<div class="task-item-type">
+					<div class="type-title new">
+						<svg-icon name="actNewGift" />
+						<div>{{ task.title }}</div>
+					</div>
+				</div>
+				<div class="task-item-description">
+					{{ task.description }}
+				</div>
+				<div class="task-item-description newbie-cond" :class="`cond-${task.key}`">
+					{{ $t('newbieCondLabel') }}：{{ newbieCondText(task) }}<template v-if="task.progress">（{{ task.progress.current }}/{{ task.progress.target }}）</template>
+				</div>
+				<div class="task-item-bottom" v-for="r in task.rewards" :key="r.label">
+					<div>{{ r.label || $t('awardsAmount') }}</div>
+					<div class="bottom-title">
+						<svg-icon name="activityWallet" />
+						<span>{{ currency(r.amount) }}</span>
+					</div>
+				</div>
+				<div class="btn btnNew" :class="`status${task.status}`" @click="clickNewbieExtra(task)">{{ newStatus(task.status) }}</div>
+			</div>
+
 			<div class="task-item task-item--card" :class="{ 'is-ended': item.status === 4 }" v-for="(item, index) in filteredCurrentTasks" :key="index">
 				<template v-if="item.taskId=='D20'">
 					<div class="task-item-subject">
@@ -234,7 +264,7 @@
 <script setup lang="ts">
 import { AwaitApiResult, AwaitWrap, currency } from '@/utils'
 import { showFailToast } from 'vant'
-import { GetWeeklyAwardList, ReceiveWeeklyAward,getNewbieGiftPackage,receiveAward,GetDailyAwardList ,ReceiveDailyAward, GetPeriodCardInfo, BuyPeriodCard, TakeDailyReward, GetActivityCenterTabSort } from '@/api'
+import { GetWeeklyAwardList, ReceiveWeeklyAward,getNewbieGiftPackage,receiveAward,getNewbieTaskList,receiveNewbieTask,GetDailyAwardList ,ReceiveDailyAward, GetPeriodCardInfo, BuyPeriodCard, TakeDailyReward, GetActivityCenterTabSort } from '@/api'
 import { computed, defineAsyncComponent, nextTick, onMounted, ref,watch, type Ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router';
@@ -263,6 +293,17 @@ const walletStore = useWalletStore()
 const showTaskTitle = ref('')
 const bonus = ref('0');
 const newbieGiftPackage = ref<any[]>([])
+// 新手任务（绑定手机/邮箱、绑定银行卡、下载APP充值奖励），来自 GetNewbieTaskList（原型新增接口，字段对应后台 任务管理＞新手任务）。
+// 状态：0 未完成 1 待领取 2 已领取；跳转页面均为本工程已有路由，下载APP弹下载APP提示。
+const NEWBIE_TASK_META: Record<string, { badge: string; cond: string; goRoute: string }> = {
+	bindContact: { badge: 'newbieBadgeBind', cond: 'newbieCondBindPhone', goRoute: 'SettingCenter-UpdatePhone' },
+	bindCard: { badge: 'newbieBadgeCard', cond: 'newbieCondBindCard', goRoute: 'Withdraw-AddBankCard' },
+	downloadApp: { badge: 'newbieBadgeApp', cond: 'newbieCondDownloadApp', goRoute: '' }
+}
+const newbieExtraTasks = ref<any[]>([])
+// 绑定手机/邮箱按 V1：只奖励注册时没用的那一个（bindType），文案随之切换；下载APP只认单笔充值，不显示进度
+const newbieCondText = (task: any) =>
+	t(task.key === 'bindContact' && task.bindType === 'email' ? 'newbieCondBindEmail' : NEWBIE_TASK_META[task.key].cond, [task.threshold ?? ''])
 const weekList= ref<any[]>([])
 const dayList= ref<any[]>([])
 // status → 展示优先级:待领取 > 未完成 > 已领取
@@ -452,7 +493,7 @@ const visibleTabs = computed(() => [
 		label: t(CARD_TAB_LABEL[card.cardType]),
 		show: !!CARD_TAB_KEY[card.cardType]
 	})),
-	{ key: 'newbie', label: t('actTip3'), show: newbieGiftPackage.value.length > 0 }
+	{ key: 'newbie', label: t('newbieTaskTab'), show: newbieGiftPackage.value.length > 0 || newbieExtraTasks.value.length > 0 }
 ].filter((tab) => tab.show)
 	// 排序值互不相等(见 DEFAULT_TAB_SORT),固定顺序:每日任务、每周任务、每日签到、购买周卡、购买月卡、新手礼包
 	.sort((a, b) => tabSort.value[b.key] - tabSort.value[a.key]))
@@ -508,7 +549,7 @@ const tabBadgeCount = (key: string): number => {
 	if (key === 'day') return dayList.value.filter((item: any) => item.status === 2).length
 	if (key === 'week') return weekList.value.filter((item: any) => item.status === 2).length
 	if (key === 'signin') return ActiveSotre.value.activityRedDot.attendanceBonusCount
-	if (key === 'newbie') return newbieGiftPackage.value[0]?.status === 1 ? 1 : 0
+	if (key === 'newbie') return (newbieGiftPackage.value[0]?.status === 1 ? 1 : 0) + newbieExtraTasks.value.filter((x: any) => x.status === 1).length
 	const card = periodCards.value.find((item: any) => CARD_TAB_KEY[item.cardType] === key)
 	return card ? (card.holdingOrders?.filter((holding: any) => holding.canTakeToday).length ?? 0) : 0
 }
@@ -649,6 +690,10 @@ function calculatePercentage(part:number, whole:number) {
 	if (whole==0) return 0
 	return (part / whole) * 100;
 }
+const getNewbieTaskListV = async()=>{
+	const res: any = await AwaitApiResult(getNewbieTaskList())
+	newbieExtraTasks.value = (Array.isArray(res?.data) ? res.data : []).filter((x: any) => NEWBIE_TASK_META[x.key])
+}
 const getNewbieGiftPackageV = async()=>{
 	newbieGiftPackage.value.length = 0
 	const res: any = await AwaitApiResult(getNewbieGiftPackage())
@@ -715,6 +760,22 @@ const clickBtnNew = async (item:any)=>{
 		}
 	}, 100) as any
 }
+// 新手任务点击：未登录先弹登录；未完成→去完成（跳对应页面/下载APP提示）；待领取→领取
+const clickNewbieExtra = async (task: any) => {
+	if (!(await requireLoginAction())) return
+	if (task.status === 2) return
+	if (task.status === 0) {
+		if (task.key === 'downloadApp') return await downAppTip('Recharge')
+		return router.push({ name: task.key === 'bindContact' && task.bindType === 'email' ? 'SettingCenter-BindEmail' : NEWBIE_TASK_META[task.key].goRoute })
+	}
+	const res = await AwaitApiResult(receiveNewbieTask({ key: task.key }))
+	if (!res) return
+	showDialog.value = true
+	bonus.value = String(task.rewards.reduce((a: number, r: any) => a + r.amount, 0))
+	showTaskTitle.value = task.title
+	getNewbieTaskListV()
+	refreshRedDot()
+}
 const goAnotherPage = async (item: any)=> {
 	if(item.taskId=='D20'){
 		if(item.schedule<item.taskTarget){
@@ -740,6 +801,7 @@ watch(()=>ActiveSotre.value.isOpenActivityAward,
 },{immediate:true})
 onMounted(()=>{
 	getNewbieGiftPackageV()
+	getNewbieTaskListV()
 	// 买卡扣的是现金余额,进页面先把三方游戏里的钱收回来,否则有钱也会被判 142
 	walletStore.resetData(true, true)
 	loadPeriodCards()
@@ -1067,6 +1129,9 @@ $buy-tint: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 
 					&.new{
 						background: var(--norm_secondary-color);
 					}
+					&.badge-bindContact{ background: linear-gradient(90deg, #3b82f6, #60a5fa); }
+					&.badge-bindCard{ background: linear-gradient(90deg, #16a34a, #4ade80); }
+					&.badge-downloadApp{ background: linear-gradient(90deg, #7c3aed, #a78bfa); }
 					&.week{
 						background: var(--norm_red-color);
 					}

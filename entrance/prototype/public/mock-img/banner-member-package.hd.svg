@@ -6,6 +6,6 @@
 		</linearGradient>
 	</defs>
 	<rect width="750" height="300" rx="24" fill="url(#g)" />
-	<text x="48" y="140" font-size="52" font-weight="700" fill="#fff" font-family="Noto Sans Devanagari, Kohinoor Devanagari, Nirmala UI, Mangal, sans-serif">नए सदस्य उपहार पैक</text>
+	<text x="48" y="140" font-size="32" font-weight="700" fill="#fff" font-family="Noto Sans Devanagari, Kohinoor Devanagari, Nirmala UI, Mangal, sans-serif">नए सदस्य की पहली जमा पर नुकसान बोनस</text>
 	<text x="48" y="210" font-size="30" fill="#fff" opacity=".85" font-family="Noto Sans Devanagari, Kohinoor Devanagari, Nirmala UI, Mangal, sans-serif">प्रोटोटाइप प्लेसहोल्डर 750×300</text>
 </svg>

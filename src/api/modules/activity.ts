@@ -295,6 +295,16 @@ export const getNewbieGiftPackage = async() => {
 	return post(api.ReceiveAward,params).then((res) => res)
 }
 
+// 获取新手任务（绑定手机/邮箱、绑定银行卡、下载APP充值奖励）
+export const getNewbieTaskList = async() => {
+	return post(api.GetNewbieTaskList)
+}
+
+// 领取新手任务奖励
+export const receiveNewbieTask = async(params: any) : Promise<any> => {
+	return post(api.ReceiveNewbieTask, params).then((res) => res)
+}
+
 //每日奖励未领取数量
 export const GetDailyAwardCount = async() => {
 	return post(api.GetDailyAwardCount)

@@ -1,5 +1,5 @@
 <template>
-	<NavBar :title="$t('eventDetails')" left-arrow @click-left="router.go(-1)" />
+	<NavBar :title="$t('newMenberPackage')" left-arrow @click-left="router.go(-1)" />
 	<div class="member-package-rule">
 		<div class="first-list-item" v-if="store.firstDepositConfig">
 			<div class="head">
@@ -8,19 +8,9 @@
 				</div>
 			</div>
 			<div class="description">
-				{{ $t('activityTime') }}<span>{{ time }}</span
-				>，{{ $t('newMemberDeposit') }}<span class="number">{{firstDepositTimeLiness}}</span>{{ $t('newMemberDepositTime') }}
-				<span v-html="$t('platformBonus', [firstDeposiSendBonust])"></span>，{{ $t('bonusLimit')
-				}} <span class="number">{{ currency(bonusLimit) }}</span
-				>，{{ $t('receiveTips') }}.
-			</div>
-		</div>
-		<div class="member-package-rule-bonus">
-			<div class="member-package-rule-bonus-title">
-				{{ $t('newMemberPlayGame') }}
-			</div>
-			<div>
-				<RulesTable :giftPackConfigList="giftPackConfigList" />
+				<p>{{ $t('newMenberRule') }}</p>
+				<p v-if="time">{{ $t('activityTime') }} {{ time }}</p>
+				<p>{{ store.firstDepositConfig.isAutomaticDistribution ? $t('memberPackageAuto') : $t('memberPackageManual') }}</p>
 			</div>
 		</div>
 	</div>
@@ -31,12 +21,10 @@ import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { onMounted } from 'vue'
 import { usePackage } from '@/hooks'
-import { currency } from '@/utils'
-import RulesTable from '@/components/common/RulesTable.vue'
 
 const { t: $t } = useI18n()
 const router = useRouter()
-const { getConfig,store, time,firstDepositTimeLiness,bonusLimit, firstDeposiSendBonust, giftPackConfigList } = usePackage()
+const { getConfig,store, time } = usePackage()
 onMounted(() => {
 	getConfig()
 })

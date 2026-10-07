@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import ruleContainer from '@/components/common/Rule.vue'
-import {useRouter} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
 import {usePackage} from '@/hooks'
-import {onMounted} from "vue";
+import {computed, onMounted} from "vue";
 import {useI18n} from "vue-i18n";
 import {currency} from "@/utils";
 
 const {t}=useI18n()
 const router=useRouter()
-const {getConfig,onApply,onReceive,onApplyFirstCharge,store,time,bonusLimit,firstDeposiSendBonust,rewardRecordList}=usePackage()
+const route=useRoute()
+const isHistory117=computed(()=>route.query.history === '117')
+const {getConfig,onReceive,store,time,rewardRecordList}=usePackage()
 const onClick=()=>{
 	router.go(-1)
 }
@@ -25,11 +27,11 @@ const states={
 	4:t('received')
 }
 
-const textMap = {
-	1: t('inApplication'),
-	2: t('applySuccess'),
+const textMap: Record<number, string> = {
+	1: t('memberPackageReviewing'),
+	2: t('memberPackagePaid'),
 	3: t('rejected'),
-	4: t('activityApply'),
+	4: t('memberPackagePending'),
 }
 onMounted(()=>{
 	getConfig()
@@ -38,54 +40,32 @@ onMounted(()=>{
 
 <template>
   <div class="package">
-	  <NavBar :title="$t('activityDestitle')"  :placeholder="false" left-arrow  @click-left="onClick" >
+	  <NavBar :title="isHistory117 ? $t('code8117') : $t('newMenberPackage')"  :placeholder="false" left-arrow  @click-left="onClick" >
 	  </NavBar>
-	  <div class="package-banner">
+	  <div v-if="!isHistory117" class="package-banner">
 		  <div class="package-banner-text">
 			  <h3>{{$t('newMenberPackage')}}</h3>
 			  <h4>{{$t('newMenberTip')}}：</h4>
 			  <p>
 				  <span>1</span>{{$t('newMenberRule')}}
 			  </p>
-			  <p>
-				  <span>2</span>{{$t('newMenberRule2')}}
-			  </p>
 			  <div>
 				  <div class="package-desc" @click="onRule">{{$t('activityDestitle')}}</div>
 			  </div>
 		  </div>
 	  </div>
-	  <ruleContainer v-if="store.firstDepositConfig" :name="$t('activityTime')"  :tiplist="[]">
+	  <ruleContainer v-if="!isHistory117 && store.firstDepositConfig" :name="$t('activityTime')"  :tiplist="[]">
 			<h2 class="package-time">
 				{{time||$t('lotteryActivityUnstarted')}}
 			</h2>
 	  </ruleContainer>
-	  <div class="package-rule" v-if="store.firstDepositConfig">
-		  <div class="package-rule-titlebox">
-			  <div class="package-rule-title">{{$t('conditionsRule')}}</div>
-			  <div class="package-rule-title">{{$t('afterDayBonus')}}</div>
-			  <div class="package-rule-title">{{$t('bonusLimit')}}</div>
-		  </div>
-		  <ul>
-			  <li >
-				  <div>
-					  {{$t('newMemberDeposit')}}
-				  </div>
-				  <div class="rotateNum">
-					  <p v-html="$t('todayBonus', [firstDeposiSendBonust])" />
-				  </div>
-				  <div><span>{{currency(bonusLimit)}}</span></div>
-			  </li>
-		  </ul>
-	  </div>
-	  <div class="package-tips" v-if="store.firstDepositConfig.rewardState == 0">
+	  <div class="package-tips" v-if="!isHistory117 && store.firstDepositConfig">
        <svg-icon name="activityNote" />
-		  {{ store.firstDepositConfig.isAutomaticDistribution ? $t('receiveTips') : $t('activityTip9')}}
+		  {{ store.firstDepositConfig.isAutomaticDistribution ? $t('memberPackageAuto') : $t('memberPackageManual')}}
 	  </div>
-	  <div v-if="![0,4].includes(store.firstDepositConfig.rewardState)" class="package-item-btn done d">{{ textMap[store.firstDepositConfig.rewardState] }}</div>
-	  <div v-if="[4].includes(store.firstDepositConfig.rewardState)" @click="onApplyFirstCharge" class="package-item-btn  d">{{ textMap[store.firstDepositConfig.rewardState] }}</div>
+	  <div v-if="!isHistory117 && [1,2,3,4].includes(store.firstDepositConfig.rewardState)" class="package-item-btn done d">{{ textMap[store.firstDepositConfig.rewardState] }}</div>
 
-	  <ul class="package-list">
+	  <ul v-if="isHistory117" class="package-list">
         <li class="package-item" v-for="item of rewardRecordList" :key="item.id">
 			<div class="package-item-head">
 				<p>{{$t('registrationFull',[item.registerDays])}}</p>
@@ -120,8 +100,6 @@ onMounted(()=>{
 				</div>
 			</div>
 			<div class="package-item-btn" v-if="item.state===3" @click="onReceive(item.id)">{{$t('receive')}}</div>
-			<div class="package-item-btn apply" v-if="item.state===0&&item.operateState===2" @click="onApply(item.id)">{{$t('activityApply')}}</div>
-			<div class="package-item-btn done" v-if="item.state===0&&[0,1].includes(item.operateState)">{{states[0]}}</div>
 			<div class="package-item-btn done" v-if="![0,3].includes(item.state)">{{states[item.state]}}</div>
 		</li>
 	  </ul>
@@ -435,6 +413,37 @@ onMounted(()=>{
 			&.d {
 				margin: 24px;
 			}
+		}
+	}
+}
+
+@media (max-width: 430px) {
+	.package-banner {
+		display: block;
+		min-height: 0;
+		padding: 26px 24px 280px;
+		background-size: 72% auto, 100% 100%;
+		background-position: right bottom, center;
+		background-repeat: no-repeat;
+	}
+
+	.package-banner-text {
+		width: 100%;
+		margin-left: 0;
+		overflow-wrap: anywhere;
+
+		h3 {
+			line-height: 1.25;
+			margin-bottom: 16px;
+		}
+
+		h4 {
+			line-height: 1.35;
+			margin-bottom: 12px;
+		}
+
+		p {
+			line-height: 1.4;
 		}
 	}
 }

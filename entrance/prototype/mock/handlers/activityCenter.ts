@@ -187,7 +187,7 @@ const banners = (ctx: MockContext) => {
 		{ bannerID: 1008, bannerTitle: pick(ctx, '邀请奖励', 'Invitation Bonus', 'आमंत्रण बोनस'), jumpType: 2, contents: '/main/InvitationBonus', image: 'activity', category: 'game', specialTag: 'new', activityCode: 'invitationBonus' },
 		{ bannerID: 1011, bannerTitle: pick(ctx, '积分商城', 'Points Mall', 'पॉइंट्स मॉल'), jumpType: 2, contents: '/activity/PointMall', image: 'activity', category: 'game', specialTag: null, activityCode: null },
 		{ bannerID: 1003, bannerTitle: pick(ctx, '大转盘', 'Spin Wheel', 'स्पिन व्हील'), jumpType: 2, contents: '/activity/Turntable', image: 'turntable', category: 'game', specialTag: null, activityCode: 'bigWheel' },
-		{ bannerID: 1005, bannerTitle: pick(ctx, '新会员礼包', 'New Member Gift Pack', 'नए सदस्य उपहार पैक'), jumpType: 2, contents: '/activity/MemberPackage', image: 'member-package', category: 'newUser', specialTag: null, activityCode: 'newMemberPackage' },
+		{ bannerID: 1005, bannerTitle: pick(ctx, '新会员首充负盈利送彩金', 'New Member First Deposit Loss Bonus', 'नए सदस्य की पहली जमा पर नुकसान बोनस'), jumpType: 2, contents: '/activity/MemberPackage', image: 'member-package', category: 'newUser', specialTag: null, activityCode: 'newMemberPackage' },
 		{ bannerID: 1006, bannerTitle: pick(ctx, '国庆充值活动', 'National Day Deposit Event', 'राष्ट्रीय दिवस डिपॉज़िट इवेंट'), jumpType: 0, contents: '', image: 'activity', category: 'recharge', specialTag: null, activityCode: null },
 		// 2026-09-24 拍板:名称改「洗码量」「超级大奖」,对齐设计稿图标行第 3、4 个文字(两条默认不出现在下方列表,不连带影响列表展示)
 		{ bannerID: 1009, bannerTitle: pick(ctx, '洗码量', 'Turnover', 'टर्नओवर'), jumpType: 2, contents: '/main/Laundry', image: 'activity', category: 'game', specialTag: null, activityCode: 'laundry' },
@@ -273,7 +273,7 @@ function bonusRecords(ctx: MockContext): BonusRecord[] {
 	]
 }
 
-/** GetRewardCenterList：按请求中的 receiveState（0/1/2）过滤；records 为 empty 时三个状态都为空 */
+/** GetRewardCenterList：按奖励类型和 receiveState（0/1/2）过滤；records 为 empty 时三个状态都为空 */
 const rewardCenterList: MockHandler = (ctx) => {
 	if (params<RewardCenterParams>(ctx, 'rewardCenter').records === 'empty') return ok(paged([], ctx.body))
 	const records = bonusRecords(ctx).map(({ base, claimKey, ...record }, index) => ({
@@ -281,8 +281,14 @@ const rewardCenterList: MockHandler = (ctx) => {
 		createTime: dayjs().subtract(index, 'day').format('YYYY-MM-DD HH:mm:ss'),
 		receiveState: RECEIVE_STATE_MAP[claimKey ? rewardStatus(ctx, claimKey, base) : base],
 	}))
+	const rewardType = ctx.body.rewardType
+	const typeFiltered = rewardType == null || Number(rewardType) === -1
+		? records
+		: records.filter((item) => item.rewardType === Number(rewardType))
 	const receiveState = Number(ctx.body.receiveState)
-	const filtered = [0, 1, 2].includes(receiveState) ? records.filter((item) => item.receiveState === receiveState) : records
+	const filtered = [0, 1, 2].includes(receiveState)
+		? typeFiltered.filter((item) => item.receiveState === receiveState)
+		: typeFiltered
 	return ok(paged(filtered, ctx.body))
 }
 

@@ -86,6 +86,8 @@ export default {
 	SaveUserDayRequest: '/SaveUserDayRequest', // 保存每周活动奖励每日访问弹窗记录
 	GetNewbieGiftPackage: '/GetNewbieGiftPackage', // 获取新手礼包
 	ReceiveAward: '/ReceiveAward', //领取新手礼包
+	GetNewbieTaskList: '/GetNewbieTaskList', // 获取新手任务（绑定手机/邮箱、绑定银行卡、下载APP充值奖励；原型新增，待后端接口）
+	ReceiveNewbieTask: '/ReceiveNewbieTask', // 领取新手任务奖励（原型新增，待后端接口）
 	GetDailyAwardCount: '/GetDailyAwardCount', //每日奖励未领取数量
 	GetDailyAwardList: '/GetDailyAwardList', //每日任务列表
 	ReceiveDailyAward: '/ReceiveDailyAward', //领取每日任务

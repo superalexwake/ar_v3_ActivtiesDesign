@@ -6,6 +6,6 @@
 		</linearGradient>
 	</defs>
 	<rect width="750" height="300" rx="24" fill="url(#g)" />
-	<text x="48" y="140" font-size="56" font-weight="700" fill="#fff" font-family="PingFang SC, Microsoft YaHei, sans-serif">新会员礼包</text>
+	<text x="48" y="140" font-size="42" font-weight="700" fill="#fff" font-family="PingFang SC, Microsoft YaHei, sans-serif">新会员首充负盈利送彩金</text>
 	<text x="48" y="210" font-size="30" fill="#fff" opacity=".85" font-family="PingFang SC, Microsoft YaHei, sans-serif">原型占位图 750×300</text>
 </svg>

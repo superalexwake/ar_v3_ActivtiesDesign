@@ -343,7 +343,10 @@ export function useBonusPack() {
 		const isSpecialType = [20, 118, 107, 30, 29, 103].includes(item.rewardType);
 		if ((isSpecialType && item.recordType === 1) || (mapParam[item.rewardType] && !isSpecialType)) {
 			onTriggerGoogle('reward_center_pages');
-			await router.push({ name: mapParam[item.rewardType] });
+			await router.push({
+				name: mapParam[item.rewardType],
+				...(item.rewardType === 117 ? { query: { history: '117' } } : {})
+			});
 			return 'navigate'
 		}
 
