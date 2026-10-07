@@ -50,7 +50,7 @@
 import { ref, onMounted } from "vue";
 import { showSuccessToast } from "vant";
 import { useI18n } from "vue-i18n";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import { currency, AwaitApiResult } from "@/utils";
 import succeedIcon from '@icon/public/succeed.png'
 import EmailInput from "@/components/Login/EmailInput.vue";
@@ -64,6 +64,7 @@ import type { UserInfo } from "@/types/api";
 import { CodeType } from "@/hooks";
 const { t } = useI18n();
 const router = useRouter();
+const route = useRoute();
 const userStore = useUserStore();
 const globalStore = GlobalStore();
 const userInfo = globalStore.getUserInfo as UserInfo;
@@ -186,6 +187,8 @@ const onSave = async () => {
   if (res) {
     if (userInfo?.verifyMethods?.email != "") {
       showSuccessToast(t("rpdsucceed"));
+      // 从新手任务「前往绑定」进来的（带 fromTask），绑定成功后回任务页
+      if (route.query.fromTask) return router.back();
       router.push({ name: "main" });
     } else {
       DialogShow.value = true;
@@ -193,8 +196,9 @@ const onSave = async () => {
   }
 };
 const onLaundy = () => {
-  router.push({ name: "main" });
   DialogShow.value = false;
+  if (route.query.fromTask) return router.back();
+  router.push({ name: "main" });
 };
 onMounted(() => {
   userStore.setCountEmailDown(0); //界面初始化时清空验证码计时器

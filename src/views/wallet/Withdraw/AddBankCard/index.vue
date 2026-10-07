@@ -201,6 +201,8 @@ function onBack() {
 	if (step.value > 0) {
 		return (step.value = 0)
 	}
+	// 从任务页「前往绑定」进来的（带 fromTask），返回回到跳转前的任务页
+	if (router.currentRoute.value.query.fromTask) return router.back()
 	router.replace({
 		name: fromV,
 		query: { type: 'Add' }
@@ -387,6 +389,11 @@ async function onconfirm() {
 		)
 		if (!res) return false
 		showSuccessToast(t('addedSuccessfully'))
+		// 从新手任务「前往绑定」进来的（带 fromTask），添加成功后回任务页
+		if (router.currentRoute.value.query.fromTask) {
+			router.back()
+			return true
+		}
 		await router.replace({
 			name: fromV,
 			query: { type: 'Add' },

@@ -1,7 +1,6 @@
 <template>
 	<div class="dailySignIn__container">
-		<template v-if="!props.embedded">
-		<NavBar title="" :placeholder="false" left-arrow @click-left="onClick" >
+		<NavBar v-if="!props.embedded" title="" :placeholder="false" left-arrow @click-left="onClick" >
 			<template #right>
 				<div class="navi-record" @click="goRecord">
 					<svg-icon name="watchCollection" />
@@ -9,33 +8,6 @@
 				</div>
 			</template>
 		</NavBar>
-		<div
-			class="task-banner"
-			:class="{ 'card-banner': cardBannerUrl }"
-			:style="cardBannerUrl ? { backgroundImage: `url(${cardBannerUrl})` } : undefined"
-		>
-			<div>
-				<p>
-					<div class="banner-title">{{ activeCardBanner ? activeCardBanner.title : tabIntro ? $t(tabIntro.title) : $t('actTip1') }}</div>
-					<div class="banner-content">
-						<div class="banner-rule" v-if="activeCardBanner" @click="ruleDialog = true">
-							<svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-								<path d="M23.67 3H12.33C6.66 3 5.25 4.515 5.25 10.56V27.45C5.25 31.44 7.44 32.385 10.095 29.535L10.11 29.52C11.34 28.215 13.215 28.32 14.28 29.745L15.795 31.77C17.01 33.375 18.975 33.375 20.19 31.77L21.705 29.745C22.785 28.305 24.66 28.2 25.89 29.52C28.56 32.37 30.735 31.425 30.735 27.435V10.56C30.75 4.515 29.34 3 23.67 3ZM11.67 18C10.845 18 10.17 17.325 10.17 16.5C10.17 15.675 10.845 15 11.67 15C12.495 15 13.17 15.675 13.17 16.5C13.17 17.325 12.495 18 11.67 18ZM11.67 12C10.845 12 10.17 11.325 10.17 10.5C10.17 9.675 10.845 9 11.67 9C12.495 9 13.17 9.675 13.17 10.5C13.17 11.325 12.495 12 11.67 12ZM24.345 17.625H16.095C15.48 17.625 14.97 17.115 14.97 16.5C14.97 15.885 15.48 15.375 16.095 15.375H24.345C24.96 15.375 25.47 15.885 25.47 16.5C25.47 17.115 24.96 17.625 24.345 17.625ZM24.345 11.625H16.095C15.48 11.625 14.97 11.115 14.97 10.5C14.97 9.885 15.48 9.375 16.095 9.375H24.345C24.96 9.375 25.47 9.885 25.47 10.5C25.47 11.115 24.96 11.625 24.345 11.625Z" fill="currentColor"/>
-							</svg>{{ $t('ruleillustrate') }}
-						</div>
-						<template v-else-if="tabIntro">
-							<div>{{ $t(tabIntro.line1) }}</div>
-							<div>{{ $t(tabIntro.line2) }}</div>
-						</template>
-						<template v-else>
-							<div>{{$t('awardsTip1')}}</div>
-							<div>{{$t('awardsTip3')}}</div>
-						</template>
-					</div>
-				</p>
-			</div>
-		</div>
-		</template>
 		<div class="task-tabs" ref="tabsRef" @mousedown="tabsDrag.onDown">
 			<button
 				v-for="tab in visibleTabs"
@@ -194,6 +166,7 @@
 				@buy="(tier: any) => onBuyCard(tier, card.totalDays)"
 				@claim="onClaimCard"
 				@expire="loadPeriodCards"
+				@rule="ruleDialog = true"
 			/>
 		</div>
 		</Transition>
@@ -290,6 +263,8 @@ const route = useRoute()
 const { ActiveTaskMap,ActiveSotre,getActive,refreshRedDot } = useActive()
 getActive()
 const { downAppTip } = useGlobalDialog()
+// 从任务页「前往」跳出去的页面带上它，对方的返回键据此回到任务页（充值页、添加银行卡页已按它处理）
+const FROM_TASK = { fromTask: '1' }
 const walletStore = useWalletStore()
 const showTaskTitle = ref('')
 const bonus = ref('0');
@@ -460,7 +435,7 @@ const onBuyCard = async (tier: any, totalDays: number) => {
 
 const onGoRecharge = () => {
 	showGateDialog.value = false
-	downAppTip('Recharge')
+	downAppTip('Recharge', FROM_TASK)
 }
 
 // 购买与领取共用一层全屏金币雨;递增触发,只在成功后动
@@ -562,21 +537,10 @@ const tabBadgeCount = (key: string): number => {
 	return card ? (card.holdingOrders?.filter((holding: any) => holding.canTakeToday).length ?? 0) : 0
 }
 
-// 卡 Tab 下 banner 换成该活动自己的图与文案;其余 Tab 为 null,维持页面原有静态 banner
+// 当前所在的周卡/月卡;其余 Tab 为 null。规则说明弹窗的标题与内容取它下发的字段
 const activeCardBanner = computed(
 	() => periodCards.value.find((card: any) => CARD_TAB_KEY[card.cardType] === activeTab.value) ?? null
 )
-// 非卡 Tab（新手任务/每日任务/每周任务/每日签到）的顶部 banner：标题和两行文案换成当前 Tab 自己的简单介绍；
-// 卡 Tab 仍用后端给的 banner，找不到时回落到原来的统一文案
-const TAB_INTRO: Record<string, { title: string; line1: string; line2: string }> = {
-	newbie: { title: 'newbieTaskTab', line1: 'bannerIntroNewbie1', line2: 'bannerIntroNewbie2' },
-	day: { title: 'dailyMission', line1: 'bannerIntroDay1', line2: 'bannerIntroDay2' },
-	week: { title: 'actTip4', line1: 'bannerIntroWeek1', line2: 'bannerIntroWeek2' },
-	signin: { title: 'code9007', line1: 'bannerIntroSignin1', line2: 'bannerIntroSignin2' }
-}
-const tabIntro = computed(() => TAB_INTRO[activeTab.value] ?? null)
-// 契约允许多图英文逗号分隔,而 banner 位只有一个,取首张
-const cardBannerUrl = computed(() => (activeCardBanner.value?.bannerUrl ?? '').split(',')[0].trim())
 const onSwitchTab = (key: string) => {
 	isTabPicked = true
 	activeTab.value = key
@@ -766,7 +730,7 @@ const clickBtnNew = async (item:any)=>{
 	}
 	timer.value = setTimeout(async () => {
 		if([2,3].includes(item.status)) return
-		if(item.status == 0) return await downAppTip('Recharge');
+		if(item.status == 0) return await downAppTip('Recharge', FROM_TASK);
 		const res = await AwaitApiResult(receiveAward({id:item.id}))
 		if(res){
 			showDialog.value = true;
@@ -782,7 +746,7 @@ const clickNewbieExtra = async (task: any) => {
 	if (!(await requireLoginAction())) return
 	if (task.status === 2) return
 	if (task.status === 0) {
-		return router.push({ name: task.key === 'bindContact' && task.bindType === 'email' ? 'SettingCenter-BindEmail' : NEWBIE_TASK_META[task.key].goRoute })
+		return router.push({ name: task.key === 'bindContact' && task.bindType === 'email' ? 'SettingCenter-BindEmail' : NEWBIE_TASK_META[task.key].goRoute, query: FROM_TASK })
 	}
 	const res = await AwaitApiResult(receiveNewbieTask({ key: task.key }))
 	if (!res) return
@@ -795,14 +759,14 @@ const clickNewbieExtra = async (task: any) => {
 const goAnotherPage = async (item: any)=> {
 	if(item.taskId=='D20'){
 		if(item.schedule<item.taskTarget){
-			return await downAppTip('Recharge');
+			return await downAppTip('Recharge', FROM_TASK);
 		}else {
 			return router.push({name: 'home'})
 		}
 	}else {
 		if(!ActiveTaskMap[item.taskId].goPath) return
 		if(ActiveTaskMap[item.taskId].homeType) sessionStorage.setItem('clickedGameType', ActiveTaskMap[item.taskId].homeType)
-		if(ActiveTaskMap[item.taskId].goPath == 'Recharge' || ActiveTaskMap[item.taskId].goPath == 'Withdraw') return downAppTip(ActiveTaskMap[item.taskId].goPath)
+		if(ActiveTaskMap[item.taskId].goPath == 'Recharge' || ActiveTaskMap[item.taskId].goPath == 'Withdraw') return downAppTip(ActiveTaskMap[item.taskId].goPath, FROM_TASK)
 		router.push({name: ActiveTaskMap[item.taskId].goPath})
 	}
 }
@@ -846,62 +810,6 @@ $buy-tint: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 
 	:deep(.navbar) {
 		.navi-record{
 			color: var(--text_color_L1);
-		}
-	}
-
-	.task-banner{
-		width: 100%;
-		height: 260px;
-		padding: 10px 20px;
-		margin-bottom: 12px;
-		background:  url("@/assets/icons/activity/DailyTask/award_bg.png") no-repeat;
-		background-size: 100% 260px;
-		display: flex;
-		align-items: flex-start;
-		position: relative;
-
-		// 后端配的活动图尺寸不定,按宽铺满居中裁切
-		&.card-banner{
-			background-size: cover;
-			background-position: center;
-		}
-		.banner-rule{
-			align-self: flex-start;
-			display: flex;
-			// 覆盖 .task-banner div 的 space-between,否则图标与文案被推到胶囊两端
-			justify-content: center;
-			align-items: center;
-			gap: 6px;
-			height: 46px;
-			padding: 0 20px;
-			border: 1px solid rgba(255, 255, 255, .6);
-			border-radius: 60px;
-			font-size: 22px;
-			svg{
-				width: 32px;
-				height: 32px;
-			}
-		}
-
-		div{
-			display: flex;
-			justify-content: space-between;
-		}
-		.banner-title{
-			margin-top: 30px;
-			margin-bottom: 10px;
-			font-size: 36px;
-			color: #FFF;
-			font-weight: 600;
-		}
-		.banner-content{
-			display: flex;
-			color: #FFF;
-			word-break: break-word;
-			flex-direction: column;
-		    width: 420px;
-			line-height: 24px
-
 		}
 	}
 

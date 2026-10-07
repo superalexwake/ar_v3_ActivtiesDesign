@@ -49,7 +49,7 @@
 <!--修改手机号逻辑---判断是否有手机号---手机号获取验证码---提交修改手机号
 绑定手机号逻辑---判断时候有手机号---输入手机号，获取验证码---绑定手机号-->
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { GlobalStore, useUserStore } from '@/stores'
 import VerifyInput from '@/components/Login/VerifyInput.vue'
 import PhoneInput from '@/components/Login/PhoneInput.vue'
@@ -65,6 +65,7 @@ import type { UserInfo } from '@/types/api'
 import { CodeType } from '@/hooks'
 const { t } = useI18n()
 const router = useRouter()
+const route = useRoute()
 const userStore = useUserStore()
 const globalStore = GlobalStore()
 const userInfo = globalStore.getUserInfo as UserInfo
@@ -151,6 +152,8 @@ async function onSave() {
 	if (res) {
 		if (userInfo?.verifyMethods?.mobile != '') {
 			showSuccessToast(t('rpdsucceed'))
+			// 从新手任务「前往绑定」进来的（带 fromTask），绑定成功后回任务页
+			if (route.query.fromTask) return router.back()
 			router.push({ name: 'main' })
 		} else {
 			DialogShow.value = true
@@ -192,8 +195,9 @@ const sendSMS = async () => {
 	}
 }
 const onLaundy = () => {
-	router.push({ name: 'main' })
 	DialogShow.value = false
+	if (route.query.fromTask) return router.back()
+	router.push({ name: 'main' })
 }
 onMounted(() => {
 	userStore.setCountDown(0) //界面初始化时清空验证码计时器

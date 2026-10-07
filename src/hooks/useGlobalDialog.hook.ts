@@ -316,10 +316,11 @@ export const useGlobalDialog = () => {
 		return data
 	}
 
-	const downAppTip = async (link: any) => {
+	const downAppTip = async (link: any, query?: Record<string, string>) => {
 		if (isHybridApp() || !store.isFinancePromptTextEnabled) {
 			return router.push({
-				name: link
+				name: link,
+				query
 			})
 		}
 		void showConfirmDialog({

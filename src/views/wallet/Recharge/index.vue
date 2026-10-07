@@ -177,7 +177,10 @@ const handleRechargeRecord = () => {
 }
 
 function onClick() {
-	if (router.currentRoute.value.query?.type === 'Add') {
+	// 从任务页「前往」进来的（带 fromTask），返回回到跳转前的任务页，不去首页
+	if (router.currentRoute.value.query?.fromTask) {
+		router.back()
+	} else if (router.currentRoute.value.query?.type === 'Add') {
 		router.go(-2)
 	} else {
 		router.push({
