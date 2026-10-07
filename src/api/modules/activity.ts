@@ -300,7 +300,7 @@ export const getNewbieTaskList = async() => {
 	return post(api.GetNewbieTaskList)
 }
 
-// 领取新手任务奖励
+// 领取新手任务奖励（仅下载APP充值手动领取）
 export const receiveNewbieTask = async(params: any) : Promise<any> => {
 	return post(api.ReceiveNewbieTask, params).then((res) => res)
 }

@@ -225,45 +225,52 @@ const NEWBIE_ID = 301
 
 interface NewbieGiftParams {
 	state: 'progress' | 'claimable' | 'claimed' | 'none'
-	amount: number
+	days: number
+	dailyAmount: number
+	receivedDays: number
 }
 
 /**
- * GetNewbieGiftPackage:新手礼包。
- * @remarks totalNumber 取 1(单次即领);未完成时 receivedNumber 归零,其余情况与 totalNumber 一致。
- * DailyTasks/index.vue 领取成功弹窗按 amount/totalNumber 计算到账金额,与这里 ReceiveAward 实际 claim() 的金额保持一致。
+ * GetNewbieGiftPackage:新手礼包，对应后台 任务管理＞新手任务＞新手礼包（领取天数 × 每天金额）。
+ * @remarks totalNumber = 领取天数，amount = 天数 × 每天金额（卡上显示合计）；receivedNumber：未完成 0、待领取取 receivedDays；已领取后接口不再返回（卡片消失）。
+ * DailyTasks/index.vue 领取成功弹窗按 amount/totalNumber 计算到账金额（即每天金额），与 ReceiveAward 实际 claim() 的金额保持一致。
  */
 const newbieGiftPackage: MockHandler = (ctx) => {
-	const { state, amount } = params<NewbieGiftParams>(ctx, 'newbieGift')
+	const { state, days, dailyAmount, receivedDays } = params<NewbieGiftParams>(ctx, 'newbieGift')
 	if (state === 'none') return ok(null)
-	const totalNumber = 1
+	const totalNumber = Math.max(1, Math.round(days))
+	const amount = Math.round(totalNumber * dailyAmount * 100) / 100
+	const finalState = rewardStatus(ctx, `newbieGift:${NEWBIE_ID}`, state)
+	// 领完整张卡消失：已领取后接口不再返回，新手任务页不再显示这张卡
+	if (finalState === 'claimed') return ok(null)
 	return ok({
 		id: NEWBIE_ID,
 		title: pick(ctx, '新手礼包', 'Newbie Gift', 'नौसिखिया उपहार'),
 		description: pick(
 			ctx,
-			`完成 ${totalNumber} 项新手任务，即可领取 ₹${amount.toFixed(2)} 彩金`,
-			`Complete ${totalNumber} newbie task to claim a ₹${amount.toFixed(2)} bonus`,
-			`₹${amount.toFixed(2)} बोनस पाने के लिए ${totalNumber} नौसिखिया कार्य पूरा करें`
+			`连续领取 ${totalNumber} 天，每天可领 ₹${dailyAmount.toFixed(2)} 彩金`,
+			`Claim for ${totalNumber} days, ₹${dailyAmount.toFixed(2)} bonus every day`,
+			`${totalNumber} दिन तक हर दिन ₹${dailyAmount.toFixed(2)} बोनस पाएं`
 		),
-		receivedNumber: state === 'progress' ? 0 : totalNumber,
+		receivedNumber: finalState === 'claimed' ? totalNumber : state === 'progress' ? 0 : Math.min(Math.max(0, Math.round(receivedDays)), totalNumber - 1),
 		totalNumber,
 		amount,
-		status: NEWBIE_STATUS[rewardStatus(ctx, `newbieGift:${NEWBIE_ID}`, state)],
+		status: NEWBIE_STATUS[finalState],
 	})
 }
 
-/** ReceiveAward:领取新手礼包,读取 body.id;奖励中心 113 类型复用同一接口与 ID */
+/** ReceiveAward:领取新手礼包（当天一份 = 每天金额）,读取 body.id;奖励中心 113 类型复用同一接口与 ID */
 const receiveAward: MockHandler = (ctx) => {
-	const { amount } = params<NewbieGiftParams>(ctx, 'newbieGift')
-	return claim(ctx, `newbieGift:${Number(ctx.body.id) || NEWBIE_ID}`, amount)
+	const { dailyAmount } = params<NewbieGiftParams>(ctx, 'newbieGift')
+	return claim(ctx, `newbieGift:${Number(ctx.body.id) || NEWBIE_ID}`, dailyAmount)
 }
 
 /** 新手任务三项（绑定手机/邮箱、绑定银行卡、下载APP充值奖励）的奖励领取键前缀，按活动 ID `newbieTasks` 清理 */
 const NEWBIE_TASK_KEY = 'newbieTasks'
 
 interface NewbieTasksParams {
-	state: 'todo' | 'claimable' | 'claimed'
+	state: 'todo' | 'claimed'
+	appState: 'todo' | 'claimable' | 'claimed'
 	regType: 'phone' | 'mail'
 	phoneOn: boolean
 	mailOn: boolean
@@ -277,46 +284,51 @@ interface NewbieTasksParams {
 
 /**
  * GetNewbieTaskList:新手任务三项（新手礼包另走 GetNewbieGiftPackage）。
- * @remarks status 与新手礼包同口径：0 未完成、1 待领取、2 已领取。
+ * @remarks 绑定手机/邮箱、绑定银行卡：系统自动发放，玩家只做「前往绑定」，到账后接口不再返回该卡（卡片从新手任务消失），没有待领取、没有领取按钮，status 恒为 0。
+ * 下载APP充值：手动领取，status 0 未达标（前往完成→跳充值页）、1 达标可领取、2 已领取（领取后卡片保留，显示已领取）。
  * 对应 V1：
- * - 绑定手机/邮箱：只奖励「注册时没用的那一个」（手机号注册→绑邮箱领邮箱奖励；邮箱注册→绑手机领手机奖励），一次性、绑定成功自动到账，没有待领取；对应的奖励开关关闭则整张卡不返回。
- * - 绑定银行卡：首次绑卡赠送金额一个。
- * - 下载APP充值：下载APP后「单笔」充值达门槛才变待领取，进度不累计，卡上不显示进度数字；「显示赠送金额」关闭时不显示金额行。
+ * - 绑定手机/邮箱：一张卡、一个标题一段描述（文案由后台下发），下面分「手机奖励」「邮箱奖励」两行；注册时用过的那项标「已绑定」置灰，按钮去绑没用过的那项；只有没用过的那项能领，绑定后到账整张卡消失；某项奖励开关关闭则不显示那一行，没用过的那项关闭则整张卡不返回。
+ * - 绑定银行卡：首次绑卡赠送金额一个，绑定成功自动到账。
+ * - 下载APP充值：下载APP后「单笔」充值达门槛才变可领取；进度不累计，卡上不显示进度数字；「显示赠送金额」关闭时不显示金额行。
+ * - 每张卡只有一个标题和一段描述，完成条件（如下载APP的充值门槛）写进描述里，不再单独一行。
  */
 const newbieTaskList: MockHandler = (ctx) => {
 	const p = params<NewbieTasksParams>(ctx, 'newbieTasks')
-	const base: RewardItemStatus = p.state === 'claimable' ? 'claimable' : p.state === 'claimed' ? 'claimed' : 'progress'
-	const status = (key: string) => NEWBIE_STATUS[rewardStatus(ctx, `${NEWBIE_TASK_KEY}:${key}`, base)]
+	// 演示「已到账」：绑定类的卡已自动到账，接口不再返回，卡片消失；下载APP卡是手动领取，状态单独由 appState 控制
+	const autoDone = p.state === 'claimed'
+	const appBase: RewardItemStatus = p.appState === 'claimable' ? 'claimable' : p.appState === 'claimed' ? 'claimed' : 'progress'
+	const appStatus = NEWBIE_STATUS[rewardStatus(ctx, `${NEWBIE_TASK_KEY}:downloadApp`, appBase)]
+	// 手机号注册→还没绑的是邮箱；邮箱注册→还没绑的是手机。注册时用过的那项算「已绑定」
 	const bindEmail = p.regType === 'phone'
-	const contactOn = bindEmail ? p.mailOn : p.phoneOn
-	const contactAmount = bindEmail ? p.mailAmount : p.phoneAmount
-	// 绑定手机/邮箱自动到账：只有「未完成/已领取」两种，演示「待领取」时仍按未完成
-	const contactStatus = p.state === 'claimed' ? 2 : 0
+	const unusedOn = bindEmail ? p.mailOn : p.phoneOn
+	const phoneRow = { label: pick(ctx, '手机奖励', 'Phone reward', 'फ़ोन इनाम'), amount: p.phoneAmount, bound: bindEmail }
+	const mailRow = { label: pick(ctx, '邮箱奖励', 'Email reward', 'ईमेल इनाम'), amount: p.mailAmount, bound: !bindEmail }
+	// 后台某项奖励关了就不显示那一行；没绑的那项关了则这张卡没有可做的事，整张卡不返回
+	const contactRewards = [p.phoneOn && phoneRow, p.mailOn && mailRow].filter(Boolean)
 	const tasks = [
-		contactOn && {
+		!autoDone && unusedOn && {
 			key: 'bindContact',
 			bindType: bindEmail ? 'email' : 'phone',
-			title: bindEmail ? pick(ctx, '绑定邮箱有奖', 'Bind email and win', 'ईमेल बाइंड करें और जीतें') : pick(ctx, '绑定手机有奖', 'Bind phone and win', 'फ़ोन बाइंड करें और जीतें'),
-			description: bindEmail
-				? pick(ctx, '首次绑定邮箱送彩金，绑定成功自动到账', 'Get a bonus for binding your email for the first time, credited automatically', 'पहली बार ईमेल बाइंड करने पर बोनस, अपने आप जमा')
-				: pick(ctx, '首次绑定手机送彩金，绑定成功自动到账', 'Get a bonus for binding your phone for the first time, credited automatically', 'पहली बार फ़ोन बाइंड करने पर बोनस, अपने आप जमा'),
-			status: contactStatus,
+			// 标题和描述由后台「任务管理＞新手任务」配置下发，这里是示例文案
+			title: pick(ctx, '绑定手机/邮箱有奖', 'Bind phone/email and win', 'फ़ोन/ईमेल बाइंड करें और जीतें'),
+			description: pick(ctx, '首次绑定手机、邮箱各送一份彩金，绑定成功自动到账', 'Get a bonus for binding your phone and email for the first time, credited automatically', 'पहली बार फ़ोन और ईमेल बाइंड करने पर बोनस, अपने आप जमा'),
+			status: 0,
 			progress: null,
-			rewards: [{ label: '', amount: contactAmount }]
+			rewards: contactRewards
 		},
-		{
+		!autoDone && {
 			key: 'bindCard',
 			title: pick(ctx, '绑定银行卡有奖', 'Bind bank card and win', 'बैंक कार्ड बाइंड करें और जीतें'),
-			description: pick(ctx, '首次绑定银行卡送彩金', 'Get a bonus for binding a bank card for the first time', 'पहली बार बैंक कार्ड बाइंड करने पर बोनस पाएं'),
-			status: status('bindCard'),
+			description: pick(ctx, '首次绑定银行卡送彩金，绑定成功自动到账', 'Get a bonus for binding a bank card for the first time, credited automatically', 'पहली बार बैंक कार्ड बाइंड करने पर बोनस, अपने आप जमा'),
+			status: 0,
 			progress: null,
 			rewards: [{ label: '', amount: p.cardAmount }]
 		},
 		{
 			key: 'downloadApp',
 			title: pick(ctx, '下载APP充值奖励', 'Download APP recharge reward', 'ऐप डाउनलोड रिचार्ज इनाम'),
-			description: pick(ctx, '下载APP后单笔充值达标送彩金', 'Get a bonus for a single recharge of the required amount after downloading the APP', 'ऐप डाउनलोड के बाद एक बार में तय राशि रिचार्ज पर बोनस पाएं'),
-			status: status('downloadApp'),
+			description: pick(ctx, `下载APP后单笔充值满₹${p.appThreshold}，达标后手动领取`, `Recharge ₹${p.appThreshold} or more in a single payment after downloading the APP, then claim manually`, `ऐप डाउनलोड के बाद एक बार में ₹${p.appThreshold} या अधिक रिचार्ज करें, फिर खुद क्लेम करें`),
+			status: appStatus,
 			threshold: p.appThreshold,
 			progress: null,
 			rewards: p.showAppGift ? [{ label: '', amount: p.appAmount }] : []
@@ -325,12 +337,10 @@ const newbieTaskList: MockHandler = (ctx) => {
 	return ok(tasks)
 }
 
-/** ReceiveNewbieTask:领取新手任务奖励（银行卡、下载APP），读取 body.key；金额为该卡全部奖励行之和 */
+/** ReceiveNewbieTask:领取新手任务奖励（仅下载APP充值手动领取），读取 body.key */
 const receiveNewbieTask: MockHandler = (ctx) => {
 	const p = params<NewbieTasksParams>(ctx, 'newbieTasks')
-	const key = String(ctx.body.key)
-	const amount = key === 'bindCard' ? p.cardAmount : p.appAmount
-	return claim(ctx, `${NEWBIE_TASK_KEY}:${key}`, amount)
+	return claim(ctx, `${NEWBIE_TASK_KEY}:${String(ctx.body.key)}`, p.appAmount)
 }
 
 /** 每日奖励、每周奖励、新手礼包(Type 118/107/113)的接口假数据 */

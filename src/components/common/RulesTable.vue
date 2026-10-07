@@ -1,6 +1,5 @@
 <template>
 	<div v-for="(config, index) in giftPackConfigList" :key="index">
-		<div class="table-head">{{$t('registrationFullTip',[config.registerDays])}}</div>
         <table class="table-container" >
 			<thead class="table-title">
 				<th>{{ $t('activeObject') }}</th>
@@ -9,7 +8,7 @@
 			</thead>
 			<tbody>
 				<tr v-for="(award, awardIndex) in config.configAwardList" class="table-content">
-					<td v-if="index>=awardIndex && awardIndex===0" rowspan="3">{{$t('registrationDepositTip',[config.registerDays,config.grandTotalDeposit])}}</td>
+					<td v-if="awardIndex===0" :rowspan="config.configAwardList.length" v-html="$t('registrationDepositTip',[config.registerDays,currency(config.grandTotalDeposit)])"></td>
 					<td>{{ currency(award.totalValidBet) }}+</td>
 					<td>{{ currency(award.giveAwayBonus)}}</td>
 				</tr>
@@ -19,7 +18,7 @@
 			<div class="head">
 				<div class="title">{{$t('forexample')}}:</div>
 			</div>
-			<div class="description" v-html="$t('registrationExample',[config.registerDays,config.grandTotalDeposit,getMax(config.configAwardList).totalValidBet,getMax(config.configAwardList).giveAwayBonus])">
+			<div class="description" v-html="$t('registrationExample',[config.registerDays,currency(config.grandTotalDeposit),currency(getExample(config.configAwardList).totalValidBet),currency(getExample(config.configAwardList).giveAwayBonus)])">
 
 			</div>
 		</div>
@@ -34,9 +33,10 @@ defineProps({
 		default: []
 	}
 })
-const getMax=(config:any[])=>{
+// 例子取中间一档（5 档取第 3 档）；档位数不固定
+const getExample=(config:any[])=>{
 	if (!config.length)return {}
-	return config[0]
+	return config[Math.floor((config.length-1)/2)]
 }
 </script>
 <style lang="scss" scoped>

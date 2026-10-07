@@ -8,24 +8,64 @@ import type { MockContext, MockHandler, MockRoutes } from '../types'
 
 /** 新会员礼包（Type 116/117）的活动参数，取值范围见 catalog.json */
 interface MemberPackageParams {
-	/** 首充负盈利申请状态（116） */
-	applyState: 'none' | 'apply' | 'pending' | 'approved' | 'rejected'
+	/** 首充负盈利页面状态（116）：apply 申请、none 无按钮、pending 申请中、approved 已返回、waiting 待申请、notStarted 活动未开始（按钮为申请）、rejected 已拒绝 */
+	applyState: 'apply' | 'none' | 'pending' | 'approved' | 'waiting' | 'notStarted' | 'rejected'
 	/** 未满足条件时是否自动发放 */
 	autoDistribute: boolean
 	/** 返利记录展示模式（117） */
 	records: 'mixed' | 'claimable' | 'apply' | 'review' | 'empty'
-	/** 活动是否已开始 */
-	started: boolean
 }
 
 /** applyState → firstDepositConfig.rewardState，见 MemberPackage/index.vue 的 textMap/states */
 const REWARD_STATE: Record<MemberPackageParams['applyState'], number> = {
 	none: 0,
 	apply: 4,
+	notStarted: 4,
 	pending: 1,
 	approved: 2,
 	rejected: 3,
+	waiting: 5,
 }
+
+/**
+ * 活动详情里的三档“玩游戏送彩金”配置（对应 V1 新会员礼包配置的档位 1/2/3：注册满 N 天 + 累计存款 + 若干条“总有效投注 → 赠送彩金”）。
+ * 档位数、每档阶梯数都不固定，前端按数组长度渲染。
+ */
+const GIFT_PACK_CONFIGS = [
+	{
+		registerDays: 3,
+		grandTotalDeposit: 200,
+		configAwardList: [
+			{ totalValidBet: 1000, giveAwayBonus: 10 },
+			{ totalValidBet: 5000, giveAwayBonus: 20 },
+			{ totalValidBet: 20000, giveAwayBonus: 30 },
+			{ totalValidBet: 50000, giveAwayBonus: 50 },
+			{ totalValidBet: 80000, giveAwayBonus: 80 },
+		],
+	},
+	{
+		registerDays: 7,
+		grandTotalDeposit: 1000,
+		configAwardList: [
+			{ totalValidBet: 5000, giveAwayBonus: 20 },
+			{ totalValidBet: 20000, giveAwayBonus: 30 },
+			{ totalValidBet: 50000, giveAwayBonus: 50 },
+			{ totalValidBet: 100000, giveAwayBonus: 100 },
+			{ totalValidBet: 200000, giveAwayBonus: 200 },
+		],
+	},
+	{
+		registerDays: 15,
+		grandTotalDeposit: 2000,
+		configAwardList: [
+			{ totalValidBet: 1000, giveAwayBonus: 25 },
+			{ totalValidBet: 50000, giveAwayBonus: 50 },
+			{ totalValidBet: 100000, giveAwayBonus: 100 },
+			{ totalValidBet: 200000, giveAwayBonus: 200 },
+			{ totalValidBet: 500000, giveAwayBonus: 500 },
+		],
+	},
+]
 
 interface RecordConfig {
 	id: number
@@ -89,17 +129,19 @@ const giftPackUserRewardRecord: MockHandler = (ctx) => {
 					giveAwayBonus: record.giveAwayBonus,
 					...recordState(ctx, mode, record.id, index),
 				}))
+	// “申请”点过后记入已申请键，页面变成“申请中”
+	const applied = p.applyState === 'apply' && rewardStatus(ctx, 'memberPackage:apply', 'progress') === 'claimed'
 	return ok({
-		// firstDepositConfig 不能为 null：MemberPackage/index.vue:81 未判空直接读 rewardState
+		// firstDepositConfig 不能为 null：MemberPackage/index.vue 未判空直接读 rewardState
 		firstDepositConfig: {
-			activityStartDate: p.started ? dayjs().subtract(7, 'day').format('YYYY-MM-DD HH:mm:ss') : '',
-			bonusLimit: 500,
-			firstDeposiSendBonust: 100,
+			activityStartDate: p.applyState === 'notStarted' ? '' : dayjs().subtract(7, 'day').format('YYYY-MM-DD HH:mm:ss'),
+			bonusLimit: 288,
+			firstDeposiSendBonust: 5,
 			firstDepositTimeLiness: '3',
-			rewardState: REWARD_STATE[p.applyState],
+			rewardState: applied ? REWARD_STATE.pending : REWARD_STATE[p.applyState],
 			isAutomaticDistribution: p.autoDistribute,
 		},
-		giftPackConfigAwardList: [],
+		giftPackConfigAwardList: GIFT_PACK_CONFIGS,
 		newUserRewardRecordList: records,
 	})
 }

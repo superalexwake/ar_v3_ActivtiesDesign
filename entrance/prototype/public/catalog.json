@@ -24,7 +24,7 @@
 				{ "title": "新手礼包", "type": 113, "kind": "route", "target": "/activity?tab=task", "note": "落在每日任务页的「新手礼包」Tab", "activity": "newbieGift" },
 				{ "title": "新手任务（绑定手机邮箱/绑定银行卡/下载APP充值）", "kind": "route", "target": "/activity/DailyTasks?sub=newbie", "note": "与新手礼包同在「新手任务」Tab，下面三张卡；字段对应后台 任务管理＞新手任务", "activity": "newbieTasks" },
 				{ "title": "锦标赛奖励", "type": 114, "kind": "route", "target": "/activity/Championship", "note": "H5 默认隐藏：在入口页“活动”面板打开“显示电子锦标赛”后，活动页、我的页才出现入口；从这里点开直接进锦标赛页", "hidden": true, "activity": "championship" },
-				{ "title": "新会员玩游戏送彩金", "type": 117, "kind": "route", "target": "/activity/MemberPackage?history=117", "note": "历史奖励记录；保留原金额、状态及既有待领取入口，不新增申请", "activity": "memberPackage" },
+				{ "title": "新会员玩游戏送彩金", "type": 117, "kind": "route", "target": "/activity/MemberPackage?history=117", "note": "历史奖励记录；保留原金额、状态及既有待领取入口，不新增申请", "hidden": true, "activity": "memberPackage" },
 				{ "title": "首充赠送", "type": 10, "kind": "route", "target": "/wallet/Recharge", "note": "充值页各通道展示首充赠送比例", "activity": "rechargeGift" },
 				{ "title": "绑定手机奖励", "type": 104, "kind": "route", "target": "/main/SettingCenter", "note": "安全中心“绑定手机”一行显示奖励（邮箱注册的用户才有这一行），点“绑定手机奖励”场景查看", "activity": "bindReward" },
 				{ "title": "绑定邮箱奖励", "type": 106, "kind": "route", "target": "/main/SettingCenter", "note": "安全中心“绑定邮箱”一行显示奖励（手机注册的用户才有这一行）", "activity": "bindReward" },
@@ -190,7 +190,7 @@
 			"note": "“活动奖励开关”同时控制活动页“活动奖励”入口和每日任务页每日、每周列表的加载；从清单打开时落在“每日任务”Tab。",
 			"params": [
 				{ "name": "enabled", "label": "活动奖励开关", "type": "boolean", "default": true, "drives": "isOpenActivityAward（同时决定每日、每周列表是否加载）" },
-				{ "name": "mix", "label": "任务状态", "type": "select", "default": "mixed", "options": [{ "value": "mixed", "label": "混合" }, { "value": "claimable", "label": "全部可领" }, { "value": "claimed", "label": "全部已领" }, { "value": "progress", "label": "全部未完成" }, { "value": "empty", "label": "无任务" }], "drives": "GetDailyAwardList[].status（1 未完成、2 可领、3 已领）、GetDailyAwardCount" },
+				{ "name": "mix", "label": "绑定类任务状态", "type": "select", "default": "mixed", "options": [{ "value": "mixed", "label": "混合" }, { "value": "claimable", "label": "全部可领" }, { "value": "claimed", "label": "全部已领" }, { "value": "progress", "label": "全部未完成" }, { "value": "empty", "label": "无任务" }], "drives": "GetDailyAwardList[].status（1 未完成、2 可领、3 已领）、GetDailyAwardCount" },
 				{ "name": "showStatusFilter", "label": "显示任务状态筛选行", "type": "boolean", "default": false, "drives": "DailyTasks 页每日/每周任务列表上方「全部/可领取/可参与/已领取/已结束」筛选行是否显示(showTaskStatusFilter)" }
 			],
 			"presets": [
@@ -267,10 +267,9 @@
 			"note": "116 当前活动与 117 历史记录共用数据面板；117 从历史入口查看原有金额和状态。",
 			"params": [
 				{ "name": "enabled", "label": "活动开关", "type": "boolean", "default": true, "drives": "newMemberGiftPackageSwitch" },
-				{ "name": "applyState", "label": "首充负盈利状态（116）", "type": "select", "default": "apply", "options": [{ "value": "none", "label": "未满足" }, { "value": "apply", "label": "待处理" }, { "value": "pending", "label": "审核中" }, { "value": "approved", "label": "已派发" }, { "value": "rejected", "label": "已驳回" }], "drives": "firstDepositConfig.rewardState（0/4/1/2/3）；仅展示状态，不新增申请动作" },
+				{ "name": "applyState", "label": "首充负盈利状态（116）", "type": "select", "default": "apply", "options": [{ "value": "apply", "label": "申请" }, { "value": "none", "label": "无按钮（直接看活动详情）" }, { "value": "pending", "label": "申请中" }, { "value": "approved", "label": "已返回" }, { "value": "waiting", "label": "待申请" }, { "value": "notStarted", "label": "活动未开始（按钮为申请）" }, { "value": "rejected", "label": "已拒绝" }], "drives": "firstDepositConfig.rewardState（4/0/1/2/5/4/3）；notStarted 时活动开始时间为空；点“申请”后变申请中" },
 				{ "name": "autoDistribute", "label": "自动发放", "type": "boolean", "default": false, "drives": "firstDepositConfig.isAutomaticDistribution（仅 none 时显示的提示文案）" },
-				{ "name": "records", "label": "历史返利记录（117）", "type": "select", "default": "mixed", "options": [{ "value": "mixed", "label": "已领/待领/未达标" }, { "value": "claimable", "label": "全部待领取" }, { "value": "apply", "label": "待申请" }, { "value": "review", "label": "审核中 + 已驳回" }, { "value": "empty", "label": "无" }], "drives": "newUserRewardRecordList[].state/operateState；从历史入口查看" },
-				{ "name": "started", "label": "活动已开始", "type": "boolean", "default": true, "drives": "firstDepositConfig.activityStartDate（false 时为空串）" }
+				{ "name": "records", "label": "历史返利记录（117）", "type": "select", "default": "mixed", "options": [{ "value": "mixed", "label": "已领/待领/未达标" }, { "value": "claimable", "label": "全部待领取" }, { "value": "apply", "label": "待申请" }, { "value": "review", "label": "审核中 + 已驳回" }, { "value": "empty", "label": "无" }], "drives": "newUserRewardRecordList[].state/operateState；从历史入口查看" }
 			],
 			"presets": [
 				{ "label": "默认", "values": {} },
@@ -278,13 +277,15 @@
 				{ "label": "已驳回", "values": { "applyState": "rejected" } },
 				{ "label": "返利待领取", "values": { "records": "claimable" } },
 				{ "label": "新会员无记录", "values": { "applyState": "none", "records": "empty" } },
-				{ "label": "活动未开始", "values": { "started": false }, "note": "活动时间显示“活动未开始”" }
+				{ "label": "待申请", "values": { "applyState": "waiting" } },
+				{ "label": "已返回", "values": { "applyState": "approved" } },
+				{ "label": "活动未开始", "values": { "applyState": "notStarted" }, "note": "活动开始时间显示“活动未开始”，按钮仍为申请" }
 			]
 		},
 		"weeklyTask": {
 			"note": "活动页入口与每周列表是否加载由“每日奖励”面板的活动奖励开关控制；从清单打开时落在“每周任务”Tab。",
 			"params": [
-				{ "name": "mix", "label": "任务状态", "type": "select", "default": "mixed", "options": [{ "value": "mixed", "label": "混合" }, { "value": "claimable", "label": "全部可领" }, { "value": "claimed", "label": "全部已领" }, { "value": "progress", "label": "全部未完成" }, { "value": "empty", "label": "无任务" }], "drives": "GetWeeklyAwardList[].status" }
+				{ "name": "mix", "label": "绑定类任务状态", "type": "select", "default": "mixed", "options": [{ "value": "mixed", "label": "混合" }, { "value": "claimable", "label": "全部可领" }, { "value": "claimed", "label": "全部已领" }, { "value": "progress", "label": "全部未完成" }, { "value": "empty", "label": "无任务" }], "drives": "GetWeeklyAwardList[].status" }
 			],
 			"presets": [
 				{ "label": "混合（默认）", "values": {} },
@@ -362,38 +363,44 @@
 			]
 		},
 		"newbieGift": {
-			"note": "每日任务页顶部的新手礼包卡；从清单打开时落在“新手礼包”Tab。",
+			"note": "每日任务页顶部的新手礼包卡；从清单打开时落在“新手礼包”Tab。领取成功后整张卡消失。",
 			"params": [
-				{ "name": "state", "label": "礼包状态", "type": "select", "default": "claimable", "options": [{ "value": "progress", "label": "未完成" }, { "value": "claimable", "label": "待领取" }, { "value": "claimed", "label": "已领取" }, { "value": "none", "label": "无礼包" }], "drives": "GetNewbieGiftPackage.status（0/1/2）；none 返回 null" },
-				{ "name": "amount", "label": "礼包金额", "type": "number", "default": 88, "min": 0, "max": 99999, "step": 0.01, "unit": "₹", "drives": "amount（领取弹窗显示 amount / totalNumber）" }
+				{ "name": "state", "label": "礼包状态", "type": "select", "default": "claimable", "options": [{ "value": "progress", "label": "未完成" }, { "value": "claimable", "label": "待领取" }, { "value": "claimed", "label": "已领取（卡片消失）" }, { "value": "none", "label": "无礼包" }], "drives": "GetNewbieGiftPackage.status（0/1/2）；none 返回 null" },
+				{ "name": "days", "label": "领取天数", "type": "number", "default": 7, "min": 1, "max": 365, "step": 1, "unit": "天", "drives": "totalNumber（后台新手礼包「领取天数」）" },
+				{ "name": "dailyAmount", "label": "每天金额", "type": "number", "default": 8, "min": 0, "max": 99999, "step": 0.01, "unit": "₹", "drives": "amount = 天数 × 每天金额（卡上合计）；领取弹窗显示每天金额" },
+				{ "name": "receivedDays", "label": "已领天数（待领取时）", "type": "number", "default": 0, "min": 0, "max": 364, "step": 1, "unit": "天", "drives": "receivedNumber，待领取状态下进度 N/天数" }
 			],
 			"presets": [
-				{ "label": "待领取（默认）", "values": {}, "note": "“领取”，成功弹窗 ₹88.00" },
+				{ "label": "待领取（默认）", "values": {}, "note": "进度 0/7，奖励金额合计 ₹56.00，“领取”成功弹窗 ₹8.00" },
+				{ "label": "已领 3 天", "values": { "receivedDays": 3 }, "note": "进度 3/7，仍可领取" },
 				{ "label": "未完成", "values": { "state": "progress" }, "note": "“去完成”，点击跳充值" },
-				{ "label": "已领取", "values": { "state": "claimed" }, "note": "置灰" },
+				{ "label": "已领取（卡片消失）", "values": { "state": "claimed" }, "note": "领完整张卡从新手任务消失，和绑定类一致；点“领取”后同样消失；其余三项也做完时整个「新手任务」Tab 消失（见新手任务的「三项全部做完」）" },
 				{ "label": "无礼包", "values": { "state": "none" }, "note": "“新手礼包”Tab 消失，默认落到每日任务" }
 			]
 		},
 		"newbieTasks": {
-			"note": "每日任务页「新手任务」Tab 里新手礼包下面的三张卡（绑定手机/邮箱有奖、绑定银行卡有奖、下载APP充值奖励）；金额、开关默认值取后台任务管理＞新手任务的示例配置。「去完成」跳转：手机/邮箱→手机绑定页，银行卡→添加银行卡页，下载APP→下载APP提示。",
+			"note": "每日任务页「新手任务」Tab 里新手礼包下面的三张卡（绑定手机/邮箱有奖、绑定银行卡有奖、下载APP充值奖励）；金额、开关默认值取后台任务管理＞新手任务的示例配置。手机/邮箱、银行卡是系统自动发放，没有领取按钮，按钮是「前往绑定」（手机/邮箱→没绑的那项的绑定页，银行卡→添加银行卡页），到账后卡片从新手任务消失；下载APP充值是手动领取：未达标按钮「前往完成」跳充值页，达标后「领取」，领取后卡片保留显示已领取。",
 			"params": [
-				{ "name": "state", "label": "任务状态", "type": "select", "default": "todo", "options": [{ "value": "todo", "label": "未完成" }, { "value": "claimable", "label": "待领取（手机/邮箱卡自动到账，仍显示未完成）" }, { "value": "claimed", "label": "已领取" }], "drives": "GetNewbieTaskList.status（0/1/2）" },
-				{ "name": "regType", "label": "会员注册方式", "type": "select", "default": "phone", "options": [{ "value": "phone", "label": "手机号注册（卡片＝绑定邮箱，领邮箱奖励）" }, { "value": "mail", "label": "邮箱注册（卡片＝绑定手机，领手机奖励）" }], "drives": "V1 BindReward：只奖励注册时没用的那一个，一次性、绑定自动到账" },
-				{ "name": "phoneOn", "label": "手机奖励开关", "type": "boolean", "default": true, "drives": "后台「手机奖励」开关；邮箱注册的会员看到的绑定手机卡，关掉则这张卡不显示" },
+				{ "name": "state", "label": "绑定类任务状态", "type": "select", "default": "todo", "options": [{ "value": "todo", "label": "未完成（卡片在，按钮前往绑定）" }, { "value": "claimed", "label": "已自动到账（绑定手机/邮箱、绑定银行卡两张卡消失）" }], "drives": "GetNewbieTaskList：已自动到账的卡不再返回" },
+				{ "name": "appState", "label": "下载APP任务状态", "type": "select", "default": "todo", "options": [{ "value": "todo", "label": "未达标（前往完成，跳充值页）" }, { "value": "claimable", "label": "已达标可领取" }, { "value": "claimed", "label": "已领取" }], "drives": "GetNewbieTaskList[downloadApp].status（0/1/2）；手动领取" },
+				{ "name": "regType", "label": "会员注册方式", "type": "select", "default": "phone", "options": [{ "value": "phone", "label": "手机号注册（邮箱还没绑，按钮去绑邮箱；手机行标已绑定）" }, { "value": "mail", "label": "邮箱注册（手机还没绑，按钮去绑手机；邮箱行标已绑定）" }], "drives": "注册时用过的那项算已绑定（金额置灰）；一次性、绑定自动到账" },
+				{ "name": "phoneOn", "label": "手机奖励开关", "type": "boolean", "default": true, "drives": "后台「手机奖励」开关；关掉则不显示「手机奖励」那一行（邮箱注册的会员还没绑手机，关掉后整张卡不显示）" },
 				{ "name": "phoneAmount", "label": "手机奖励金额", "type": "number", "default": 3, "min": 0, "max": 99999, "step": 0.01, "unit": "₹", "drives": "rewards[绑定手机奖励].amount" },
-				{ "name": "mailOn", "label": "邮箱奖励开关", "type": "boolean", "default": true, "drives": "后台「邮箱奖励」开关；手机注册的会员看到的绑定邮箱卡，关掉则这张卡不显示" },
+				{ "name": "mailOn", "label": "邮箱奖励开关", "type": "boolean", "default": true, "drives": "后台「邮箱奖励」开关；关掉则不显示「邮箱奖励」那一行（手机注册的会员还没绑邮箱，关掉后整张卡不显示）" },
 				{ "name": "mailAmount", "label": "邮箱奖励金额", "type": "number", "default": 2, "min": 0, "max": 99999, "step": 0.01, "unit": "₹", "drives": "rewards[绑定邮箱奖励].amount" },
 				{ "name": "cardAmount", "label": "绑定银行卡赠送金额", "type": "number", "default": 5, "min": 0, "max": 99999, "step": 0.01, "unit": "₹", "drives": "rewards[].amount" },
-				{ "name": "appThreshold", "label": "下载APP充值门槛", "type": "number", "default": 100, "min": 1, "max": 99999, "step": 1, "unit": "₹", "drives": "下载APP卡完成条件文案「单笔充值满X」（后台「充值金额」）；V1 只认单笔，不累计" },
+				{ "name": "appThreshold", "label": "下载APP充值门槛", "type": "number", "default": 100, "min": 1, "max": 99999, "step": 1, "unit": "₹", "drives": "下载APP卡描述里的「单笔充值满X」（后台「充值金额」）；V1 只认单笔，不累计" },
 				{ "name": "appAmount", "label": "下载APP赠送金额", "type": "number", "default": 10, "min": 0, "max": 99999, "step": 0.01, "unit": "₹", "drives": "rewards[].amount" },
 				{ "name": "showAppGift", "label": "显示赠送金额", "type": "boolean", "default": true, "drives": "后台「显示赠送金额」；关掉后下载APP卡不显示奖励金额行" }
 			],
 			"presets": [
-				{ "label": "未完成（默认）", "values": {}, "note": "三张卡都是“去完成”（默认手机号注册，卡片是绑定邮箱）" },
-				{ "label": "邮箱注册·绑手机", "values": { "regType": "mail" }, "note": "绑定卡变成「绑定手机有奖」，奖励取手机奖励金额" },
-				{ "label": "待领取", "values": { "state": "claimable" }, "note": "银行卡、下载APP两张卡是“领取”；手机/邮箱卡自动到账，仍显示去完成" },
-				{ "label": "已领取", "values": { "state": "claimed" }, "note": "三张卡置灰" },
-				{ "label": "隐藏赠送金额+邮箱奖励关", "values": { "showAppGift": false, "mailOn": false }, "note": "手机号注册的会员没有绑定邮箱卡；下载APP卡没有奖励金额行" }
+				{ "label": "未完成（默认）", "values": {}, "note": "绑定类按钮前往绑定，下载APP按钮前往完成（默认手机号注册：手机行已绑定，邮箱行可领）" },
+				{ "label": "邮箱注册·绑手机", "values": { "regType": "mail" }, "note": "卡片标题不变，邮箱行标「已绑定」置灰，按钮改为去绑手机" },
+				{ "label": "绑定类已自动到账", "values": { "state": "claimed" }, "note": "绑定手机/邮箱、绑定银行卡两张卡已自动到账、从新手任务消失；下载APP卡和新手礼包仍在" },
+				{ "label": "下载APP达标可领取", "values": { "appState": "claimable" }, "note": "下载APP卡按钮变「领取」，点击到账" },
+				{ "label": "下载APP已领取", "values": { "appState": "claimed" }, "note": "下载APP卡保留，按钮置灰「已领取」" },
+				{ "label": "三项全部做完", "values": { "state": "claimed", "appState": "claimed" }, "note": "绑定类自动到账消失、下载APP已领取；再把「新手礼包」设为已领取，新手任务 Tab 整个消失、默认落到每日任务；改回即恢复" },
+				{ "label": "隐藏赠送金额+邮箱奖励关", "values": { "showAppGift": false, "mailOn": false }, "note": "手机号注册的会员没有绑定卡（邮箱没得绑）；下载APP卡没有奖励金额行" }
 			]
 		},
 		"championship": {

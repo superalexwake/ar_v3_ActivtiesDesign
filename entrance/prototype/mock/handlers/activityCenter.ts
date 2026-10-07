@@ -267,7 +267,7 @@ function bonusRecords(ctx: MockContext): BonusRecord[] {
 		{ activityId: 4, rewardType: 29, recordType: 1, receiveTaskId: 1004, amount: 0, base: 'progress', maxRewardableRate: 0.1 },
 		{ activityId: 5, rewardType: 30, recordType: 1, receiveTaskId: 1005, amount: 0, base: 'expired', maxRewardableRate: 0.05 },
 		{ activityId: 6, rewardType: 103, recordType: 1, receiveTaskId: 1006, amount: 0, base: 'progress', maxRewardableAmount: 5000 },
-		{ activityId: 7, rewardType: 113, recordType: 0, receiveTaskId: 301, amount: amountOf('newbieGift'), base: 'claimable', claimKey: 'newbieGift:301' },
+		{ activityId: 7, rewardType: 113, recordType: 0, receiveTaskId: 301, amount: params<{ dailyAmount: number }>(ctx, 'newbieGift').dailyAmount, base: 'claimable', claimKey: 'newbieGift:301' },
 		{ activityId: 8, rewardType: 115, recordType: 0, receiveTaskId: 9001, amount: amountOf('returnAward'), base: 'claimable', claimKey: 'returnAward:1' },
 		{ activityId: 9, rewardType: 131, recordType: 0, receiveTaskId: 9002, amount: amountOf('appDownload'), base: 'claimed', claimKey: 'appDownload:1' },
 	]

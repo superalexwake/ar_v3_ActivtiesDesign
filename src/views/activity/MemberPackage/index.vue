@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import ruleContainer from '@/components/common/Rule.vue'
+import RulesTable from '@/components/common/RulesTable.vue'
 import {useRoute, useRouter} from "vue-router";
 import {usePackage} from '@/hooks'
 import {computed, onMounted} from "vue";
@@ -10,14 +11,9 @@ const {t}=useI18n()
 const router=useRouter()
 const route=useRoute()
 const isHistory117=computed(()=>route.query.history === '117')
-const {getConfig,onReceive,store,time,rewardRecordList}=usePackage()
+const {getConfig,onReceive,onApplyFirstCharge,store,time,rewardRecordList,giftPackConfigList,bonusLimit,firstDeposiSendBonust}=usePackage()
 const onClick=()=>{
 	router.go(-1)
-}
-const onRule=()=>{
-	router.push({
-		name:"MemberPackage-Rules"
-	})
 }
 const states={
 	0:t('witeApply'),
@@ -27,11 +23,12 @@ const states={
 	4:t('received')
 }
 
+// 116 首充负盈利按钮：4 可申请（可点）；1/2/3/5 灰色状态；0 不显示按钮
 const textMap: Record<number, string> = {
-	1: t('memberPackageReviewing'),
-	2: t('memberPackagePaid'),
+	1: t('inApplication'),
+	2: t('memberPackageReturned'),
 	3: t('rejected'),
-	4: t('memberPackagePending'),
+	5: t('witeApply'),
 }
 onMounted(()=>{
 	getConfig()
@@ -42,28 +39,38 @@ onMounted(()=>{
   <div class="package">
 	  <NavBar :title="isHistory117 ? $t('code8117') : $t('newMenberPackage')"  :placeholder="false" left-arrow  @click-left="onClick" >
 	  </NavBar>
-	  <div v-if="!isHistory117" class="package-banner">
-		  <div class="package-banner-text">
-			  <h3>{{$t('newMenberPackage')}}</h3>
-			  <h4>{{$t('newMenberTip')}}：</h4>
-			  <p>
-				  <span>1</span>{{$t('newMenberRule')}}
-			  </p>
-			  <div>
-				  <div class="package-desc" @click="onRule">{{$t('activityDestitle')}}</div>
-			  </div>
-		  </div>
-	  </div>
+	  <div v-if="!isHistory117" class="package-banner"></div>
 	  <ruleContainer v-if="!isHistory117 && store.firstDepositConfig" :name="$t('activityTime')"  :tiplist="[]">
 			<h2 class="package-time">
 				{{time||$t('lotteryActivityUnstarted')}}
 			</h2>
 	  </ruleContainer>
+	  <table v-if="!isHistory117 && store.firstDepositConfig" class="package-table">
+		  <thead>
+			  <tr>
+				  <th>{{$t('conditionsRule')}}</th>
+				  <th>{{$t('afterDayBonus')}}</th>
+				  <th>{{$t('bonusLimit')}}</th>
+			  </tr>
+		  </thead>
+		  <tbody>
+			  <tr>
+				  <td>{{$t('newMemberDeposit')}}</td>
+				  <td v-html="$t('todayBonus',[firstDeposiSendBonust])"></td>
+				  <td>{{currency(bonusLimit)}}</td>
+			  </tr>
+		  </tbody>
+	  </table>
 	  <div class="package-tips" v-if="!isHistory117 && store.firstDepositConfig">
        <svg-icon name="activityNote" />
 		  {{ store.firstDepositConfig.isAutomaticDistribution ? $t('memberPackageAuto') : $t('memberPackageManual')}}
 	  </div>
-	  <div v-if="!isHistory117 && [1,2,3,4].includes(store.firstDepositConfig.rewardState)" class="package-item-btn done d">{{ textMap[store.firstDepositConfig.rewardState] }}</div>
+	  <div v-if="!isHistory117 && store.firstDepositConfig.rewardState===4" class="package-item-btn apply d" @click="onApplyFirstCharge">{{ $t('activityApply') }}</div>
+	  <div v-else-if="!isHistory117 && textMap[store.firstDepositConfig.rewardState]" class="package-item-btn done d">{{ textMap[store.firstDepositConfig.rewardState] }}</div>
+	  <div v-if="!isHistory117" class="package-detail member-package-rule">
+		  <h3 class="package-detail-title">{{$t('activityDestitle')}}</h3>
+		  <RulesTable :giftPackConfigList="giftPackConfigList" />
+	  </div>
 
 	  <ul v-if="isHistory117" class="package-list">
         <li class="package-item" v-for="item of rewardRecordList" :key="item.id">
@@ -109,76 +116,59 @@ onMounted(()=>{
 <style scoped lang="scss">
 .package{
 
-	&-desc{
-		border-radius: 40px;
-		border: 1px solid #fff;
-		min-width: 180px;
-		max-width: 300px;
-		height: 50px;
-		color: #fff;
-		line-height: 50px;
-		font-size: 24px;
-		text-align: center;
-		padding: 0 10px;
-	}
 	&-banner{
-	  display: flex;
-	  align-items: center;
-	  min-height: 290px;
-	  margin-bottom: 20px;
-	   padding: 26px 0;
+		min-height: 354px;
+		margin-bottom: 20px;
 		background: url("@/assets/icons/activity/MemberPackage/box.png"), linear-gradient(103deg, #FAAC48 4.77%, #F7602B 96.1%);
 		background-size: 100% 354px;
-	  img{
-		  display: block;
-		  width: 202px;
-		  height: 240px;
-	  }
-	  &-text{
+	}
+	&-table{
+		width: calc(100% - 48px);
+		margin: 20px 24px 0;
+		border-radius: 20px;
+		overflow: hidden;
+		background: var(--darkBg,var(--bg_color_L2));
+		thead{
+			height: 80px;
+			background: var(--sheet_nva_color);
 			color: #fff;
-		    margin-left: 34px;
-		  width:100%;
-		  &>div{
-			  display: flex;
-			  justify-content: start;
-		  }
-		   h3{
-			   font-size: 36px;
-			   font-style: normal;
-			   font-weight: 700;
-			   line-height: 36px;
-			   margin-bottom: 30px;
-		   }
-		  h4{
-			  font-size: 26px;
-			  font-style: normal;
-			  font-weight: 500;
-			  line-height: 26px;
-			  margin-bottom: 24px;
-		  }
-		  p{
-			  font-size: 22px;
-			  font-style: normal;
-			  font-weight: 400;
-			  line-height: 24px;
-			  margin-bottom: 14px;
-		  }
-		  span{
-			  width: 28px;
-			  height: 28px;
-			  display: inline-block;
-			  border-radius: 50%;
-			  background: #fff;
-			  color: var(--norm_secondary-color);
-			  text-align: center;
-			  font-size: 22px;
-			  font-style: normal;
-			  font-weight: 500;
-			  line-height: 28px;
-			  margin-right: 10px;
-		  }
-	  }
-  }
+			th{
+				font-size: 24px;
+				text-align: center;
+				border-right: 1px solid var(--Dividing-line_color);
+			}
+		}
+		tbody td{
+			height: 90px;
+			padding: 10px;
+			font-size: 24px;
+			text-align: center;
+			vertical-align: middle;
+			color: var(--text_color_L1);
+			border-right: 1px solid var(--Dividing-line_color);
+			:deep(span){
+				color: var(--norm_red-color);
+			}
+		}
+		th:last-child, td:last-child{
+			border-right: none;
+		}
+	}
+	&-detail{
+		padding: 0 24px 24px;
+		:deep(.number){
+			color: var(--norm_red-color);
+		}
+		&-title{
+			margin: 40px 0 20px;
+			padding-left: 16px;
+			border-left: 8px solid var(--norm_red-color);
+			font-size: 32px;
+			font-weight: 700;
+			line-height: 32px;
+			color: var(--text_color_L1);
+		}
+	}
 	&-time{
 		color: var(--norm_red-color);
 		font-size: 32px;
@@ -278,14 +268,15 @@ onMounted(()=>{
 	}
 	&-tips{
 		background: var(--bg_color_L2);
-		padding: 20px;
+		border: 1px solid var(--norm_red-color);
+		padding: 14px 20px;
 		color: var(--norm_red-color);
 		font-size: 24px;
 		font-style: normal;
 		font-weight: 500;
 		line-height: 36px;
-		border-radius: 50px;
-		margin: 20px 20px 0;
+		border-radius: 12px;
+		margin: 20px 24px 0;
 		
 		svg{
 			width: 36px;
@@ -413,37 +404,6 @@ onMounted(()=>{
 			&.d {
 				margin: 24px;
 			}
-		}
-	}
-}
-
-@media (max-width: 430px) {
-	.package-banner {
-		display: block;
-		min-height: 0;
-		padding: 26px 24px 280px;
-		background-size: 72% auto, 100% 100%;
-		background-position: right bottom, center;
-		background-repeat: no-repeat;
-	}
-
-	.package-banner-text {
-		width: 100%;
-		margin-left: 0;
-		overflow-wrap: anywhere;
-
-		h3 {
-			line-height: 1.25;
-			margin-bottom: 16px;
-		}
-
-		h4 {
-			line-height: 1.35;
-			margin-bottom: 12px;
-		}
-
-		p {
-			line-height: 1.4;
 		}
 	}
 }

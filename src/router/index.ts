@@ -11,7 +11,21 @@ const router = createRouter({
 	history: createWebHashHistory(import.meta.env.BASE_URL),
 	routes: routes,
 	scrollBehavior(to, from, savedPosition) {
-		return { top: 0 }
+		// 点「前往」进了别的页，再点返回/浏览器后退：回到离开时的位置。新进入的页面照旧回顶部。
+		// 列表数据是异步加载的，页面还没撑到足够高就滚会落空，所以等内容长够（最多 3 秒）再恢复。
+		// 同一页只是地址栏参数变了（比如切 Tab 时改 sub），不动滚动位置，免得把刚恢复的位置又顶回顶部
+		if (!savedPosition && to.path === from.path) return false
+		if (!savedPosition) return { top: 0 }
+		const wantTop = savedPosition.top ?? 0
+		return new Promise((resolve) => {
+			const start = Date.now()
+			const tryRestore = () => {
+				const enough = document.documentElement.scrollHeight >= wantTop + window.innerHeight
+				if (wantTop === 0 || enough || Date.now() - start > 3000) return resolve(savedPosition)
+				setTimeout(tryRestore, 100)
+			}
+			setTimeout(tryRestore, 100)
+		})
 	}
 })
 setAppRouter(router)

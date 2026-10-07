@@ -16,13 +16,17 @@
 		>
 			<div>
 				<p>
-					<div class="banner-title">{{ activeCardBanner ? activeCardBanner.title : $t('actTip1') }}</div>
+					<div class="banner-title">{{ activeCardBanner ? activeCardBanner.title : tabIntro ? $t(tabIntro.title) : $t('actTip1') }}</div>
 					<div class="banner-content">
 						<div class="banner-rule" v-if="activeCardBanner" @click="ruleDialog = true">
 							<svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
 								<path d="M23.67 3H12.33C6.66 3 5.25 4.515 5.25 10.56V27.45C5.25 31.44 7.44 32.385 10.095 29.535L10.11 29.52C11.34 28.215 13.215 28.32 14.28 29.745L15.795 31.77C17.01 33.375 18.975 33.375 20.19 31.77L21.705 29.745C22.785 28.305 24.66 28.2 25.89 29.52C28.56 32.37 30.735 31.425 30.735 27.435V10.56C30.75 4.515 29.34 3 23.67 3ZM11.67 18C10.845 18 10.17 17.325 10.17 16.5C10.17 15.675 10.845 15 11.67 15C12.495 15 13.17 15.675 13.17 16.5C13.17 17.325 12.495 18 11.67 18ZM11.67 12C10.845 12 10.17 11.325 10.17 10.5C10.17 9.675 10.845 9 11.67 9C12.495 9 13.17 9.675 13.17 10.5C13.17 11.325 12.495 12 11.67 12ZM24.345 17.625H16.095C15.48 17.625 14.97 17.115 14.97 16.5C14.97 15.885 15.48 15.375 16.095 15.375H24.345C24.96 15.375 25.47 15.885 25.47 16.5C25.47 17.115 24.96 17.625 24.345 17.625ZM24.345 11.625H16.095C15.48 11.625 14.97 11.115 14.97 10.5C14.97 9.885 15.48 9.375 16.095 9.375H24.345C24.96 9.375 25.47 9.885 25.47 10.5C25.47 11.115 24.96 11.625 24.345 11.625Z" fill="currentColor"/>
 							</svg>{{ $t('ruleillustrate') }}
 						</div>
+						<template v-else-if="tabIntro">
+							<div>{{ $t(tabIntro.line1) }}</div>
+							<div>{{ $t(tabIntro.line2) }}</div>
+						</template>
 						<template v-else>
 							<div>{{$t('awardsTip1')}}</div>
 							<div>{{$t('awardsTip3')}}</div>
@@ -110,17 +114,14 @@
 				<div class="task-item-description">
 					{{ task.description }}
 				</div>
-				<div class="task-item-description newbie-cond" :class="`cond-${task.key}`">
-					{{ $t('newbieCondLabel') }}：{{ newbieCondText(task) }}<template v-if="task.progress">（{{ task.progress.current }}/{{ task.progress.target }}）</template>
-				</div>
-				<div class="task-item-bottom" v-for="r in task.rewards" :key="r.label">
-					<div>{{ r.label || $t('awardsAmount') }}</div>
+				<div class="task-item-bottom" :class="{ 'is-bound': r.bound }" v-for="r in task.rewards" :key="r.label">
+					<div>{{ r.label || $t('awardsAmount') }}<span v-if="r.bound" class="bound-mark">{{ $t('newbieBound') }}</span></div>
 					<div class="bottom-title">
 						<svg-icon name="activityWallet" />
 						<span>{{ currency(r.amount) }}</span>
 					</div>
 				</div>
-				<div class="btn btnNew" :class="`status${task.status}`" @click="clickNewbieExtra(task)">{{ newStatus(task.status) }}</div>
+				<div class="btn btnNew" :class="`status${task.status}`" @click="clickNewbieExtra(task)">{{ newbieBtnText(task) }}</div>
 			</div>
 
 			<div class="task-item task-item--card" :class="{ 'is-ended': item.status === 4 }" v-for="(item, index) in filteredCurrentTasks" :key="index">
@@ -295,15 +296,15 @@ const bonus = ref('0');
 const newbieGiftPackage = ref<any[]>([])
 // 新手任务（绑定手机/邮箱、绑定银行卡、下载APP充值奖励），来自 GetNewbieTaskList（原型新增接口，字段对应后台 任务管理＞新手任务）。
 // 状态：0 未完成 1 待领取 2 已领取；跳转页面均为本工程已有路由，下载APP弹下载APP提示。
-const NEWBIE_TASK_META: Record<string, { badge: string; cond: string; goRoute: string }> = {
-	bindContact: { badge: 'newbieBadgeBind', cond: 'newbieCondBindPhone', goRoute: 'SettingCenter-UpdatePhone' },
-	bindCard: { badge: 'newbieBadgeCard', cond: 'newbieCondBindCard', goRoute: 'Withdraw-AddBankCard' },
-	downloadApp: { badge: 'newbieBadgeApp', cond: 'newbieCondDownloadApp', goRoute: '' }
+// 绑定手机/邮箱、绑定银行卡：系统自动发放，玩家只做「前往绑定」，到账后接口不再返回该卡（卡片消失），没有领取按钮
+// 下载APP充值：手动领取，未达标「前往完成」→跳充值页；达标后「领取」；领取后卡片保留显示「已领取」
+const NEWBIE_TASK_META: Record<string, { badge: string; btn: string; goRoute: string }> = {
+	bindContact: { badge: 'newbieBadgeBind', btn: 'newbieGoBind', goRoute: 'SettingCenter-UpdatePhone' },
+	bindCard: { badge: 'newbieBadgeCard', btn: 'newbieGoBind', goRoute: 'Withdraw-AddBankCard' },
+	downloadApp: { badge: 'newbieBadgeApp', btn: 'newbieGoComplete', goRoute: 'Recharge' }
 }
+const newbieBtnText = (task: any) => task.key === 'downloadApp' && task.status !== 0 ? newStatus(task.status) : t(NEWBIE_TASK_META[task.key].btn)
 const newbieExtraTasks = ref<any[]>([])
-// 绑定手机/邮箱按 V1：只奖励注册时没用的那一个（bindType），文案随之切换；下载APP只认单笔充值，不显示进度
-const newbieCondText = (task: any) =>
-	t(task.key === 'bindContact' && task.bindType === 'email' ? 'newbieCondBindEmail' : NEWBIE_TASK_META[task.key].cond, [task.threshold ?? ''])
 const weekList= ref<any[]>([])
 const dayList= ref<any[]>([])
 // status → 展示优先级:待领取 > 未完成 > 已领取
@@ -328,15 +329,15 @@ const TAB_KEY_BY_CONTRACT: Record<string, string> = {
 	WeekCard: 'weekcard',
 	MonthCard: 'monthcard'
 }
-// 子页签固定顺序(2026-09-22 拍板):每日任务、每周任务、每日签到、购买周卡、购买月卡、新手礼包
+// 子页签固定顺序(2026-10-07 改):新手任务、每日任务、每周任务、每日签到、购买周卡、购买月卡
 // 每日签到无对应契约键,排序值只在这里维护;后台未配置时的契约默认值与此对齐(见 periodCard.ts 的 DEFAULT_TAB_SORT)
 const DEFAULT_TAB_SORT: Record<string, number> = {
+	newbie: 105,
 	day: 100,
 	week: 95,
 	signin: 90,
 	weekcard: 85,
-	monthcard: 80,
-	newbie: 75
+	monthcard: 80
 }
 const tabSort = ref<Record<string, number>>({ ...DEFAULT_TAB_SORT })
 
@@ -482,6 +483,13 @@ const onClaimCard = async (holding: any) => {
 		await afterCardSubmit(res)
 	})
 }
+// 新手任务 Tab:还有没做完的才显示。礼包领完整张卡会消失(接口不再返回);其余任务 status===2 视为做完;
+// 后端关掉的任务本来就不返回,不参与"是否全部完成"的判断
+const newbieHasUndone = computed(
+	() =>
+		newbieGiftPackage.value.some((g: any) => g.status !== 2) ||
+		newbieExtraTasks.value.some((t: any) => t.status !== 2)
+)
 const visibleTabs = computed(() => [
 	{ key: 'day', label: t('dailyMission'), show: dayList.value.length > 0 },
 	{ key: 'week', label: t('actTip4'), show: weekList.value.length > 0 },
@@ -493,9 +501,9 @@ const visibleTabs = computed(() => [
 		label: t(CARD_TAB_LABEL[card.cardType]),
 		show: !!CARD_TAB_KEY[card.cardType]
 	})),
-	{ key: 'newbie', label: t('newbieTaskTab'), show: newbieGiftPackage.value.length > 0 || newbieExtraTasks.value.length > 0 }
+	{ key: 'newbie', label: t('newbieTaskTab'), show: newbieHasUndone.value }
 ].filter((tab) => tab.show)
-	// 排序值互不相等(见 DEFAULT_TAB_SORT),固定顺序:每日任务、每周任务、每日签到、购买周卡、购买月卡、新手礼包
+	// 排序值互不相等(见 DEFAULT_TAB_SORT),固定顺序:新手任务、每日任务、每周任务、每日签到、购买周卡、购买月卡
 	.sort((a, b) => tabSort.value[b.key] - tabSort.value[a.key]))
 const currentTasks = computed<any[]>(() => sortTasks(TASK_SOURCES[activeTab.value]?.value ?? []))
 
@@ -558,6 +566,15 @@ const tabBadgeCount = (key: string): number => {
 const activeCardBanner = computed(
 	() => periodCards.value.find((card: any) => CARD_TAB_KEY[card.cardType] === activeTab.value) ?? null
 )
+// 非卡 Tab（新手任务/每日任务/每周任务/每日签到）的顶部 banner：标题和两行文案换成当前 Tab 自己的简单介绍；
+// 卡 Tab 仍用后端给的 banner，找不到时回落到原来的统一文案
+const TAB_INTRO: Record<string, { title: string; line1: string; line2: string }> = {
+	newbie: { title: 'newbieTaskTab', line1: 'bannerIntroNewbie1', line2: 'bannerIntroNewbie2' },
+	day: { title: 'dailyMission', line1: 'bannerIntroDay1', line2: 'bannerIntroDay2' },
+	week: { title: 'actTip4', line1: 'bannerIntroWeek1', line2: 'bannerIntroWeek2' },
+	signin: { title: 'code9007', line1: 'bannerIntroSignin1', line2: 'bannerIntroSignin2' }
+}
+const tabIntro = computed(() => TAB_INTRO[activeTab.value] ?? null)
 // 契约允许多图英文逗号分隔,而 banner 位只有一个,取首张
 const cardBannerUrl = computed(() => (activeCardBanner.value?.bannerUrl ?? '').split(',')[0].trim())
 const onSwitchTab = (key: string) => {
@@ -760,12 +777,11 @@ const clickBtnNew = async (item:any)=>{
 		}
 	}, 100) as any
 }
-// 新手任务点击：未登录先弹登录；未完成→去完成（跳对应页面/下载APP提示）；待领取→领取
+// 新手任务点击：未登录先弹登录；未完成→前往绑定/前往完成（跳对应页面，下载APP跳充值页）；下载APP达标后→领取。绑定类奖励由系统自动发放，没有领取
 const clickNewbieExtra = async (task: any) => {
 	if (!(await requireLoginAction())) return
 	if (task.status === 2) return
 	if (task.status === 0) {
-		if (task.key === 'downloadApp') return await downAppTip('Recharge')
 		return router.push({ name: task.key === 'bindContact' && task.bindType === 'email' ? 'SettingCenter-BindEmail' : NEWBIE_TASK_META[task.key].goRoute })
 	}
 	const res = await AwaitApiResult(receiveNewbieTask({ key: task.key }))
@@ -1304,6 +1320,33 @@ $buy-tint: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 
 				color: #768096;
 				font-size: 24px;
 				border-bottom: 1px solid var(--Dividing-line_color);
+				// 已绑定的那一项：金额置灰并标「已绑定」
+				&.is-bound{
+					.bottom-title, .bottom-title span{ color: #B5BBC8; }
+					.bottom-title svg{ opacity: .45; filter: grayscale(1); }
+					// 小胶囊 + 对勾，比纯灰字更清楚（本页 px 按 750 设计稿换算，数值是实际的两倍）
+					.bound-mark{
+						display: inline-flex;
+						align-items: center;
+						margin-left: 16px;
+						padding: 2px 16px 2px 12px;
+						border-radius: 20px;
+						background: #EEF0F5;
+						color: #8A93A6;
+						font-size: 22px;
+						line-height: 32px;
+						vertical-align: middle;
+						&::before{
+							content: '';
+							width: 16px;
+							height: 8px;
+							margin: -4px 8px 0 0;
+							border-left: 3px solid currentColor;
+							border-bottom: 3px solid currentColor;
+							transform: rotate(-45deg);
+						}
+					}
+				}
 				.bottom-title{
 					display: flex;
 					color: var(--DailyTaskTextColor-3);
